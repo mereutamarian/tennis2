@@ -24,7 +24,7 @@
 </div>
 
 <div class="container">
-    <form id="contact" th:action="@{update}" method="get" th:object="${horaire}" >
+    <form id="contact" th:action="@{update}" method="get" th:object="${terrain}" >
         <h3>Ajouter votre horaire</h3>
 
         <fieldset>
@@ -33,52 +33,10 @@
         </fieldset>
 
         <fieldset>
-            <span>heure debut</span>
-            <input  type="time" th:field="*{heureDebut}" >
-            <span th:if="${#fields.hasErrors('heureDebut')}" th:errors="*{heureDebut}"></span>
+            <span>nom du terrain</span>
+            <input  type="text" th:field="*{nomTerrain}" >
+            <span th:if="${#fields.hasErrors('nomTerrain')}" th:errors="*{nomTerrain}"></span>
         </fieldset>
-
-
-        <fieldset>
-            <span>heure fin</span>
-            <input  type="time" th:field="*{heureFin}" >
-            <span th:if="${#fields.hasErrors('heureFin')}" th:errors="*{heureFin}"></span>
-        </fieldset>
-
-
-        <input  type="hidden" th:field="*{nom}" >
-        <input  type="hidden" th:field="*{horaireFix}" >
-        <input  type="hidden" th:field="*{mesureInterval}" >
-        <input  type="hidden" th:field="*{terrains}" >
-
-
-
-        <th:block  th:if="*{dateHoraireSpecial !=  null}">
-
-            <fieldset>
-                <input placeholder="nom horaire " type="text" th:field="*{nom}" tabindex="3" required>
-                <span th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}"></span>
-            </fieldset>
-
-            <fieldset >
-                <input placeholder="jour de la semaine " type="date" th:field="*{dateHoraireSpecial}" tabindex="3" required>
-                <span th:if="${#fields.hasErrors('dateHoraireSpecial')}" th:errors="*{dateHoraireSpecial}"></span>
-            </fieldset>
-
-
-
-
-
-
-
-
-
-        </th:block>
-
-
-
-
-
 
 
         <fieldset>

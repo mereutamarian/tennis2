@@ -36,5 +36,31 @@ public class MetierTerrain implements InterfaceMetierTerrain {
         return listechoix;
     }
 
+    @Override
+    public Terrain getTerrain(Integer id) {
+        return terrainRepository.getOne(id);
+    }
+
+    @Override
+    public void deleteTerrain(Terrain terrain){
+        terrainRepository.delete(terrain);
+
+    }
+
+    @Override
+    public void addTerrain(Terrain terrain){
+
+        terrainRepository.save(terrain);
+    }
+
+    @Override
+    public void setActivTerrain(Terrain t){
+
+        t.setActif(true);
+
+    }
+
+
+
 
 }

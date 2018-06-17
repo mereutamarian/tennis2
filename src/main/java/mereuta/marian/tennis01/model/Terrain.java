@@ -13,8 +13,9 @@ public class Terrain {
     @Id @GeneratedValue
     @Column(name = "id_terrain")
     private Integer id;
-    @NotNull
 
+
+    @NotNull
     @Size(min = 3, max = 25)
     @Column(name = "nom_terrain")
     private  String nomTerrain;

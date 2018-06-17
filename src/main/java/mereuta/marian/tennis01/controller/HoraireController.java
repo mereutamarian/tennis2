@@ -113,8 +113,12 @@ public class HoraireController {
     public String getHoraire(@RequestParam(name = "id") Integer id, Model model) {
 
         horaire = metierHoraire.getHoraire(id);
+        terrains= metierTerrain.showTerrain();
+
 
         model.addAttribute("horaire", horaire);
+        model.addAttribute("terrains", terrains);
+
 
 
         return "editHoraire";
@@ -136,7 +140,7 @@ public class HoraireController {
     @GetMapping("/update")
     public String updateHoraire(@Valid @ModelAttribute("horaire") Horaire horaire, BindingResult bindingResult) {
 
-
+        System.out.println(horaire);
         if (bindingResult.hasErrors()) {
             return "editHoraire";
         } else {
