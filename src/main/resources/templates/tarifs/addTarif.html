@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th= "http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <link  rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" href="../static/css/formHoraire.css" th:href="@{/css/formHoraire.css}"/>
+</head>
+<body>
+
+
+<div>
+    <h1>Ajouter Terrain</h1>
+</div>
+
+<div class="container">
+    <form id="contact" th:action="@{addTarif}" method="get" th:object="${tarif}"  >
+        <h3>Ajouter votre tarif</h3>
+
+        <fieldset>
+            <input placeholder="nom du tarif" type="text" th:field="*{nomTarif}" tabindex="1" required autofocus>
+            <span th:if="${#fields.hasErrors('nomTarif')}" th:errors="*{nomTarif}"></span>
+        </fieldset>
+
+        <fieldset>
+            <input placeholder="prix" type="number" th:field="*{prix}" tabindex="1" required autofocus>
+            <span th:if="${#fields.hasErrors('prix')}" th:errors="*{prix}"></span>
+        </fieldset>
+
+
+
+        <fieldset>
+            <input placeholder="date debut" type="date" th:field="*{dateDebut}" tabindex="1" required autofocus>
+            <span th:if="${#fields.hasErrors('dateDebut')}" th:errors="*{dateDebut}"></span>
+        </fieldset>
+
+        <fieldset>
+            <input placeholder="date de fin" type="date" th:field="*{dateFin}" tabindex="1" required autofocus>
+            <span th:if="${#fields.hasErrors('dateFin')}" th:errors="*{dateFin}"></span>
+        </fieldset>
+
+
+        <fieldset>
+            <input placeholder="heure de debut" type="time" th:field="*{heureDebut}" tabindex="1" required autofocus>
+            <span th:if="${#fields.hasErrors('heureDebut')}" th:errors="*{heureDebut}"></span>
+        </fieldset>
+
+        <fieldset>
+            <input placeholder="heure de fin" type="time" th:field="*{heureFin}" tabindex="1" required autofocus>
+            <span th:if="${#fields.hasErrors('heureFin')}" th:errors="*{heureFin}"></span>
+        </fieldset>
+
+        <fieldset>
+            <labe>Week end</labe>
+            <input placeholder="true" type="radio" th:field="*{weekend}" th:value="true" tabindex="1" required autofocus>
+            <input placeholder="false" type="radio" th:field="*{weekend}" th:value="false" tabindex="1" required autofocus>
+
+        </fieldset>
+
+        <input placeholder="true" type="hidden" th:field="*{actif}" th:value="true" tabindex="1" required autofocus>
+
+
+
+
+        <fieldset>
+            <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">ajouter</button>
+        </fieldset>
+
+    </form>
+</div>
+</body>
+</html>

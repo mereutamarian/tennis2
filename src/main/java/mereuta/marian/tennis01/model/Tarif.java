@@ -1,11 +1,14 @@
 package mereuta.marian.tennis01.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity(name = "tarifs")
 public class Tarif {
@@ -20,13 +23,21 @@ public class Tarif {
     @Column(name = "actif")
     private boolean actif;
     @Column(name = "date_debut")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateDebut;
     @Column(name = "date_fin")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateFin;
     @Column(name = "heure_debut")
-    private Time heureDebut;
+    private LocalTime heureDebut;
     @Column(name = "heure_fin")
-    private Time heureFin;
+    private LocalTime heureFin;
+    @Column(name="weekend")
+    private boolean weekend;
+    @Column(name = "tarif_special")
+    private boolean tarifSpecial;
+    @Column(name = "default_tarif")
+    private boolean tarifParDefaut;
 
     public Integer getId() {
         return id;
@@ -76,34 +87,49 @@ public class Tarif {
         this.dateFin = dateFin;
     }
 
-    public Time getHeureDebut() {
+    public LocalTime getHeureDebut() {
         return heureDebut;
     }
 
-    public void setHeureDebut(Time heureDebut) {
+    public void setHeureDebut(LocalTime heureDebut) {
         this.heureDebut = heureDebut;
     }
 
-    public Time getHeureFin() {
+    public LocalTime getHeureFin() {
         return heureFin;
     }
 
-    public void setHeureFin(Time heureFin) {
+    public void setHeureFin(LocalTime heureFin) {
         this.heureFin = heureFin;
+    }
+
+    public boolean isWeekend() {
+        return weekend;
+    }
+
+    public void setWeekend(boolean weekend) {
+        this.weekend = weekend;
+    }
+
+    public boolean isTarifSpecial() {
+        return tarifSpecial;
+    }
+
+    public void setTarifSpecial(boolean tarifSpecial) {
+        this.tarifSpecial = tarifSpecial;
+    }
+
+    public boolean isTarifParDefaut() {
+        return tarifParDefaut;
+    }
+
+    public void setTarifParDefaut(boolean tarifParDefaut) {
+        this.tarifParDefaut = tarifParDefaut;
     }
 
     public Tarif() {
     }
 
-    public Tarif(String nomTarif, float prix, boolean actif, LocalDate dateDebut, LocalDate dateFin, Time heureDebut, Time heureFin) {
-        this.nomTarif = nomTarif;
-        this.prix = prix;
-        this.actif = actif;
-        this.dateDebut = dateDebut;
-        this.dateFin = dateFin;
-        this.heureDebut = heureDebut;
-        this.heureFin = heureFin;
-    }
 
     @Override
     public String toString() {
@@ -116,6 +142,9 @@ public class Tarif {
                 ", dateFin=" + dateFin +
                 ", heureDebut=" + heureDebut +
                 ", heureFin=" + heureFin +
+                ", weekend=" + weekend +
+                ", tarifSpecial=" + tarifSpecial +
+                ", tarifParDefaut=" + tarifParDefaut +
                 '}';
     }
 }
