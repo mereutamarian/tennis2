@@ -48,13 +48,15 @@ public String listeTarifs(Model model){
     @GetMapping("/addTarif")
     public String addHoraire(@Valid  @ModelAttribute("tarif") Tarif tarif, BindingResult bindingResult) {
 
+    tarifs=tarifMetier.listeTarifsNormaux();
+
         if (bindingResult.hasErrors()) {
             return "tarifs/addTarif";
-        } else if(tarifMetier.intersectionDates(tarif)==0) {
+        } else if(tarifMetier.intersectionDatesOuDatesEgales(tarif,tarifs)==0 || tarifMetier.intersectionDatesOuDatesEgalesEtWeekEndDifferent(tarif)>0 || tarifMetier.dateEgaleWeekEndEgalEtHeureDifferente(tarif)==0 ){
 
             tarifMetier.TarifActif(tarif);
            tarifMetier.addTarif(tarif);
-            return "redirect: /tarif/liste";
+            return "redirect:/tarif/liste";
 
         }else{
             return "tarifs/problemeTarif";
