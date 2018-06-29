@@ -10,12 +10,14 @@ public interface TarifMetierInterface {
     public void addTarif(Tarif tarif);
     public Tarif getTarif(Integer id);
     public void TarifActif(Tarif tarif);
+    public void TarifSpecial(Tarif tarif);
     public void deleteTarif(Tarif tarif);
     public int intersectionDatesOuDatesEgales(Tarif tarif, List<Tarif> tarifs);
     public boolean weekendEgal(Tarif tarif ,Tarif tarif1);
-    public int intersectionDatesOuDatesEgalesEtWeekEndDifferent(Tarif tarif);
+    public int intersectionDatesOuDatesEgalesEtWeekEndDifferent(Tarif tarif,List<Tarif> tarifs);
     public boolean heureEgaleOuIntersection(Tarif tarif1, Tarif tarif2);
-    public int dateEgaleWeekEndEgalEtHeureDifferente(Tarif tarif);
+    public int dateEgaleWeekEndEgalEtHeureDifferente(Tarif tarif,List<Tarif> tarifs);
     public List<Tarif> listeTarifsNormaux();
+    public List<Tarif> listeTarifsSpeciaux();
 
 }

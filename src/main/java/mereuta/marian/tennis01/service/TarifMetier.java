@@ -41,6 +41,11 @@ public class TarifMetier implements TarifMetierInterface {
     }
 
     @Override
+    public void TarifSpecial(Tarif tarif) {
+        tarif.setTarifSpecial(true);
+    }
+
+    @Override
     public void deleteTarif(Tarif tarif) {
         tarif.setActif(false);
         tarifRepository.save(tarif);
@@ -71,15 +76,13 @@ public class TarifMetier implements TarifMetierInterface {
     }
 
     @Override
-    public int intersectionDatesOuDatesEgalesEtWeekEndDifferent(Tarif tarif) {
+    public int intersectionDatesOuDatesEgalesEtWeekEndDifferent(Tarif tarif, List<Tarif> tarifs) {
 
 
         List<Tarif> weekendsEgals = new ArrayList<>();
         int checkWeeknd = 0;
         int check = 0;
 
-
-        tarifs = tarifRepository.listeTarifsNormaux();
 
         for (Tarif t : tarifs) {
             if (checkIfIntersectionOuDatesEgales(tarif, t)) {
@@ -119,12 +122,13 @@ public class TarifMetier implements TarifMetierInterface {
 
     }
 
+
     @Override
     public boolean heureEgaleOuIntersection(Tarif tarif1, Tarif tarif2) {
 
         if (tarif1.getHeureDebut().minusHours(1).isAfter(tarif2.getHeureDebut().minusHours(1)) && tarif1.getHeureDebut().minusHours(1).isBefore(tarif2.getHeureFin().minusHours(1)) ||
                 tarif2.getHeureDebut().minusHours(1).isAfter(tarif1.getHeureDebut().minusHours(1)) && tarif2.getHeureDebut().minusHours(1).isBefore(tarif1.getHeureFin().minusHours(1)) ||
-                tarif1.getHeureDebut().minusHours(1).equals(tarif2.getHeureFin().minusHours(1)) && tarif1.getHeureFin().minusHours(1).equals(tarif2.getHeureFin().minusHours(1))) {
+                tarif1.getHeureDebut().minusHours(1).equals(tarif2.getHeureDebut().minusHours(1)) && tarif1.getHeureFin().minusHours(1).equals(tarif2.getHeureFin().minusHours(1))) {
 
             return true;
         } else {
@@ -134,15 +138,14 @@ public class TarifMetier implements TarifMetierInterface {
 
     }
 
+
     @Override
-    public int dateEgaleWeekEndEgalEtHeureDifferente(Tarif tarif) {
+    public int dateEgaleWeekEndEgalEtHeureDifferente(Tarif tarif, List<Tarif> tarifs) {
 
         List<Tarif> weekendsEgals = new ArrayList<>();
-        List<Tarif> heuresCheck= new ArrayList<>();
+        List<Tarif> heuresCheck = new ArrayList<>();
         int check = 0;
 
-
-        tarifs = tarifRepository.listeTarifsNormaux();
 
         for (Tarif t : tarifs) {
             if (checkIfIntersectionOuDatesEgales(tarif, t)) {
@@ -155,24 +158,29 @@ public class TarifMetier implements TarifMetierInterface {
 
         for (Tarif t : weekendsEgals) {
             if (weekendEgal(tarif, t) == true) {
-               heuresCheck.add(t);
+                heuresCheck.add(t);
             }
         }
 
-        for(Tarif t: heuresCheck){
-            if(heureEgaleOuIntersection(tarif, t)){
+        for (Tarif t : heuresCheck) {
+            if (heureEgaleOuIntersection(tarif, t)) {
                 check++;
 
 
             }
         }
-
+        System.out.println("je suis l'heure " + check);
         return check;
     }
 
     @Override
     public List<Tarif> listeTarifsNormaux() {
         return tarifRepository.listeTarifsNormaux();
+    }
+
+    @Override
+    public List<Tarif> listeTarifsSpeciaux() {
+        return tarifRepository.listeTarifsSpeciaux();
     }
 
     public boolean checkIfIntersectionOuDatesEgales(Tarif tarif, Tarif t) {

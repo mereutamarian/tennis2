@@ -60,12 +60,19 @@
             <span th:if="${#fields.hasErrors('heureFin')}" th:errors="*{heureFin}"></span>
         </fieldset>
 
-        <fieldset>
-            <labe>Week end</labe>
-            <input placeholder="true" type="radio" th:field="*{weekend}" th:value="true" tabindex="1" required autofocus>
-            <input placeholder="false" type="radio" th:field="*{weekend}" th:value="false" tabindex="1" required autofocus>
+        <!-- si id == 1 c'est un tarif normal si 2 tarif special-->
+        <th:block th:if="${typeTarif==1}">
 
-        </fieldset>
+            <fieldset>
+                <labe>Week end</labe>
+                <input placeholder="true" type="radio" th:field="*{weekend}" th:value="true" tabindex="1" required autofocus>
+                <input placeholder="false" type="radio" th:field="*{weekend}" th:value="false" tabindex="1" required autofocus>
+
+            </fieldset>
+        </th:block>
+
+        <input type="hidden" name="typeDeTarif" th:value="${typeTarif}">
+
 
         <input placeholder="true" type="hidden" th:field="*{actif}" th:value="true" tabindex="1" required autofocus>
 
