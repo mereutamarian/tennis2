@@ -28,6 +28,7 @@ public class TarifMetier implements TarifMetierInterface {
 
         tarifRepository.save(tarif);
 
+
     }
 
     @Override
@@ -182,6 +183,23 @@ public class TarifMetier implements TarifMetierInterface {
     public List<Tarif> listeTarifsSpeciaux() {
         return tarifRepository.listeTarifsSpeciaux();
     }
+
+    @Override
+    public List<Tarif> effacerTarifListe(Tarif tarif, List<Tarif> tarifs) {
+
+        for(Tarif t: tarifs){
+            if(tarif.getId()==t.getId()){
+                System.out.println("avant "+tarifs);
+                tarifs.remove(t);
+                System.out.println("apres "+tarifs);
+            }
+        }
+
+        return tarifs;
+    }
+
+
+
 
     public boolean checkIfIntersectionOuDatesEgales(Tarif tarif, Tarif t) {
         if (tarif.getDateDebut().isAfter(t.getDateDebut()) && tarif.getDateDebut().isBefore(t.getDateFin()) ||

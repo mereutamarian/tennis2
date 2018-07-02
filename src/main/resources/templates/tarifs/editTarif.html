@@ -24,10 +24,16 @@
 </div>
 
 <div class="container">
-    <form id="contact" th:action="@{addTarif}" method="get" th:object="${tarif}"  >
+    <form id="contact" th:action="@{update}" method="get" th:object="${tarif}"  >
         <h3>Ajouter votre tarif</h3>
 
         <th:block th:if="${typeTarif==3}">
+            <input type="hidden" th:field="*{id}">
+            <input type="hidden" th:field="*{tarifParDefaut}">
+            <input type="hidden" th:field="*{tarifSpecial}">
+            <input type="hidden" th:field="*{actif}">
+            <input type="hidden" name="tarifType" th:value="${typeTarif}">
+
            <fieldset>
                <input placeholder="nom du tarif" type="hidden" th:field="*{nomTarif}" tabindex="1" required autofocus>
                <span th:if="${#fields.hasErrors('nomTarif')}" th:errors="*{nomTarif}"></span>
@@ -77,7 +83,13 @@
 
 
 
-        <th:block th:if="${typeTarif==1}">
+        <th:block th:if="${typeTarif==1 || typeTarif==2}">
+
+            <input type="hidden" th:field="*{id}">
+            <input type="hidden" th:field="*{tarifParDefaut}">
+            <input type="hidden" th:field="*{tarifSpecial}">
+            <input type="hidden" name="tarifType" th:value="${typeTarif}">
+
             <fieldset>
                 <input placeholder="nom du tarif" type="text" th:field="*{nomTarif}" tabindex="1" required autofocus>
                 <span th:if="${#fields.hasErrors('nomTarif')}" th:errors="*{nomTarif}"></span>
@@ -132,10 +144,7 @@
         </th:block>
 
 
-        <input type="hidden" name="typeDeTarif" th:value="${typeTarif}">
 
-
-        <input placeholder="true" type="hidden" th:field="*{actif}" th:value="true" tabindex="1" required autofocus>
 
 
 

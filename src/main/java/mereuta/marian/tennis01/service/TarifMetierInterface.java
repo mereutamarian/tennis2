@@ -19,5 +19,6 @@ public interface TarifMetierInterface {
     public int dateEgaleWeekEndEgalEtHeureDifferente(Tarif tarif,List<Tarif> tarifs);
     public List<Tarif> listeTarifsNormaux();
     public List<Tarif> listeTarifsSpeciaux();
+    public  List<Tarif> effacerTarifListe(Tarif tarif,List<Tarif> tarifs);
 
 }

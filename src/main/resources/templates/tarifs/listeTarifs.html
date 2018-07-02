@@ -68,7 +68,7 @@
                         <tr th:each="t:${tarifs}">
                             <th:block th:if="${t.actif eq true && t.tarifSpecial eq false && t.tarifParDefaut eq false }">
                                 <td>
-                                    <a th:href="@{edit(id=${t.getId()})}">update</a> <br> <br>
+                                    <a th:href="@{edit(id=${t.getId()}, typeTarif=1)}">update</a> <br> <br>
                                     <a th:href="@{delete(id=${t.getId()})}">supprimer</a>
 
                                 </td>
@@ -127,7 +127,7 @@
                             <th class="hidden-xs">date de fin</th>
                             <th class="hidden-xs">heure de debut</th>
                             <th class="hidden-xs">heure de fin</th>
-                            <th class="hidden-xs">weekend</th>
+
 
                         </tr>
                         </thead>
@@ -135,7 +135,7 @@
                         <tr th:each="t:${tarifs}">
                             <th:block th:if="${t.actif eq true && t.tarifSpecial eq true  }">
                                 <td>
-                                    <a th:href="@{edit(id=${t.getId()})}">update</a> <br> <br>
+                                    <a th:href="@{edit(id=${t.getId()}, typeTarif=2)}">update</a> <br> <br>
                                     <a th:href="@{delete(id=${t.getId()})}">supprimer</a>
 
                                 </td>
@@ -148,7 +148,7 @@
                                 <td th:text="${t.dateFin}"></td>
                                 <td th:text="${t.heureDebut}"></td>
                                 <td th:text="${t.heureFin}"></td>
-                                <td th:text="${t.weekend}"></td>
+
 
                             </th:block>
 
@@ -190,7 +190,7 @@
                             <th class="hidden-xs">date de fin</th>
                             <th class="hidden-xs">heure de debut</th>
                             <th class="hidden-xs">heure de fin</th>
-                            <th class="hidden-xs">weekend</th>
+
 
                         </tr>
                         </thead>
@@ -211,7 +211,7 @@
                                 <td th:text="${t.dateFin}"></td>
                                 <td th:text="${t.heureDebut}"></td>
                                 <td th:text="${t.heureFin}"></td>
-                                <td th:text="${t.weekend}"></td>
+
 
                             </th:block>
 

@@ -1,6 +1,7 @@
 package mereuta.marian.tennis01.controller;
 
 
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import mereuta.marian.tennis01.model.Tarif;
 import mereuta.marian.tennis01.service.TarifMetier;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/tarif")
@@ -51,15 +53,22 @@ public String listeTarifs(Model model){
 
 
     @GetMapping("/addTarif")
-    public String addHoraire(@Valid  @ModelAttribute("tarif") Tarif tarif, BindingResult bindingResult, @RequestParam(value = "typeDeTarif") int typeTarif) {
+    public String addTarif(@Valid  @ModelAttribute("tarif") Tarif tarif, BindingResult bindingResult, @RequestParam(value = "typeDeTarif" ) int typeTarif) {
 
+
+        System.out.println("le type de tarif est "+typeTarif);
 
        if(typeTarif==1){
            tarifs=tarifMetier.listeTarifsNormaux();
+
+
+
        }else{
             tarifs=tarifMetier.listeTarifsSpeciaux();
            tarifMetier.TarifSpecial(tarif);
        }
+
+        System.out.println(tarifs);
 
 
 
@@ -94,25 +103,7 @@ public String listeTarifs(Model model){
         return "redirect:/tarif/liste";
     }
 
-    @GetMapping("/addTarifSpecial")
-    public String addHoraireSpecial(@Valid  @ModelAttribute("tarif") Tarif tarif, BindingResult bindingResult) {
 
-        tarifs=tarifMetier.listeTarifsNormaux();
-
-        if (bindingResult.hasErrors()) {
-            return "tarifs/addTarif";
-        } else if(tarifMetier.intersectionDatesOuDatesEgales(tarif,tarifs)==0||
-                tarifMetier.dateEgaleWeekEndEgalEtHeureDifferente(tarif,tarifs)==0 ){
-
-            tarifMetier.TarifActif(tarif);
-            tarifMetier.addTarif(tarif);
-            return "redirect:/tarif/liste";
-
-        }else{
-            return "tarifs/problemeTarif";
-        }
-
-    }
 
     @GetMapping("/edit")
     public String getTarif(@RequestParam(name = "id") Integer id, Model model, @RequestParam(name = "typeTarif")int typeTarif) {
@@ -123,6 +114,7 @@ public String listeTarifs(Model model){
 
         model.addAttribute("tarif", tarif);
         System.out.println(tarif);
+        System.out.println("je suis le tarif"+tarif);
         model.addAttribute("typeTarif", typeTarif);
 
 
@@ -131,19 +123,24 @@ public String listeTarifs(Model model){
         return "tarifs/editTarif";
     }
 
+
+
     @GetMapping("/update")
-    public String updateHoraire(@Valid @ModelAttribute("horaire") Tarif tarif, BindingResult bindingResult) {
+    public String updateHoraire(@Valid @ModelAttribute("tarif") Tarif tarif, BindingResult bindingResult, @RequestParam(name = "tarifType",defaultValue = "1") int idTypeTarif ){
 
         System.out.println(tarif);
-//        if (bindingResult.hasErrors()) {
-//            return "editHoraire";
-//        }
- //       else
+        if (bindingResult.hasErrors()) {
+            return "tarifs/editTarif";
+        }
+        else if(idTypeTarif==3)
             {
 
 
             tarifMetier.addTarif(tarif);
-            return "horaires";
+
+            return "redirect:/tarif/liste";
+        }else{
+            return addTarif(tarif,bindingResult,idTypeTarif);
         }
 
     }
