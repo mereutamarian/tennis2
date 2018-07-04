@@ -43,5 +43,10 @@ public class TableauMetier implements TableauMetierInterface {
         tableauRepository.delete(tableau);
     }
 
+    @Override
+    public Tableau getTableau(Integer id) {
+        return tableauRepository.getOne(id) ;
+    }
+
 
 }

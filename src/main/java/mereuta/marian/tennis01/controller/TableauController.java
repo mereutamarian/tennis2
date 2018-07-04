@@ -136,7 +136,7 @@ public String tableau(Model model){
         if (idT != null) {
             ecran.setTableau(tableau);
 
-            ecranMetier.addEcran(ecran);
+          //  ecranMetier.addEcran(ecran);
 
         }
 

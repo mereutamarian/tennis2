@@ -5,6 +5,7 @@ import mereuta.marian.tennis01.service.MetierHoraire;
 import mereuta.marian.tennis01.service.MetierReservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -24,7 +25,7 @@ public class ReservationController {
    private Horaire horaire;
 
         @GetMapping("/tableau")
-    public String tableau(){
+    public String tableau(Model model){
 
     horaire=metierReservation.checkHoraire(LocalDate.now());
 
@@ -32,8 +33,10 @@ public class ReservationController {
 
     heures=metierReservation.transformHeures(horaire);
 
+    model.addAttribute(heures);
 
-            return "horaires";
+
+            return "tableauReservation";
         }
 
 

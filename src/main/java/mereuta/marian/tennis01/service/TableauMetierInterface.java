@@ -11,4 +11,5 @@ public interface TableauMetierInterface {
     public void addTableau(Tableau tableau);
     public Tableau chargeTableau(Integer id);
     public void deleteTableau(Tableau tableau);
+    public Tableau getTableau(Integer id);
 }
