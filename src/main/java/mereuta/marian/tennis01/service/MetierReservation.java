@@ -1,6 +1,8 @@
 package mereuta.marian.tennis01.service;
 
+import mereuta.marian.tennis01.model.Ecran;
 import mereuta.marian.tennis01.model.Horaire;
+import mereuta.marian.tennis01.repository.EcranRepository;
 import mereuta.marian.tennis01.repository.HoraireRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -19,14 +21,21 @@ public class MetierReservation implements ReservationMetierInterface {
 
     @Autowired
     private HoraireRepository horaireRepository;
+
+    @Autowired
+    EcranMetier ecranMetier;
+
     private Horaire horaire;
     private List<Horaire> horaires;
+    private Ecran ecran;
+
 
 
 
     public int checkJourSpecial(@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date){
 
 
+        //prendd tous les horaires speciaux
         horaires=horaireRepository.findAllByDateHoraireSpecialNotNull();
 
        int check=0;
@@ -114,4 +123,33 @@ public class MetierReservation implements ReservationMetierInterface {
 
         return listeHeures;
     }
+
+    public  List<Integer> nombreJours(){
+
+        List<Integer> compteurJours=new ArrayList<>();
+
+        ecran=ecranMetier.showEcran();
+
+        for(int i=0;i<ecran.getTableau().getNombreJours();i++){
+            compteurJours.add(i);
+        }
+
+        return compteurJours;
+    }
+
+    public LocalDate dateDuTableauReservation(Integer compteur){
+
+        LocalDate dateTableau;
+
+        dateTableau=LocalDate.now();
+
+       dateTableau= dateTableau.plusDays(compteur);
+
+        return dateTableau;
+
+
+    }
+
+
+
 }

@@ -109,40 +109,7 @@ public String tableau(Model model){
         return "redirect:/tableau/liste";
     }
 
-    @GetMapping("/attribuer")
 
-    public String attribuerTableau(@RequestParam(name = "id") Integer id, Model model){
-
-        Ecran ecran= ecranMetier.showEcran();
-
-        tableaux= tableauMetier.showTableaux();
-
-        model.addAttribute("ecran", ecran);
-        model.addAttribute("tableaux", tableaux);
-
-
-
-        return "tableaux/attribution";
-    }
-
-    @GetMapping("/updateTerrain")
-    public String updateTerrain( @RequestParam(name = "idTableau", required = false) Integer idT) throws Exception {
-
-        Tableau tableau= tableauMetier.chargeTableau(idT);
-        Ecran ecran= ecranMetier.showEcran();
-
-
-        // s'il n'y a pas  de terrain selectioné on garde les anciens terrains et on ne fais pas le changement
-        if (idT != null) {
-            ecran.setTableau(tableau);
-
-          //  ecranMetier.addEcran(ecran);
-
-        }
-
-        return "horaires";
-
-    }
 
 
     @Autowired
