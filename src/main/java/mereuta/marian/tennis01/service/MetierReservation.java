@@ -2,14 +2,18 @@ package mereuta.marian.tennis01.service;
 
 import mereuta.marian.tennis01.model.Ecran;
 import mereuta.marian.tennis01.model.Horaire;
+import mereuta.marian.tennis01.model.Tarif;
 import mereuta.marian.tennis01.repository.EcranRepository;
 import mereuta.marian.tennis01.repository.HoraireRepository;
+import mereuta.marian.tennis01.repository.TarifRepository;
+import mereuta.marian.tennis01.repository.TerrainRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +29,13 @@ public class MetierReservation implements ReservationMetierInterface {
     @Autowired
     EcranMetier ecranMetier;
 
+    @Autowired
+    TarifRepository tarifRepository;
+
     private Horaire horaire;
     private List<Horaire> horaires;
     private Ecran ecran;
+    private List<Tarif> tarifs;
 
 
 
@@ -72,7 +80,7 @@ public class MetierReservation implements ReservationMetierInterface {
                 if (jour == "MONDAY") {
                     horaire = horaireRepository.getOne(1);
 
-                } else if (date.getDayOfWeek().equals("TUESDAY")) {
+                } else if (jour=="TUESDAY") {
 
                     horaire = horaireRepository.getOne(2);
 
@@ -150,6 +158,69 @@ public class MetierReservation implements ReservationMetierInterface {
 
     }
 
+@Override
+    public LocalTime getSecondHeure(Integer indexDate2, List<LocalTime> listeHeureues) {
+
+       return listeHeureues.get(indexDate2);
+    }
+
+    @Override
+    public LocalDateTime constructionDateTime(LocalDate date, LocalTime heure) {
+
+
+        return LocalDateTime.of(date, heure);
+
+    }
+
+    @Override
+    public Tarif recupereTarif(LocalDate date, LocalTime heure1) {
+
+        tarifs=tarifRepository.findAll();
+
+        DayOfWeek dayOfWeek= date.getDayOfWeek();
+        String jour=dayOfWeek.name();
+
+        Tarif tarifFinal= new Tarif();
+
+
+        for (Tarif tarif: tarifs){
+            if(     date.isAfter(tarif.getDateDebut()) &&
+                    date.isBefore(tarif.getDateFin())  &&
+                    heure1.isAfter(tarif.getHeureDebut()) &&
+                    heure1.isBefore(tarif.getHeureFin()) &&
+                    tarif.isTarifSpecial() && tarif.isActif() && !tarif.isTarifParDefaut()
+                    ){
+                tarifFinal= tarif;
+            }else if(
+                    jour=="SATURDAY" || jour=="SUNDAY" &&
+                    date.isAfter(tarif.getDateDebut()) &&
+                    date.isBefore(tarif.getDateFin())  &&
+                    heure1.isAfter(tarif.getHeureDebut()) &&
+                    heure1.isBefore(tarif.getHeureFin()) &&
+                    !tarif.isTarifSpecial() && tarif.isActif() && !tarif.isTarifParDefaut()&& tarif.isWeekend()
+                    ){
+
+                    tarifFinal= tarif;
+            }else if (
+
+                   jour !="SATURDAY" || jour !="SUNDAY" &&
+                            date.isAfter(tarif.getDateDebut()) &&
+                            date.isBefore(tarif.getDateFin())  &&
+                            heure1.isAfter(tarif.getHeureDebut()) &&
+                            heure1.isBefore(tarif.getHeureFin()) &&
+                            !tarif.isTarifSpecial() && tarif.isActif() && !tarif.isTarifParDefaut()&& !tarif.isWeekend()
+
+                    ){
+                tarifFinal=tarif;
+
+            }else {
+                tarifFinal= tarifRepository.getOne(83);
+            }
+
+        }
+
+        return tarifFinal;
+    }
 
 
 }

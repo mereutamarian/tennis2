@@ -1,8 +1,10 @@
 package mereuta.marian.tennis01.controller;
 
-import mereuta.marian.tennis01.model.Horaire;
+import mereuta.marian.tennis01.model.*;
+import mereuta.marian.tennis01.repository.UtilisateurRepository;
 import mereuta.marian.tennis01.service.MetierHoraire;
 import mereuta.marian.tennis01.service.MetierReservation;
+import mereuta.marian.tennis01.service.MetierTerrain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -23,6 +26,12 @@ public class ReservationController {
     private MetierReservation metierReservation;
     @Autowired
     private MetierHoraire metierHoraire;
+    @Autowired
+    private MetierTerrain metierTerrain;
+
+    //provisoire
+    @Autowired
+    UtilisateurRepository utilisateurRepository;
 
 
     private Horaire horaire;
@@ -74,13 +83,41 @@ public class ReservationController {
                                      @RequestParam(value = "date2") Integer indexDate2,
                                      @RequestParam(value = "listeHeures") List<LocalTime> listeHeureues) {
 
-        System.out.println("---------------------------");
-        System.out.println(heure1);
-        System.out.println("terrain" + idTerrain);
-        System.out.println(date);
-        System.out.println("index" + indexDate2);
-        System.out.println(listeHeureues);
-        System.out.println("-------------------------------------------");
+
+
+        //recuperation de la deuxieme heure
+        LocalTime heure2=metierReservation.getSecondHeure(indexDate2, listeHeureues);
+
+        //creation date1 et date2 pour la db
+        LocalDateTime date1=metierReservation.constructionDateTime(date, heure1);
+        LocalDateTime date2=metierReservation.constructionDateTime(date, heure2);
+
+       //get terrain by id
+        Terrain terrain=metierTerrain.getTerrain(idTerrain);
+
+        //recuperer Tarif
+        System.out.println("je suis la date"+date);
+
+
+        //on recupere le tarif qui correspond a la date de la reservation
+        Tarif tarif=metierReservation.recupereTarif(date,heure1);
+
+        System.out.println("je suis le tarif "+tarif);
+
+        float prix=tarif.getPrix();
+
+
+//provisoire
+      //  Utilisateur utilisateur= utilisateurRepository.getOne(1);
+
+        Integer idUtilisateur=1;
+
+        //Reservation reservation=
+
+
+
+
+
 
 
         return "redirect:/reservation/tableau";
