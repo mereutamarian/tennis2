@@ -2,11 +2,9 @@ package mereuta.marian.tennis01.service;
 
 import mereuta.marian.tennis01.model.Ecran;
 import mereuta.marian.tennis01.model.Horaire;
+import mereuta.marian.tennis01.model.Reservation;
 import mereuta.marian.tennis01.model.Tarif;
-import mereuta.marian.tennis01.repository.EcranRepository;
-import mereuta.marian.tennis01.repository.HoraireRepository;
-import mereuta.marian.tennis01.repository.TarifRepository;
-import mereuta.marian.tennis01.repository.TerrainRepository;
+import mereuta.marian.tennis01.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
@@ -31,6 +29,9 @@ public class MetierReservation implements ReservationMetierInterface {
 
     @Autowired
     TarifRepository tarifRepository;
+
+    @Autowired
+    ReservationRepository reservationRepository;
 
     private Horaire horaire;
     private List<Horaire> horaires;
@@ -119,7 +120,7 @@ public class MetierReservation implements ReservationMetierInterface {
 
         System.out.println(heures);
 
-        for(int i=0; i<heures+1; i++){
+        for(int i=0; i<heures+2; i++){
 
             LocalTime heureDebut=h.getHeureDebut();
 
@@ -220,6 +221,10 @@ public class MetierReservation implements ReservationMetierInterface {
         }
 
         return tarifFinal;
+    }
+
+    public void addReservation(Reservation reservation){
+        reservationRepository.save(reservation);
     }
 
 

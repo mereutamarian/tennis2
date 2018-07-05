@@ -106,15 +106,19 @@ public class ReservationController {
 
         float prix=tarif.getPrix();
 
+        System.out.println(tarif.getPrix()+"je suis le prix");
+
 
 //provisoire
-      //  Utilisateur utilisateur= utilisateurRepository.getOne(1);
+        Utilisateur utilisateur= utilisateurRepository.getOne(1);
 
         Integer idUtilisateur=1;
 
-        //Reservation reservation=
 
 
+        Reservation reservation=new Reservation(LocalDateTime.now(),date1, date2,true,prix,utilisateur,terrain,tarif);
+
+        metierReservation.addReservation(reservation);
 
 
 
