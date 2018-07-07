@@ -30,8 +30,18 @@
         <h2 th:text="${t.nomTerrain}"></h2>
         <table border="1px">
 
-            <tr  th:each="h,index:${heures}"    >
+            <tr  th:each="h,index : ${heures.subList(0,15)}"   >
+
                 <td>
+
+            <th:block th:each="resa:${reservations}" th:if="${resa.dateReservation eq date && resa.heureDebut eq h}">
+
+                <p>test</p>
+
+            </th:block>
+
+
+
 
                     <a th:text="${h}" th:href="@{addResa(heure=${h} , terrain=${t.id} ,date=${date},date2=${index.index+1}, listeHeures = ${heures} )}"></a>
 

@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.temporal.ChronoUnit;
 
 import static java.time.temporal.ChronoUnit.HOURS;
 
@@ -165,13 +166,7 @@ public class MetierReservation implements ReservationMetierInterface {
        return listeHeureues.get(indexDate2);
     }
 
-    @Override
-    public LocalDateTime constructionDateTime(LocalDate date, LocalTime heure) {
 
-
-        return LocalDateTime.of(date, heure);
-
-    }
 
     @Override
     public Tarif recupereTarif(LocalDate date, LocalTime heure1) {
@@ -225,6 +220,23 @@ public class MetierReservation implements ReservationMetierInterface {
 
     public void addReservation(Reservation reservation){
         reservationRepository.save(reservation);
+    }
+
+    LocalDate today;
+
+
+    public List<Reservation> getReservationList(){
+
+        // on met la date d'ouajourd'hui a minuit
+        today=LocalDate.now().minusDays(1);
+
+
+        System.out.println("-----------------------");
+        System.out.println("la date est " +today);
+        System.out.println("---------------------------");
+
+
+        return reservationRepository.findByDateReservationIsGreaterThanAndActifTrue(today);
     }
 
 

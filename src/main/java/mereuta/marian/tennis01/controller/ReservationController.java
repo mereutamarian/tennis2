@@ -36,6 +36,7 @@ public class ReservationController {
 
     private Horaire horaire;
     private LocalDate date = LocalDate.now();
+    private List<Reservation> reservations;
 
     @GetMapping("/tableau")
     public String tableau(Model model,
@@ -67,10 +68,23 @@ public class ReservationController {
 
         System.out.println(dateResa);
 
+
+        reservations=metierReservation.getReservationList();
+
+
+            System.out.println("les reservations sont "+reservations);
+
+
+
+
+        int iterateur=0;
+
+        model.addAttribute("iterator",iterateur);
         model.addAttribute("date", dateResa);
         model.addAttribute(horaire);
         model.addAttribute("compteur", compteurJours);
         model.addAttribute("heures", heures);
+        model.addAttribute("reservations", reservations);
 
 
         return "reservation/tableauReservations";
@@ -88,9 +102,7 @@ public class ReservationController {
         //recuperation de la deuxieme heure
         LocalTime heure2=metierReservation.getSecondHeure(indexDate2, listeHeureues);
 
-        //creation date1 et date2 pour la db
-        LocalDateTime date1=metierReservation.constructionDateTime(date, heure1);
-        LocalDateTime date2=metierReservation.constructionDateTime(date, heure2);
+
 
        //get terrain by id
         Terrain terrain=metierTerrain.getTerrain(idTerrain);
@@ -104,19 +116,17 @@ public class ReservationController {
 
         System.out.println("je suis le tarif "+tarif);
 
-        float prix=tarif.getPrix();
 
-        System.out.println(tarif.getPrix()+"je suis le prix");
 
 
 //provisoire
         Utilisateur utilisateur= utilisateurRepository.getOne(1);
 
-        Integer idUtilisateur=1;
 
 
 
-        Reservation reservation=new Reservation(LocalDateTime.now(),date1, date2,true,prix,utilisateur,terrain,tarif);
+
+        Reservation reservation=new Reservation(LocalDateTime.now(),date,heure1, heure2,true,utilisateur,terrain,tarif);
 
         metierReservation.addReservation(reservation);
 

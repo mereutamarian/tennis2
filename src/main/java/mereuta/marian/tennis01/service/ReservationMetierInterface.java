@@ -14,7 +14,7 @@ public interface ReservationMetierInterface {
         public Horaire checkHoraire(LocalDate date);
         public LocalTime getSecondHeure(Integer indexDate2, List<LocalTime> listeHeureues);
 
-        public LocalDateTime constructionDateTime(LocalDate date, LocalTime heure);
+
 
        public Tarif recupereTarif(LocalDate date, LocalTime heure1);
 }

@@ -1,7 +1,9 @@
 package mereuta.marian.tennis01.model;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity(name = "reservations")
 public class Reservation {
@@ -9,16 +11,17 @@ public class Reservation {
     @Id @GeneratedValue
     @Column(name = "id")
     private Integer id;
+    @Column(name = "date_creation_reservation")
+    private LocalDateTime dateCreationReservation;
     @Column(name = "date_reservation")
-    private LocalDateTime dateReservation;
-    @Column(name = "date_debut")
-    private LocalDateTime dateDebut;
-    @Column(name = "date_fin")
-    private LocalDateTime dateFin;
+    private LocalDate dateReservation;
+    @Column(name = "heure_debut")
+    private LocalTime heureDebut;
+    @Column(name = "heure_fin")
+    private LocalTime heureFin;
     @Column(name = "active")
     private boolean actif;
-    @Column(name = "prix")
-    private float prix;
+
     @ManyToOne
     @JoinColumn(name = "id_utilisateur")
     private   Utilisateur utilisateur;
@@ -29,16 +32,15 @@ public class Reservation {
     @JoinColumn(name = "id_tarif")
    private Tarif tarif;
 
-
     public Reservation() {
     }
 
-    public Reservation(LocalDateTime dateReservation, LocalDateTime dateDebut, LocalDateTime dateFin, boolean actif, float prix, Utilisateur utilisateur, Terrain terrain, Tarif tarif) {
+    public Reservation(LocalDateTime dateCreationReservation, LocalDate dateReservation, LocalTime heureDebut, LocalTime heureFin, boolean actif, Utilisateur utilisateur, Terrain terrain, Tarif tarif) {
+        this.dateCreationReservation = dateCreationReservation;
         this.dateReservation = dateReservation;
-        this.dateDebut = dateDebut;
-        this.dateFin = dateFin;
+        this.heureDebut = heureDebut;
+        this.heureFin = heureFin;
         this.actif = actif;
-        this.prix = prix;
         this.utilisateur = utilisateur;
         this.terrain = terrain;
         this.tarif = tarif;
@@ -52,28 +54,36 @@ public class Reservation {
         this.id = id;
     }
 
-    public LocalDateTime getDateReservation() {
+    public LocalDateTime getDateCreationReservation() {
+        return dateCreationReservation;
+    }
+
+    public void setDateCreationReservation(LocalDateTime dateCreationReservation) {
+        this.dateCreationReservation = dateCreationReservation;
+    }
+
+    public LocalDate getDateReservation() {
         return dateReservation;
     }
 
-    public void setDateReservation(LocalDateTime dateReservation) {
+    public void setDateReservation(LocalDate dateReservation) {
         this.dateReservation = dateReservation;
     }
 
-    public LocalDateTime getDateDebut() {
-        return dateDebut;
+    public LocalTime getHeureDebut() {
+        return heureDebut;
     }
 
-    public void setDateDebut(LocalDateTime dateDebut) {
-        this.dateDebut = dateDebut;
+    public void setHeureDebut(LocalTime heureDebut) {
+        this.heureDebut = heureDebut;
     }
 
-    public LocalDateTime getDateFin() {
-        return dateFin;
+    public LocalTime getHeureFin() {
+        return heureFin;
     }
 
-    public void setDateFin(LocalDateTime dateFin) {
-        this.dateFin = dateFin;
+    public void setHeureFin(LocalTime heureFin) {
+        this.heureFin = heureFin;
     }
 
     public boolean isActif() {
@@ -82,14 +92,6 @@ public class Reservation {
 
     public void setActif(boolean actif) {
         this.actif = actif;
-    }
-
-    public float getPrix() {
-        return prix;
-    }
-
-    public void setPrix(float prix) {
-        this.prix = prix;
     }
 
     public Utilisateur getUtilisateur() {
@@ -120,11 +122,11 @@ public class Reservation {
     public String toString() {
         return "Reservation{" +
                 "id=" + id +
+                ", dateCreationReservation=" + dateCreationReservation +
                 ", dateReservation=" + dateReservation +
-                ", dateDebut=" + dateDebut +
-                ", dateFin=" + dateFin +
+                ", heureDebut=" + heureDebut +
+                ", heureFin=" + heureFin +
                 ", actif=" + actif +
-                ", prix=" + prix +
                 ", utilisateur=" + utilisateur +
                 ", terrain=" + terrain +
                 ", tarif=" + tarif +
