@@ -218,6 +218,33 @@ public class MetierReservation implements ReservationMetierInterface {
         return tarifFinal;
     }
 
+    @Override
+    public Reservation getReservation(Integer idReservation) {
+        return reservationRepository.getOne(idReservation);
+    }
+
+    @Override
+    public void annulerReservation(Reservation reservation) {
+
+        reservation.setActif(false);
+        reservationRepository.save(reservation);
+    }
+
+    @Override
+    public boolean checkIfDateEtHeureInferieureMaintenant(LocalDate date, LocalTime heure1) {
+
+        LocalDateTime maintenant=LocalDateTime.now();
+        LocalDateTime dateHeureResa=LocalDateTime.of(date, heure1);
+
+        if(maintenant.isAfter(dateHeureResa)){
+            return true;
+        }else {
+            return false;
+        }
+
+
+    }
+
     public void addReservation(Reservation reservation){
         reservationRepository.save(reservation);
     }

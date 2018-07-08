@@ -37,6 +37,7 @@ public class ReservationController {
     private Horaire horaire;
     private LocalDate date = LocalDate.now();
     private List<Reservation> reservations;
+    private Reservation reservation;
 
     @GetMapping("/tableau")
     public String tableau(Model model,
@@ -69,17 +70,15 @@ public class ReservationController {
         System.out.println(dateResa);
 
 
-        reservations=metierReservation.getReservationList();
+        reservations = metierReservation.getReservationList();
 
 
-            System.out.println("les reservations sont "+reservations);
+        System.out.println("les reservations sont " + reservations);
 
 
+        int iterator = 0;
 
-
-        int iterateur=0;
-
-        model.addAttribute("iterator",iterateur);
+        model.addAttribute("iterator", iterator);
         model.addAttribute("date", dateResa);
         model.addAttribute(horaire);
         model.addAttribute("compteur", compteurJours);
@@ -98,43 +97,54 @@ public class ReservationController {
                                      @RequestParam(value = "listeHeures") List<LocalTime> listeHeureues) {
 
 
-
         //recuperation de la deuxieme heure
-        LocalTime heure2=metierReservation.getSecondHeure(indexDate2, listeHeureues);
+        LocalTime heure2 = metierReservation.getSecondHeure(indexDate2, listeHeureues);
 
 
-
-       //get terrain by id
-        Terrain terrain=metierTerrain.getTerrain(idTerrain);
+        //get terrain by id
+        Terrain terrain = metierTerrain.getTerrain(idTerrain);
 
         //recuperer Tarif
-        System.out.println("je suis la date"+date);
+        System.out.println("je suis la date" + date);
 
 
         //on recupere le tarif qui correspond a la date de la reservation
-        Tarif tarif=metierReservation.recupereTarif(date,heure1);
+        Tarif tarif = metierReservation.recupereTarif(date, heure1);
 
-        System.out.println("je suis le tarif "+tarif);
-
-
+        System.out.println("je suis le tarif " + tarif);
 
 
 //provisoire
-        Utilisateur utilisateur= utilisateurRepository.getOne(1);
+        Utilisateur utilisateur = utilisateurRepository.getOne(1);
 
 
+        Reservation reservation = new Reservation(LocalDateTime.now(), date, heure1, heure2, true, utilisateur, terrain, tarif);
+
+        boolean checkHeureresa = metierReservation.checkIfDateEtHeureInferieureMaintenant(date, heure1);
+
+        System.out.println(" je suis la fonction de check" + checkHeureresa);
+
+        if (checkHeureresa == false) {
+            metierReservation.addReservation(reservation);
+            return "redirect:/reservation/tableau";
+        } else {
+            return "reservation/checkAddResa";
+        }
 
 
+    }
 
-        Reservation reservation=new Reservation(LocalDateTime.now(),date,heure1, heure2,true,utilisateur,terrain,tarif);
-
-        metierReservation.addReservation(reservation);
-
+    @GetMapping("/cancelResa")
+    public String annulerReservation(@RequestParam(value = "idResa") Integer idReservation) {
 
 
+        reservation = metierReservation.getReservation(idReservation);
+
+        metierReservation.annulerReservation(reservation);
 
 
         return "redirect:/reservation/tableau";
+
     }
 
 

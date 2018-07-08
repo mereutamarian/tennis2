@@ -1,6 +1,7 @@
 package mereuta.marian.tennis01.service;
 
 import mereuta.marian.tennis01.model.Horaire;
+import mereuta.marian.tennis01.model.Reservation;
 import mereuta.marian.tennis01.model.Tarif;
 import mereuta.marian.tennis01.model.Terrain;
 
@@ -11,10 +12,16 @@ import java.util.List;
 
 public interface ReservationMetierInterface {
 
-        public Horaire checkHoraire(LocalDate date);
-        public LocalTime getSecondHeure(Integer indexDate2, List<LocalTime> listeHeureues);
+    public Horaire checkHoraire(LocalDate date);
+
+    public LocalTime getSecondHeure(Integer indexDate2, List<LocalTime> listeHeureues);
 
 
+    public Tarif recupereTarif(LocalDate date, LocalTime heure1);
 
-       public Tarif recupereTarif(LocalDate date, LocalTime heure1);
+    public Reservation getReservation(Integer idReservation);
+
+    public void annulerReservation(Reservation reservation);
+
+    boolean checkIfDateEtHeureInferieureMaintenant(LocalDate date, LocalTime heure1);
 }
