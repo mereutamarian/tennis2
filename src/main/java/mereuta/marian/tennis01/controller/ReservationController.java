@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -120,15 +121,21 @@ public class ReservationController {
 
         Reservation reservation = new Reservation(LocalDateTime.now(), date, heure1, heure2, true, utilisateur, terrain, tarif);
 
+        //check si l'heure de la résa est après l'heure currente
+
         boolean checkHeureresa = metierReservation.checkIfDateEtHeureInferieureMaintenant(date, heure1);
+        boolean checkCredit = metierReservation.checkIfCreditOk(utilisateur, tarif);
 
         System.out.println(" je suis la fonction de check" + checkHeureresa);
 
-        if (checkHeureresa == false) {
+
+        if (checkHeureresa == false && checkCredit == true) {
             metierReservation.addReservation(reservation);
             return "redirect:/reservation/tableau";
-        } else {
+        } else if (checkHeureresa == true) {
             return "reservation/checkAddResa";
+        } else {
+            return "reservation/creditInsuffisant";
         }
 
 
@@ -140,11 +147,33 @@ public class ReservationController {
 
         reservation = metierReservation.getReservation(idReservation);
 
-        metierReservation.annulerReservation(reservation);
+        boolean checkCancelOk = metierReservation.checkIfCancelBefore24Hours(reservation.getDateReservation(), reservation.getHeureDebut());
+        if (checkCancelOk == true) {
+
+            metierReservation.annulerReservation(reservation);
+            return "redirect:/reservation/tableau";
+        } else {
+            return "reservation/checkIfCancelationOk";
+        }
+
+
+    }
+
+    @GetMapping("/heuresAnnulationForm")
+    public String formHeuresAnnulation() {
+
+        return "reservation/formHeuresAnnulation";
+    }
+
+
+    @PostMapping("/heuresAnnulation")
+    public String heuresAnulationReservation(@RequestParam(name = "nombreHeures") int nombreHeures) {
+
+        metierReservation.heuresAnnulerReservation(nombreHeures);
+
 
 
         return "redirect:/reservation/tableau";
-
     }
 
 

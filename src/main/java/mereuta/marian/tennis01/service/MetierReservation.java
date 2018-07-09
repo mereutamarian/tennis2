@@ -1,9 +1,6 @@
 package mereuta.marian.tennis01.service;
 
-import mereuta.marian.tennis01.model.Ecran;
-import mereuta.marian.tennis01.model.Horaire;
-import mereuta.marian.tennis01.model.Reservation;
-import mereuta.marian.tennis01.model.Tarif;
+import mereuta.marian.tennis01.model.*;
 import mereuta.marian.tennis01.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -33,11 +30,14 @@ public class MetierReservation implements ReservationMetierInterface {
 
     @Autowired
     ReservationRepository reservationRepository;
+    @Autowired
+    UtilisateurRepository utilisateurRepository;
 
     private Horaire horaire;
     private List<Horaire> horaires;
     private Ecran ecran;
     private List<Tarif> tarifs;
+    private int nombreHeuresAvantAnnulation=24;
 
 
 
@@ -245,6 +245,53 @@ public class MetierReservation implements ReservationMetierInterface {
 
     }
 
+    @Override
+    public boolean checkIfCancelBefore24Hours(LocalDate dateReservation, LocalTime heureDebut) {
+
+        LocalDateTime resaHeure=LocalDateTime.of(dateReservation,heureDebut);
+
+        // check if 24 heures de difference entre la date de la reservation et la date d'aujourd'hui
+        long hours=ChronoUnit.HOURS.between(resaHeure,LocalDateTime.now());
+
+        System.out.println("je suis les heures"+hours);
+
+
+
+        if (hours<= -nombreHeuresAvantAnnulation){
+            return true;
+        }else {
+            return  false;
+        }
+
+    }
+
+    @Override
+    public boolean checkIfCreditOk(Utilisateur utilisateur, Tarif tarif) {
+
+        System.out.println("je suis le prix de la resa"+tarif.getPrix());
+        System.out.println("je suis le credit de l'utilisateur"+utilisateur.getCredit());
+
+
+
+        if(utilisateur.getCredit()>=tarif.getPrix()){
+
+            utilisateur.setCredit(utilisateur.getCredit()-tarif.getPrix());
+            utilisateurRepository.save(utilisateur);
+
+            return true;
+
+
+        }else {
+            return false;
+        }
+
+    }
+
+    @Override
+    public void heuresAnnulerReservation(int nombreHeures) {
+        nombreHeuresAvantAnnulation=nombreHeures;
+    }
+
     public void addReservation(Reservation reservation){
         reservationRepository.save(reservation);
     }
@@ -265,6 +312,8 @@ public class MetierReservation implements ReservationMetierInterface {
 
         return reservationRepository.findByDateReservationIsGreaterThanAndActifTrue(today);
     }
+
+
 
 
 }

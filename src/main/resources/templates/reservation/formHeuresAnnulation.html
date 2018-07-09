@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div>
+    <h1>Changer heures reservation</h1>
+</div>
+
+<div class="container">
+    <form id="contact" th:action="@{heuresAnnulation}" method="post"   >
+        <h3>Changer heures reservation</h3>
+
+        <fieldset>
+            <input placeholder="nombre d'heures" type="number" name="nombreHeures" tabindex="1" required autofocus>
+
+        </fieldset>
+
+        <fieldset>
+            <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">Modifier</button>
+        </fieldset>
+
+    </form>
+</div>
+
+</body>
+</html>

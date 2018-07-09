@@ -24,6 +24,13 @@ import static java.time.temporal.ChronoUnit.HOURS;
 @SpringBootApplication
 public class Tennis01Application {
 
+//	public class AnnulationService{
+//		private int heureAnnulation = 24;
+//
+//		public Annulation(int newHeureAnnul){
+//			heureAnnulation = newHeureAnnul;
+//		}
+
 
 	public static void main(String[] args) {
 

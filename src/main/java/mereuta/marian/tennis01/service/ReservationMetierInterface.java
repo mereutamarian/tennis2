@@ -1,9 +1,6 @@
 package mereuta.marian.tennis01.service;
 
-import mereuta.marian.tennis01.model.Horaire;
-import mereuta.marian.tennis01.model.Reservation;
-import mereuta.marian.tennis01.model.Tarif;
-import mereuta.marian.tennis01.model.Terrain;
+import mereuta.marian.tennis01.model.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,5 +20,12 @@ public interface ReservationMetierInterface {
 
     public void annulerReservation(Reservation reservation);
 
-    boolean checkIfDateEtHeureInferieureMaintenant(LocalDate date, LocalTime heure1);
+    public boolean checkIfDateEtHeureInferieureMaintenant(LocalDate date, LocalTime heure1);
+
+    public boolean checkIfCancelBefore24Hours(LocalDate dateReservation, LocalTime heureDebut);
+
+
+    public boolean checkIfCreditOk(Utilisateur utilisateur, Tarif tarif);
+
+   public void heuresAnnulerReservation(int nombreHeures);
 }
