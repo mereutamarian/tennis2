@@ -43,7 +43,7 @@
 
 
                         <th:block th:each="resa:${reservations}">
-                            <th:block th:if="${resa.dateReservation eq date && resa.heureDebut eq h}"
+                            <th:block th:if="${resa.dateReservation eq date && resa.heureDebut eq h && t.id eq resa.terrain.id}"
                                       th:with="iterator=${iterator+1}">
                                 <p>reserve</p>
                                 <a th:text="'Annuler'" th:href="@{cancelResa(idResa=${resa.getId()})}"></a>

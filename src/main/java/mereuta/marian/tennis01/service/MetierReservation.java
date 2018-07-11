@@ -22,8 +22,7 @@ public class MetierReservation implements ReservationMetierInterface {
     @Autowired
     private HoraireRepository horaireRepository;
 
-    @Autowired
-    EcranMetier ecranMetier;
+
 
     @Autowired
     TarifRepository tarifRepository;
@@ -35,9 +34,12 @@ public class MetierReservation implements ReservationMetierInterface {
 
     private Horaire horaire;
     private List<Horaire> horaires;
-    private Ecran ecran;
+
+    private Utilisateur utilisateur;
+
     private List<Tarif> tarifs;
     private int nombreHeuresAvantAnnulation=24;
+    private int nombreJoursAvantResa=7;
 
 
 
@@ -138,9 +140,9 @@ public class MetierReservation implements ReservationMetierInterface {
 
         List<Integer> compteurJours=new ArrayList<>();
 
-        ecran=ecranMetier.showEcran();
 
-        for(int i=0;i<ecran.getTableau().getNombreJours();i++){
+
+        for(int i=0;i<nombreJoursAvantResa;i++){
             compteurJours.add(i);
         }
 
@@ -228,6 +230,19 @@ public class MetierReservation implements ReservationMetierInterface {
 
         reservation.setActif(false);
         reservationRepository.save(reservation);
+
+
+        //on recupere l'utilisatuer de la resa et on lui redonne le credit
+
+        System.out.println("je suis l'id" +reservation.getUtilisateur().getId());
+        utilisateur=utilisateurRepository.getOne(reservation.getUtilisateur().getId());
+
+        utilisateur.setCredit(utilisateur.getCredit()+reservation.getTarif().getPrix());
+
+        utilisateurRepository.save(utilisateur);
+
+
+
     }
 
     @Override
@@ -290,6 +305,11 @@ public class MetierReservation implements ReservationMetierInterface {
     @Override
     public void heuresAnnulerReservation(int nombreHeures) {
         nombreHeuresAvantAnnulation=nombreHeures;
+    }
+
+    @Override
+    public void joursReservation(int nombreJours) {
+        nombreJoursAvantResa=nombreJours;
     }
 
     public void addReservation(Reservation reservation){

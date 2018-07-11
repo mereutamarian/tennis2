@@ -177,5 +177,27 @@ public class ReservationController {
     }
 
 
+
+
+
+
+    @GetMapping("/joursReservationForm")
+    public String joursReservationForm() {
+
+        return "reservation/formJoursReservation";
+    }
+
+
+    @PostMapping("/joursReservation")
+    public String joursReservation(@RequestParam(name = "nombreJours") int nombreJours) {
+
+        metierReservation.joursReservation(nombreJours);
+
+
+
+        return "redirect:/reservation/tableau";
+    }
+
+
 }
 

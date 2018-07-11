@@ -28,4 +28,6 @@ public interface ReservationMetierInterface {
     public boolean checkIfCreditOk(Utilisateur utilisateur, Tarif tarif);
 
    public void heuresAnnulerReservation(int nombreHeures);
+
+    public void joursReservation(int nombreJours);
 }
