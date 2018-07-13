@@ -1,6 +1,11 @@
 package mereuta.marian.tennis01.model;
 
+import mereuta.marian.tennis01.annotations.EmailUnique;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity(name = "utilisateurs")
@@ -8,20 +13,28 @@ public class Utilisateur {
     @Id @GeneratedValue
     @Column(name = "id_utilisateur")
     private Integer id;
+    @NotNull
     @Column(name = "nom")
     private String nom;
+    @NotNull
     @Column(name="prenom")
     private String prenom;
     @Column(name = "adresse")
     private String adrese;
+    @Size(min=4 , max = 4)
+    @Pattern(regexp = "[0-9]{4}", message = "le code postal doit contenir 4 chiffres !!!")
     @Column(name = "code_postal")
-    private int codePostal;
+    private String codePostal;
     @Column(name = "ville")
     private String ville;
+    @Pattern(regexp ="([(+]*[0-9]+[()+. -]*)", message = "le format du numéro du téléphone que vous avez inseré est invalide")
     @Column(name = "telephone")
     private String telephone;
     @Column(name = "email")
+    @EmailUnique(message = "mail deja existant")
     private String email;
+    @Size(min = 4, max = 20)
+    @Column(name = "password")
     private String password;
     @Column(name="credit")
     private float credit;
@@ -48,20 +61,7 @@ public class Utilisateur {
         this.reservations = reservations;
     }
 
-    public Utilisateur(String nom, String prenom, String adrese, int codePostal, String ville, String telephone, String email, String password , float credit, Role role) {
-        this.nom = nom;
-        this.prenom = prenom;
-        this.adrese = adrese;
-        this.codePostal = codePostal;
-        this.ville = ville;
-        this.telephone = telephone;
-        this.email = email;
-        this.credit = credit;
-        this.password=password;
-        this.actif = true;
-        this.role=role;
 
-    }
 
     @Override
     public String toString() {
@@ -121,11 +121,11 @@ public class Utilisateur {
         this.adrese = adrese;
     }
 
-    public int getCodePostal() {
+    public String getCodePostal() {
         return codePostal;
     }
 
-    public void setCodePostal(int codePostal) {
+    public void setCodePostal(String codePostal) {
         this.codePostal = codePostal;
     }
 

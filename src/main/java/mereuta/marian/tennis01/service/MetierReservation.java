@@ -23,7 +23,6 @@ public class MetierReservation implements ReservationMetierInterface {
     private HoraireRepository horaireRepository;
 
 
-
     @Autowired
     TarifRepository tarifRepository;
 
@@ -38,96 +37,93 @@ public class MetierReservation implements ReservationMetierInterface {
     private Utilisateur utilisateur;
 
     private List<Tarif> tarifs;
-    private int nombreHeuresAvantAnnulation=24;
-    private int nombreJoursAvantResa=7;
+    private int nombreHeuresAvantAnnulation = 24;
+    private int nombreJoursAvantResa = 7;
 
 
-
-
-    public int checkJourSpecial(@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date){
+    @Override
+    public int checkJourSpecial(@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
 
 
         //prendd tous les horaires speciaux
-        horaires=horaireRepository.findAllByDateHoraireSpecialNotNull();
+        horaires = horaireRepository.findAllByDateHoraireSpecialNotNull();
 
-       int check=0;
+        int check = 0;
 
-        for (Horaire h: horaires){
-            if (h.getDateHoraireSpecial().equals(date)){
+        for (Horaire h : horaires) {
+            if (h.getDateHoraireSpecial().equals(date)) {
                 check++;
             }
         }
 
-            return check;
+        return check;
 
     }
 
-
+    @Override
     public Horaire checkHoraire(@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
-
 
 
         DayOfWeek day = date.getDayOfWeek();
 
         String jour = day.name();
 
-        Horaire horaire=new Horaire();
+        Horaire horaire = new Horaire();
 
 
+        if (checkJourSpecial(date) == 1) {
 
-           if(checkJourSpecial(date)==1){
+            horaire = horaireRepository.findByDateHoraireSpecial(date);
 
-                horaire=horaireRepository.findByDateHoraireSpecial(date);
+        } else {
 
-            }else {
+            if (jour == "MONDAY") {
+                horaire = horaireRepository.getOne(1);
 
-                if (jour == "MONDAY") {
-                    horaire = horaireRepository.getOne(1);
+            } else if (jour == "TUESDAY") {
 
-                } else if (jour=="TUESDAY") {
+                horaire = horaireRepository.getOne(2);
 
-                    horaire = horaireRepository.getOne(2);
+            } else if (jour == "WEDNESDAY") {
 
-                } else if (jour == "WEDNESDAY") {
+                horaire = horaireRepository.getOne(3);
 
-                    horaire = horaireRepository.getOne(3);
+            } else if (jour == "THURSDAY") {
 
-                } else if (jour == "THURSDAY") {
+                horaire = horaireRepository.getOne(4);
 
-                    horaire = horaireRepository.getOne(4);
+            } else if (jour == "FRIDAY") {
 
-                } else if (jour == "FRIDAY") {
+                horaire = horaireRepository.getOne(5);
 
-                    horaire = horaireRepository.getOne(5);
+            } else if (jour == "SATURDAY") {
 
-                } else if (jour == "SATURDAY") {
+                horaire = horaireRepository.getOne(6);
 
-                    horaire = horaireRepository.getOne(6);
+            } else if (jour == "SUNDAY") {
 
-                } else if (jour == "SUNDAY") {
+                horaire = horaireRepository.getOne(7);
 
-                    horaire = horaireRepository.getOne(7);
-
-                }
             }
-
-            return horaire;
         }
 
+        return horaire;
+    }
 
-    public List<LocalTime> transformHeures(Horaire h){
+    @Override
+    public List<LocalTime> transformHeures(Horaire h) {
 
-        List<LocalTime> listeHeures=new ArrayList<>();
+        List<LocalTime> listeHeures = new ArrayList<>();
 
-        int heures= (int) HOURS.between(h.getHeureDebut(), h.getHeureFin());
+        int heures = (int) HOURS.between(h.getHeureDebut(), h.getHeureFin());
 
         System.out.println(heures);
 
-        for(int i=0; i<heures+2; i++){
+        for (int i = 0; i < heures + 2; i++) {
 
-            LocalTime heureDebut=h.getHeureDebut();
+            LocalTime heureDebut = h.getHeureDebut();
 
-            heureDebut=heureDebut.plusHours(i);
+            heureDebut = heureDebut.plusHours(i);
 
             listeHeures.add(heureDebut);
 
@@ -136,83 +132,83 @@ public class MetierReservation implements ReservationMetierInterface {
         return listeHeures;
     }
 
-    public  List<Integer> nombreJours(){
+    @Override
+    public List<Integer> nombreJours() {
 
-        List<Integer> compteurJours=new ArrayList<>();
+        List<Integer> compteurJours = new ArrayList<>();
 
 
-
-        for(int i=0;i<nombreJoursAvantResa;i++){
+        for (int i = 0; i < nombreJoursAvantResa; i++) {
             compteurJours.add(i);
         }
 
         return compteurJours;
     }
 
-    public LocalDate dateDuTableauReservation(Integer compteur){
+    @Override
+    public LocalDate dateDuTableauReservation(Integer compteur) {
 
         LocalDate dateTableau;
 
-        dateTableau=LocalDate.now();
+        dateTableau = LocalDate.now();
 
-       dateTableau= dateTableau.plusDays(compteur);
+        dateTableau = dateTableau.plusDays(compteur);
 
         return dateTableau;
 
 
     }
 
-@Override
+    @Override
     public LocalTime getSecondHeure(Integer indexDate2, List<LocalTime> listeHeureues) {
 
-       return listeHeureues.get(indexDate2);
+        return listeHeureues.get(indexDate2);
     }
-
 
 
     @Override
     public Tarif recupereTarif(LocalDate date, LocalTime heure1) {
 
-        tarifs=tarifRepository.findAll();
+        tarifs = tarifRepository.findAll();
 
-        DayOfWeek dayOfWeek= date.getDayOfWeek();
-        String jour=dayOfWeek.name();
+        DayOfWeek dayOfWeek = date.getDayOfWeek();
+        String jour = dayOfWeek.name();
 
-        Tarif tarifFinal= new Tarif();
+        Tarif tarifFinal = new Tarif();
 
 
-        for (Tarif tarif: tarifs){
-            if(     date.isAfter(tarif.getDateDebut()) &&
-                    date.isBefore(tarif.getDateFin())  &&
+        for (Tarif tarif : tarifs) {
+            if (date.isAfter(tarif.getDateDebut()) &&
+                    date.isBefore(tarif.getDateFin()) &&
                     heure1.isAfter(tarif.getHeureDebut()) &&
                     heure1.isBefore(tarif.getHeureFin()) &&
                     tarif.isTarifSpecial() && tarif.isActif() && !tarif.isTarifParDefaut()
-                    ){
-                tarifFinal= tarif;
-            }else if(
-                    jour=="SATURDAY" || jour=="SUNDAY" &&
-                    date.isAfter(tarif.getDateDebut()) &&
-                    date.isBefore(tarif.getDateFin())  &&
-                    heure1.isAfter(tarif.getHeureDebut()) &&
-                    heure1.isBefore(tarif.getHeureFin()) &&
-                    !tarif.isTarifSpecial() && tarif.isActif() && !tarif.isTarifParDefaut()&& tarif.isWeekend()
-                    ){
-
-                    tarifFinal= tarif;
-            }else if (
-
-                   jour !="SATURDAY" || jour !="SUNDAY" &&
+                    ) {
+                tarifFinal = tarif;
+            } else if (
+                    jour == "SATURDAY" || jour == "SUNDAY" &&
                             date.isAfter(tarif.getDateDebut()) &&
-                            date.isBefore(tarif.getDateFin())  &&
+                            date.isBefore(tarif.getDateFin()) &&
                             heure1.isAfter(tarif.getHeureDebut()) &&
                             heure1.isBefore(tarif.getHeureFin()) &&
-                            !tarif.isTarifSpecial() && tarif.isActif() && !tarif.isTarifParDefaut()&& !tarif.isWeekend()
+                            !tarif.isTarifSpecial() && tarif.isActif() && !tarif.isTarifParDefaut() && tarif.isWeekend()
+                    ) {
 
-                    ){
-                tarifFinal=tarif;
+                tarifFinal = tarif;
+            } else if (
 
-            }else {
-                tarifFinal= tarifRepository.getOne(83);
+                    jour != "SATURDAY" || jour != "SUNDAY" &&
+                            date.isAfter(tarif.getDateDebut()) &&
+                            date.isBefore(tarif.getDateFin()) &&
+                            heure1.isAfter(tarif.getHeureDebut()) &&
+                            heure1.isBefore(tarif.getHeureFin()) &&
+                            !tarif.isTarifSpecial() && tarif.isActif() && !tarif.isTarifParDefaut() && !tarif.isWeekend()
+
+                    ) {
+                tarifFinal = tarif;
+
+            } else {
+                tarifFinal = tarifRepository.getOne(83);
             }
 
         }
@@ -234,13 +230,12 @@ public class MetierReservation implements ReservationMetierInterface {
 
         //on recupere l'utilisatuer de la resa et on lui redonne le credit
 
-        System.out.println("je suis l'id" +reservation.getUtilisateur().getId());
-        utilisateur=utilisateurRepository.getOne(reservation.getUtilisateur().getId());
+        System.out.println("je suis l'id" + reservation.getUtilisateur().getId());
+        utilisateur = utilisateurRepository.getOne(reservation.getUtilisateur().getId());
 
-        utilisateur.setCredit(utilisateur.getCredit()+reservation.getTarif().getPrix());
+        utilisateur.setCredit(utilisateur.getCredit() + reservation.getTarif().getPrix());
 
         utilisateurRepository.save(utilisateur);
-
 
 
     }
@@ -248,12 +243,12 @@ public class MetierReservation implements ReservationMetierInterface {
     @Override
     public boolean checkIfDateEtHeureInferieureMaintenant(LocalDate date, LocalTime heure1) {
 
-        LocalDateTime maintenant=LocalDateTime.now();
-        LocalDateTime dateHeureResa=LocalDateTime.of(date, heure1);
+        LocalDateTime maintenant = LocalDateTime.now();
+        LocalDateTime dateHeureResa = LocalDateTime.of(date, heure1);
 
-        if(maintenant.isAfter(dateHeureResa)){
+        if (maintenant.isAfter(dateHeureResa)) {
             return true;
-        }else {
+        } else {
             return false;
         }
 
@@ -263,19 +258,18 @@ public class MetierReservation implements ReservationMetierInterface {
     @Override
     public boolean checkIfCancelBefore24Hours(LocalDate dateReservation, LocalTime heureDebut) {
 
-        LocalDateTime resaHeure=LocalDateTime.of(dateReservation,heureDebut);
+        LocalDateTime resaHeure = LocalDateTime.of(dateReservation, heureDebut);
 
         // check if 24 heures de difference entre la date de la reservation et la date d'aujourd'hui
-        long hours=ChronoUnit.HOURS.between(resaHeure,LocalDateTime.now());
+        long hours = ChronoUnit.HOURS.between(resaHeure, LocalDateTime.now());
 
-        System.out.println("je suis les heures"+hours);
+        System.out.println("je suis les heures" + hours);
 
 
-
-        if (hours<= -nombreHeuresAvantAnnulation){
+        if (hours <= -nombreHeuresAvantAnnulation) {
             return true;
-        }else {
-            return  false;
+        } else {
+            return false;
         }
 
     }
@@ -283,20 +277,19 @@ public class MetierReservation implements ReservationMetierInterface {
     @Override
     public boolean checkIfCreditOk(Utilisateur utilisateur, Tarif tarif) {
 
-        System.out.println("je suis le prix de la resa"+tarif.getPrix());
-        System.out.println("je suis le credit de l'utilisateur"+utilisateur.getCredit());
+        System.out.println("je suis le prix de la resa" + tarif.getPrix());
+        System.out.println("je suis le credit de l'utilisateur" + utilisateur.getCredit());
 
 
+        if (utilisateur.getCredit() >= tarif.getPrix()) {
 
-        if(utilisateur.getCredit()>=tarif.getPrix()){
-
-            utilisateur.setCredit(utilisateur.getCredit()-tarif.getPrix());
+            utilisateur.setCredit(utilisateur.getCredit() - tarif.getPrix());
             utilisateurRepository.save(utilisateur);
 
             return true;
 
 
-        }else {
+        } else {
             return false;
         }
 
@@ -304,36 +297,36 @@ public class MetierReservation implements ReservationMetierInterface {
 
     @Override
     public void heuresAnnulerReservation(int nombreHeures) {
-        nombreHeuresAvantAnnulation=nombreHeures;
+        nombreHeuresAvantAnnulation = nombreHeures;
     }
 
     @Override
     public void joursReservation(int nombreJours) {
-        nombreJoursAvantResa=nombreJours;
+        nombreJoursAvantResa = nombreJours;
     }
 
-    public void addReservation(Reservation reservation){
+    @Override
+    public void addReservation(Reservation reservation) {
         reservationRepository.save(reservation);
     }
 
     LocalDate today;
 
 
-    public List<Reservation> getReservationList(){
+    @Override
+    public List<Reservation> getReservationList() {
 
         // on met la date d'ouajourd'hui a minuit
-        today=LocalDate.now().minusDays(1);
+        today = LocalDate.now().minusDays(1);
 
 
         System.out.println("-----------------------");
-        System.out.println("la date est " +today);
+        System.out.println("la date est " + today);
         System.out.println("---------------------------");
 
 
         return reservationRepository.findByDateReservationIsGreaterThanAndActifTrue(today);
     }
-
-
 
 
 }
