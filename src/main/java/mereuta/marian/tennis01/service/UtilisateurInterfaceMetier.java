@@ -8,4 +8,7 @@ public interface UtilisateurInterfaceMetier {
 
     public List<Utilisateur> listUtilisateurs();
     public void creerUtilisateur(Utilisateur utilisateur);
+
+    public boolean checkIfMailIsPresent(String email);
+    public Utilisateur findByEmail(String email);
 }

@@ -1,6 +1,8 @@
 package mereuta.marian.tennis01.controller;
 
 import mereuta.marian.tennis01.model.Utilisateur;
+import mereuta.marian.tennis01.service.UtilisateurMetier;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,6 +15,9 @@ import javax.validation.Valid;
 @RequestMapping("/utilisateur")
 public class UtilisateurController {
 
+    @Autowired
+    UtilisateurMetier utilisateurMetier;
+
 
 @GetMapping("/inscription")
     public String registerForm(Model model){
@@ -24,15 +29,19 @@ public class UtilisateurController {
 
 
     @PostMapping("/addUtilisateur")
-    public String addUtilisateur(@Valid @ModelAttribute("utilisateur") Utilisateur utilisateur, BindingResult bindingResult){
+    public String addUtilisateur(@Valid @ModelAttribute("utilisateur") Utilisateur utilisateur, BindingResult bindingResult,Model model){
 
 
     if(bindingResult.hasErrors()){
         return "utilisateur/formRegister";
-    }else {
-        System.out.println(utilisateur);
-        return null;
     }
+
+
+    utilisateurMetier.creerUtilisateur(utilisateur);
+
+    return "utilisateur/utilisateurAjoute";
+
+
 
     }
 }

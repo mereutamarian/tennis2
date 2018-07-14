@@ -33,7 +33,7 @@ public class Utilisateur {
     @Column(name = "email")
     @EmailUnique(message = "mail deja existant")
     private String email;
-    @Size(min = 4, max = 20)
+    @Size(min = 4, max = 256)
     @Column(name = "password")
     private String password;
     @Column(name="credit")
