@@ -1,9 +1,7 @@
 package mereuta.marian.tennis01.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity(name = "roles")
 public class Role {
@@ -17,14 +15,11 @@ public class Role {
     @Column(name = "actif")
     private boolean actif;
 
+
     public Role() {
     }
 
-    public Role( String nomRole ) {
 
-        this.nomRole = nomRole;
-        this.actif=true;
-    }
 
     public Integer getId() {
         return id;
@@ -49,6 +44,8 @@ public class Role {
     public void setActif(boolean actif) {
         this.actif = actif;
     }
+
+
 
     @Override
     public String toString() {

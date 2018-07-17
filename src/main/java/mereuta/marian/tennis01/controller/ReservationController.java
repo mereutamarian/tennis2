@@ -124,7 +124,7 @@ public class ReservationController {
         //check si l'heure de la résa est après l'heure currente
 
         boolean checkHeureresa = metierReservation.checkIfDateEtHeureInferieureMaintenant(date, heure1);
-        boolean checkCredit = metierReservation.checkIfCreditOk(utilisateur, tarif);
+        boolean checkCredit = metierReservation.checkIfCreditOk(utilisateur, tarif,heure1,heure2);
 
         System.out.println(" je suis la fonction de check" + checkHeureresa);
 

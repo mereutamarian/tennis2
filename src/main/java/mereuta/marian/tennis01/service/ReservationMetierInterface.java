@@ -24,7 +24,7 @@ public interface ReservationMetierInterface {
 
     public boolean checkIfCancelBefore24Hours(LocalDate dateReservation, LocalTime heureDebut);
 
-    public boolean checkIfCreditOk(Utilisateur utilisateur, Tarif tarif);
+    public boolean checkIfCreditOk(Utilisateur utilisateur, Tarif tarif,LocalTime heure1,LocalTime heure2);
 
     public void heuresAnnulerReservation(int nombreHeures);
 

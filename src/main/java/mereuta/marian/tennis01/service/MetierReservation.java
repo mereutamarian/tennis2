@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.temporal.ChronoUnit;
@@ -275,7 +272,7 @@ public class MetierReservation implements ReservationMetierInterface {
     }
 
     @Override
-    public boolean checkIfCreditOk(Utilisateur utilisateur, Tarif tarif) {
+    public boolean checkIfCreditOk(Utilisateur utilisateur, Tarif tarif, LocalTime heure1,LocalTime heure2) {
 
         System.out.println("je suis le prix de la resa" + tarif.getPrix());
         System.out.println("je suis le credit de l'utilisateur" + utilisateur.getCredit());
@@ -283,7 +280,16 @@ public class MetierReservation implements ReservationMetierInterface {
 
         if (utilisateur.getCredit() >= tarif.getPrix()) {
 
-            utilisateur.setCredit(utilisateur.getCredit() - tarif.getPrix());
+            Duration duration=Duration.between(heure1, heure2);
+
+            if(duration.getSeconds()==1800){
+                utilisateur.setCredit(utilisateur.getCredit() - tarif.getPrix()/2);
+            }else {
+                utilisateur.setCredit(utilisateur.getCredit() - tarif.getPrix());
+            }
+
+            System.out.println("je suis le tarif  de "+duration.getSeconds()+" secondes");
+
             utilisateurRepository.save(utilisateur);
 
             return true;

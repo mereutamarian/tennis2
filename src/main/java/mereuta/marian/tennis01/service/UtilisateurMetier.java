@@ -5,11 +5,12 @@ import mereuta.marian.tennis01.model.Utilisateur;
 import mereuta.marian.tennis01.repository.RoleRepository;
 import mereuta.marian.tennis01.repository.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
-
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -37,11 +38,15 @@ public class UtilisateurMetier implements UtilisateurInterfaceMetier {
 
         role=roleRepository.getOne(3);
 
+
+
         System.out.println(role);
 
         BCryptPasswordEncoder encoder=new BCryptPasswordEncoder();
 
-        utilisateur.setPassword(encoder.encode(utilisateur.getPassword()));
+        System.out.println("je suis le role"+role);
+
+       utilisateur.setPassword(encoder.encode(utilisateur.getPassword()));
         utilisateur.setRole(role);
         utilisateur.setCredit(credit);
         utilisateur.setActif(actif);
@@ -64,4 +69,28 @@ public class UtilisateurMetier implements UtilisateurInterfaceMetier {
 
         return true;
     }
+
+
+    public boolean checkEmailLogin(String email) {
+
+        if(findByEmail(email)==null){
+            return true;
+        }else {
+            return false;
+        }
+            
+        
+        
+    }
+
+    public boolean comparePassword(String password, Utilisateur utilisateur) {
+        BCryptPasswordEncoder encoder=new BCryptPasswordEncoder();
+        
+        if (encoder.matches(password, utilisateur.getPassword()))
+            return true;
+        
+        return false;
+    }
+
+
 }
