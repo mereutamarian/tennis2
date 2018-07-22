@@ -60,12 +60,15 @@ public class MetierReservation implements ReservationMetierInterface {
     @Override
     public Horaire checkHoraire(@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
 
+        System.out.println("je suis la date " + date);
 
         DayOfWeek day = date.getDayOfWeek();
 
         String jour = day.name();
 
         Horaire horaire = new Horaire();
+
+        // System.out.println("je suis le jour "+jour);
 
 
         if (checkJourSpecial(date) == 1) {
@@ -110,17 +113,35 @@ public class MetierReservation implements ReservationMetierInterface {
     @Override
     public List<LocalTime> transformHeures(Horaire h) {
 
+        System.out.println("je suis l'horaire  " + h);
+
+        System.out.println("je suis l'interval----" + h.getMesureInterval().getMesure_interval());
+
         List<LocalTime> listeHeures = new ArrayList<>();
 
         int heures = (int) HOURS.between(h.getHeureDebut(), h.getHeureFin());
+        System.out.println("heures premier" + heures);
 
-        System.out.println(heures);
+        if (h.getMesureInterval().getMesure_interval() == 30) {
+            heures = heures + heures;
+        } else {
+            heures = heures + 0;
+        }
 
-        for (int i = 0; i < heures + 2; i++) {
+
+        System.out.println("heures 2eme" + heures);
+        System.out.println(heures + "je suis les heures");
+
+        for (int i = 0; i < heures + 1; i++) {
 
             LocalTime heureDebut = h.getHeureDebut();
 
-            heureDebut = heureDebut.plusHours(i);
+
+            if (h.getMesureInterval().getMesure_interval() == 30) {
+                heureDebut = heureDebut.plusMinutes(30 * i);
+            } else {
+                heureDebut = heureDebut.plusHours(i);
+            }
 
             listeHeures.add(heureDebut);
 
@@ -157,9 +178,12 @@ public class MetierReservation implements ReservationMetierInterface {
     }
 
     @Override
-    public LocalTime getSecondHeure(Integer indexDate2, List<LocalTime> listeHeureues) {
+    public LocalTime getSecondHeure(LocalTime heure1, List<LocalTime> listeHeureues) {
 
-        return listeHeureues.get(indexDate2);
+        int indexheure2 = listeHeureues.indexOf(heure1);
+        indexheure2 = indexheure2 + 1;
+
+        return listeHeureues.get(indexheure2);
     }
 
 
@@ -272,23 +296,30 @@ public class MetierReservation implements ReservationMetierInterface {
     }
 
     @Override
-    public boolean checkIfCreditOk(Utilisateur utilisateur, Tarif tarif, LocalTime heure1,LocalTime heure2) {
+    public boolean checkIfCreditOk(Utilisateur utilisateur, Tarif tarif, LocalTime heure1, LocalTime heure2) {
+
+        //on regarde si la reservation a été effectuée pour une heure ou pour une demiheure
+        Duration duration = Duration.between(heure1, heure2);
+
+        float prixTarif = tarif.getPrix();
+
+        //1800 = une demiheure en secondes
+        //si resa d'une demi heure on doit diviser le tarif par 2 car le tarif est fait pour une heure
+        if (duration.getSeconds() == 1800) {
+            prixTarif = prixTarif / 2;
+        }
 
         System.out.println("je suis le prix de la resa" + tarif.getPrix());
         System.out.println("je suis le credit de l'utilisateur" + utilisateur.getCredit());
 
 
-        if (utilisateur.getCredit() >= tarif.getPrix()) {
+        if (utilisateur.getCredit() >= prixTarif) {
 
-            Duration duration=Duration.between(heure1, heure2);
 
-            if(duration.getSeconds()==1800){
-                utilisateur.setCredit(utilisateur.getCredit() - tarif.getPrix()/2);
-            }else {
-                utilisateur.setCredit(utilisateur.getCredit() - tarif.getPrix());
-            }
+            utilisateur.setCredit(utilisateur.getCredit() - prixTarif);
 
-            System.out.println("je suis le tarif  de "+duration.getSeconds()+" secondes");
+
+            System.out.println("je suis le tarif  de " + duration.getSeconds() + " secondes");
 
             utilisateurRepository.save(utilisateur);
 

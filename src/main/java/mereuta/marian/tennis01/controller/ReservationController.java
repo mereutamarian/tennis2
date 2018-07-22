@@ -1,10 +1,7 @@
 package mereuta.marian.tennis01.controller;
 
 import mereuta.marian.tennis01.model.*;
-import mereuta.marian.tennis01.repository.UtilisateurRepository;
-import mereuta.marian.tennis01.service.MetierHoraire;
-import mereuta.marian.tennis01.service.MetierReservation;
-import mereuta.marian.tennis01.service.MetierTerrain;
+import mereuta.marian.tennis01.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -29,10 +26,8 @@ public class ReservationController {
     private MetierHoraire metierHoraire;
     @Autowired
     private MetierTerrain metierTerrain;
-
-    //provisoire
     @Autowired
-    UtilisateurRepository utilisateurRepository;
+    UtilisateurMetier utilisateurMetier;
 
 
     private Horaire horaire;
@@ -48,10 +43,13 @@ public class ReservationController {
         List<Integer> compteurJours;
         List<LocalTime> heures;
 
-        //l'horaire qui va être affiché
-        horaire = metierReservation.checkHoraire(date);
 
-        System.out.println(horaire);
+
+        LocalDate dateResa = metierReservation.dateDuTableauReservation(p);
+
+        //l'horaire qui va être affiché
+        horaire = metierReservation.checkHoraire(dateResa);
+
 
 
         //liste des heures qui vont etre disponibles pour la reservation
@@ -66,18 +64,22 @@ public class ReservationController {
         System.out.println(compteurJours);
 
         //chaque numero du tableau de reservation correspond à l'index du tableau des dates
-        LocalDate dateResa = metierReservation.dateDuTableauReservation(p);
 
-        System.out.println(dateResa);
+
+
 
 
         reservations = metierReservation.getReservationList();
 
 
-        System.out.println("les reservations sont " + reservations);
+
+
+        System.out.println("la taille de la lisste des heures est :"+heures.size());
 
 
         int iterator = 0;
+        int iteratorOption=0;
+
 
         model.addAttribute("iterator", iterator);
         model.addAttribute("date", dateResa);
@@ -85,6 +87,8 @@ public class ReservationController {
         model.addAttribute("compteur", compteurJours);
         model.addAttribute("heures", heures);
         model.addAttribute("reservations", reservations);
+        model.addAttribute("iteratorOption",iteratorOption);
+
 
 
         return "reservation/tableauReservations";
@@ -94,37 +98,44 @@ public class ReservationController {
     public String insererReservation(@RequestParam(value = "heure") LocalTime heure1,
                                      @RequestParam(value = "terrain") Integer idTerrain,
                                      @RequestParam(value = "date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
-                                     @RequestParam(value = "date2") Integer indexDate2,
-                                     @RequestParam(value = "listeHeures") List<LocalTime> listeHeureues) {
+                                     @RequestParam(value = "listeHeures") List<LocalTime> listeHeureues,
+                                     @RequestParam(value = "idUtilisateur")Integer idUtilisateur,
+                                     @RequestParam(value = "optionalOrReservation")Integer optionalOrReservation) {
 
 
         //recuperation de la deuxieme heure
-        LocalTime heure2 = metierReservation.getSecondHeure(indexDate2, listeHeureues);
+        LocalTime heure2 = metierReservation.getSecondHeure(heure1, listeHeureues);
 
 
         //get terrain by id
         Terrain terrain = metierTerrain.getTerrain(idTerrain);
 
         //recuperer Tarif
-        System.out.println("je suis la date" + date);
-
 
         //on recupere le tarif qui correspond a la date de la reservation
         Tarif tarif = metierReservation.recupereTarif(date, heure1);
 
-        System.out.println("je suis le tarif " + tarif);
+
+        Utilisateur utilisateur = utilisateurMetier.getUtilisateur(idUtilisateur);
 
 
-//provisoire
-        Utilisateur utilisateur = utilisateurRepository.getOne(1);
+
+         if (optionalOrReservation==1){
+             reservation = new Reservation(LocalDateTime.now(), date, heure1, heure2, true,false, utilisateur, terrain, tarif);
+         }else {
+             reservation = new Reservation(LocalDateTime.now(), date, heure1, heure2, false,true, utilisateur, terrain, tarif);
 
 
-        Reservation reservation = new Reservation(LocalDateTime.now(), date, heure1, heure2, true, utilisateur, terrain, tarif);
+
+                 //je dois faire une methode qui va checker dans la db si cette option n'est pas déja mise
+         }
+
+
 
         //check si l'heure de la résa est après l'heure currente
 
         boolean checkHeureresa = metierReservation.checkIfDateEtHeureInferieureMaintenant(date, heure1);
-        boolean checkCredit = metierReservation.checkIfCreditOk(utilisateur, tarif,heure1,heure2);
+        boolean checkCredit = metierReservation.checkIfCreditOk(utilisateur, tarif, heure1, heure2);
 
         System.out.println(" je suis la fonction de check" + checkHeureresa);
 
@@ -137,9 +148,9 @@ public class ReservationController {
         } else {
             return "reservation/creditInsuffisant";
         }
-
-
     }
+
+
 
     @GetMapping("/cancelResa")
     public String annulerReservation(@RequestParam(value = "idResa") Integer idReservation) {
@@ -197,6 +208,8 @@ public class ReservationController {
 
         return "redirect:/reservation/tableau";
     }
+
+
 
 
 }

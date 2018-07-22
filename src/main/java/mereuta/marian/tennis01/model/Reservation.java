@@ -21,7 +21,8 @@ public class Reservation {
     private LocalTime heureFin;
     @Column(name = "active")
     private boolean actif;
-
+    @Column(name = "optional")
+    private boolean optional;
     @ManyToOne
     @JoinColumn(name = "id_utilisateur")
     private   Utilisateur utilisateur;
@@ -35,12 +36,13 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(LocalDateTime dateCreationReservation, LocalDate dateReservation, LocalTime heureDebut, LocalTime heureFin, boolean actif, Utilisateur utilisateur, Terrain terrain, Tarif tarif) {
+    public Reservation(LocalDateTime dateCreationReservation, LocalDate dateReservation, LocalTime heureDebut, LocalTime heureFin, boolean actif,boolean optional, Utilisateur utilisateur, Terrain terrain, Tarif tarif) {
         this.dateCreationReservation = dateCreationReservation;
         this.dateReservation = dateReservation;
         this.heureDebut = heureDebut;
         this.heureFin = heureFin;
         this.actif = actif;
+        this.optional=optional;
         this.utilisateur = utilisateur;
         this.terrain = terrain;
         this.tarif = tarif;
@@ -118,6 +120,14 @@ public class Reservation {
         this.tarif = tarif;
     }
 
+    public boolean isOptional() {
+        return optional;
+    }
+
+    public void setOptional(boolean optional) {
+        this.optional = optional;
+    }
+
     @Override
     public String toString() {
         return "Reservation{" +
@@ -127,6 +137,7 @@ public class Reservation {
                 ", heureDebut=" + heureDebut +
                 ", heureFin=" + heureFin +
                 ", actif=" + actif +
+                ", optional=" + optional +
                 ", utilisateur=" + utilisateur +
                 ", terrain=" + terrain +
                 ", tarif=" + tarif +

@@ -37,7 +37,9 @@
 
                 <!--<a th:text="${h}" th:href="@{addResa(heure=${h} , terrain=${t.id} ,date=${date},date2=${index.index+1}, listeHeures = ${heures} )}"></a>-->
 
-                <tr th:each="h,index : ${heures.subList(0,15)}">
+
+
+                <tr th:each="h,index : ${heures}"  >
                     <td>
                         <!--     <p th:text="${listeDatesResa.contains(h) && listeResa.contains(t.getId()) }? 'egal' : 'not egal'"></p> -->
 
@@ -45,15 +47,30 @@
                         <th:block th:each="resa:${reservations}">
                             <th:block th:if="${resa.dateReservation eq date && resa.heureDebut eq h && t.id eq resa.terrain.id}"
                                       th:with="iterator=${iterator+1}">
+
+
                                 <p>reserve</p>
-                                <a th:text="'Annuler'" th:href="@{cancelResa(idResa=${resa.getId()})}"></a>
+                                <a th:if="${resa.utilisateur.id eq session.session.id}" th:text="'Annuler'" th:href="@{cancelResa(idResa=${resa.getId()})}"></a>
+
+
+                                        <a th:if="${resa.utilisateur.id != session.session.id }"  th:text="'Option'" th:with="compteurOption=1"
+                                           th:href="@{addResa(heure=${h} , terrain=${t.id} ,date=${date}, listeHeures = ${heures},idUtilisateur= ${session.session.id},optionalOrReservation=2 )}"
+
+                                        ></a>
+
+
+
+                               <p th:if="${c}"></p>
+
+
+
                                 <p th:hidden="${iterator+1}">
                             </th:block>
                         </th:block>
 
                         <th:block th:if="${iterator eq 0}">
                             <a th:text="${h}"
-                               th:href="@{addResa(heure=${h} , terrain=${t.id} ,date=${date},date2=${index.index+1}, listeHeures = ${heures} )}"></a>
+                               th:href="@{addResa(heure=${h} , terrain=${t.id} ,date=${date}, listeHeures = ${heures},idUtilisateur= ${session.session.id} ,optionalOrReservation=1 )}"></a>
                         </th:block>
 
                     </td>

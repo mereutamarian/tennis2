@@ -20,29 +20,32 @@
 
 
 <div>
-    <h1>Login</h1>
+    <h1>Message to responsable</h1>
 </div>
 
 
 
 
 <div class="container">
-    <form id="contact" th:action="@{login}" method="post" >
-        <h3>Se connecter</h3>
+
+    <div role="alert" data-th-if="${message}" data-th-text="${message}" data-th-class="${classCss}"></div>
+
+    <form id="contact" th:action="@{sendMail}" method="post" >
+        <h3>Envoyer Message</h3>
 
 
 
+        <input placeholder="email" type="hidden" name="email" th:value="${session.session.email}" tabindex="2" required/>
 
+        <fieldset>
 
-    <fieldset>
-
-            <input placeholder="email" type="email" name="email"  tabindex="2" required/>
+        <input placeholder="sujet" type="text" name="sujet"  tabindex="2" required/>
 
         </fieldset>
 
         <fieldset>
 
-            <input placeholder="password" type="password" name="password" tabindex="2" required/>
+           <textarea id="message" class="text" cols="86" rows="20" name="message"></textarea>
 
         </fieldset>
 

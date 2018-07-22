@@ -13,9 +13,11 @@ public class Utilisateur {
     @Id @GeneratedValue
     @Column(name = "id_utilisateur")
     private Integer id;
+    @Pattern(regexp = "[\\p{L} '-]+",message = "ce champ ne doit pas contenir des chiffres")
     @NotNull
     @Column(name = "nom")
     private String nom;
+    @Pattern(regexp = "[\\p{L} '-]+",message = "ce champ ne doit pas contenir des chiffres")
     @NotNull
     @Column(name="prenom")
     private String prenom;
@@ -30,6 +32,7 @@ public class Utilisateur {
     @Pattern(regexp ="([(+]*[0-9]+[()+. -]*)", message = "le format du numéro du téléphone que vous avez inseré est invalide")
     @Column(name = "telephone")
     private String telephone;
+    @Pattern(regexp = "^[\\w\\-.+_%]+@[\\w\\.\\-]+\\.[A-Za-z0-9]{2,}$",message = "le format de l'email est invalide")
     @Column(name = "email")
     @EmailUnique(message = "mail deja existant")
     private String email;

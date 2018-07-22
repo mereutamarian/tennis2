@@ -62,6 +62,11 @@ public class UtilisateurMetier implements UtilisateurInterfaceMetier {
     }
 
     @Override
+    public Utilisateur getUtilisateur(Integer id) {
+        return utilisateurRepository.getOne(id);
+    }
+
+    @Override
     public boolean checkIfMailIsPresent(String email) {
 
         if(utilisateur!=null)
@@ -91,6 +96,8 @@ public class UtilisateurMetier implements UtilisateurInterfaceMetier {
         
         return false;
     }
+
+
 
 
 }
