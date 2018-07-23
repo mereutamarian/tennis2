@@ -81,6 +81,10 @@ public class ReservationController {
         int iteratorOption=0;
 
 
+        List<Reservation> reservationsOptional=metierReservation.listeReservationOptional();
+
+
+        model.addAttribute("optionsList",reservationsOptional);
         model.addAttribute("iterator", iterator);
         model.addAttribute("date", dateResa);
         model.addAttribute(horaire);

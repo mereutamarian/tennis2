@@ -365,5 +365,10 @@ public class MetierReservation implements ReservationMetierInterface {
         return reservationRepository.findByDateReservationIsGreaterThanAndActifTrue(today);
     }
 
+    @Override
+    public List<Reservation> listeReservationOptional() {
+        return reservationRepository.findByOptionalTrue();
+    }
+
 
 }

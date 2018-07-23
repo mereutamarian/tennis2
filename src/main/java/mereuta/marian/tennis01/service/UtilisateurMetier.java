@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UtilisateurMetier implements UtilisateurInterfaceMetier {
@@ -67,6 +69,16 @@ public class UtilisateurMetier implements UtilisateurInterfaceMetier {
     }
 
     @Override
+    public int getNombreHommes() {
+        return utilisateurRepository.numbreHommesCount();
+    }
+
+    @Override
+    public int getNombreFemmes() {
+        return utilisateurRepository.numbreFemmesCount();
+    }
+
+    @Override
     public boolean checkIfMailIsPresent(String email) {
 
         if(utilisateur!=null)
@@ -97,7 +109,23 @@ public class UtilisateurMetier implements UtilisateurInterfaceMetier {
         return false;
     }
 
+    public List<List<Map<Object, Object>>> getListFemmesHommes(){
 
+         Map<Object,Object> map = null;
+         List<List<Map<Object,Object>>> listFinale = new ArrayList<>();
+         List<Map<Object,Object>> donnesFemmesHommes = new ArrayList<>();
+
+         map=new HashMap<>();map.put("label","Femmes");
+         map.put("y", utilisateurRepository.numbreFemmesCount());
+         donnesFemmesHommes.add(map);
+
+        map=new HashMap<>();map.put("label","Hommes");
+        map.put("y", utilisateurRepository.numbreHommesCount());
+        donnesFemmesHommes.add(map);
+
+
+         return listFinale;
+    }
 
 
 }

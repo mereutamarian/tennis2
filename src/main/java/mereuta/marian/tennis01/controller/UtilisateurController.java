@@ -13,6 +13,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -61,11 +63,17 @@ public class UtilisateurController {
 
     @GetMapping("/home")
     public String home() {
+
+
+
         return "utilisateur/home";
     }
 
     @PostMapping("/login")
     public String login(Model model, @RequestParam(name = "email") String email, @RequestParam(name = "password") String password, HttpServletRequest request) {
+
+
+
 
         int compt = 0;
         Utilisateur utilisateur = utilisateurMetier.findByEmail(email);
@@ -151,6 +159,15 @@ public class UtilisateurController {
 
 
         return "redirect:/reservation/tableau";
+    }
+
+    public String femmesHommes(Model model){
+
+        List<List<Map<Object,Object>>> list =utilisateurMetier.getListFemmesHommes();
+
+        model.addAttribute("listeFemmesHommes",list);
+
+        return "utilisateur/graphHommesFemmes";
     }
 
 }

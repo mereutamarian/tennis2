@@ -41,4 +41,5 @@ public interface ReservationMetierInterface {
     public void addReservation(Reservation reservation);
 
     public List<Reservation> getReservationList();
+    public List<Reservation>listeReservationOptional();
 }

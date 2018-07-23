@@ -1,11 +1,14 @@
 package mereuta.marian.tennis01.model;
 
+import mereuta.marian.tennis01.annotations.CheckAge;
 import mereuta.marian.tennis01.annotations.EmailUnique;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity(name = "utilisateurs")
@@ -43,6 +46,13 @@ public class Utilisateur {
     private float credit;
     @Column(name = "actif")
     private boolean actif;
+    @CheckAge(message = "vous avez moins de 16 ans")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Column(name="date_naissance")
+    private LocalDate dateNaissance;
+    @Size(min = 1 , max = 1)
+    @Column(name="sexe")
+    private String sexe;
 
     @ManyToOne
     @JoinColumn(name="id_role")
@@ -65,7 +75,6 @@ public class Utilisateur {
     }
 
 
-
     @Override
     public String toString() {
         return "Utilisateur{" +
@@ -73,14 +82,17 @@ public class Utilisateur {
                 ", nom='" + nom + '\'' +
                 ", prenom='" + prenom + '\'' +
                 ", adrese='" + adrese + '\'' +
-                ", codePostal=" + codePostal +
+                ", codePostal='" + codePostal + '\'' +
                 ", ville='" + ville + '\'' +
                 ", telephone='" + telephone + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", credit=" + credit +
                 ", actif=" + actif +
+                ", dateNaissance=" + dateNaissance +
+                ", sexe='" + sexe + '\'' +
                 ", role=" + role +
+                ", reservations=" + reservations +
                 '}';
     }
 
@@ -180,4 +192,19 @@ public class Utilisateur {
         this.role = role;
     }
 
+    public LocalDate getDateNaissance() {
+        return dateNaissance;
+    }
+
+    public void setDateNaissance(LocalDate dateNaissance) {
+        this.dateNaissance = dateNaissance;
+    }
+
+    public String getSexe() {
+        return sexe;
+    }
+
+    public void setSexe(String sexe) {
+        this.sexe = sexe;
+    }
 }

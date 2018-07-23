@@ -40,6 +40,33 @@
             <span class="text text-danger" th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}"></span>
         </fieldset>
 
+        <fieldset>
+            <input placeholder="dateNaissance " type=date th:field="*{dateNaissance}" tabindex="1" required autofocus/>
+            <span class="text text-danger" th:if="${#fields.hasErrors('dateNaissance')}" th:errors="*{dateNaissance}"></span>
+        </fieldset>
+
+
+
+
+        <fieldset>
+            <legend>Veuillez selectioner votre sexe</legend>
+
+            <div>
+                <input type="radio" th:field="*{sexe}" th:value="'m'" tabindex="1" required autofocus  />
+                <span class="text text-danger" th:if="${#fields.hasErrors('sexe')}" th:errors="*{sexe}"></span>
+                <label>Masculin</label>
+            </div>
+
+            <div>
+                <input type="radio" th:field="*{sexe}" th:value="'f'" tabindex="1" required autofocus  />
+                <span class="text text-danger" th:if="${#fields.hasErrors('sexe')}" th:errors="*{sexe}"></span>
+                <label>Feminin</label>
+            </div>
+
+
+
+        </fieldset>
+
 
         <fieldset>
             <input placeholder="adresse" type="text" th:field="*{adrese}" tabindex="2" required/>

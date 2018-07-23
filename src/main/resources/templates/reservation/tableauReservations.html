@@ -19,7 +19,7 @@
     <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"/>
     <link rel="stylesheet" type="text/css" href="../static/css/myStyle.css" th:href="@{/css/myStyle.css}"/>
 </head>
-<body>
+<body >
 <div style="margin-top: 40px; ">
     <h1 style="text-align: center">Tableau des Reservations</h1>
 </div>
@@ -45,20 +45,14 @@
 
 
                         <th:block th:each="resa:${reservations}">
+
+
                             <th:block th:if="${resa.dateReservation eq date && resa.heureDebut eq h && t.id eq resa.terrain.id}"
                                       th:with="iterator=${iterator+1}">
 
 
                                 <p>reserve</p>
                                 <a th:if="${resa.utilisateur.id eq session.session.id}" th:text="'Annuler'" th:href="@{cancelResa(idResa=${resa.getId()})}"></a>
-
-
-                                        <a th:if="${resa.utilisateur.id != session.session.id }"  th:text="'Option'" th:with="compteurOption=1"
-                                           th:href="@{addResa(heure=${h} , terrain=${t.id} ,date=${date}, listeHeures = ${heures},idUtilisateur= ${session.session.id},optionalOrReservation=2 )}"
-
-                                        ></a>
-
-
 
                                <p th:if="${c}"></p>
 
@@ -68,14 +62,19 @@
                             </th:block>
                         </th:block>
 
+
+
                         <th:block th:if="${iterator eq 0}">
+
+
+
                             <a th:text="${h}"
                                th:href="@{addResa(heure=${h} , terrain=${t.id} ,date=${date}, listeHeures = ${heures},idUtilisateur= ${session.session.id} ,optionalOrReservation=1 )}"></a>
                         </th:block>
 
                     </td>
 
-
+                </tr>
             </table>
         </div>
 

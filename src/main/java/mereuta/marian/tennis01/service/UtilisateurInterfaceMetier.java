@@ -12,4 +12,7 @@ public interface UtilisateurInterfaceMetier {
     public boolean checkIfMailIsPresent(String email);
     public Utilisateur findByEmail(String email);
     public Utilisateur getUtilisateur(Integer id);
+    public int getNombreHommes();
+    public int getNombreFemmes();
+
 }
