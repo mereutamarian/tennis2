@@ -1,5 +1,6 @@
 package mereuta.marian.tennis01.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import mereuta.marian.tennis01.model.Utilisateur;
 import mereuta.marian.tennis01.service.MailMetier;
 import mereuta.marian.tennis01.service.UtilisateurMetier;
@@ -13,7 +14,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Map;
 
 
@@ -63,6 +63,8 @@ public class UtilisateurController {
 
     @GetMapping("/home")
     public String home() {
+
+
 
 
 
@@ -152,7 +154,7 @@ public class UtilisateurController {
 
 
     @PostMapping("/modificationAdresseMail")
-    public String heuresAnulationReservation(@RequestParam(name = "email") String email) {
+    public String heuresAnulationReservation(@RequestParam(name = "email") String email)  {
 
         mailMetier.modifierAdresseMail(email);
 
@@ -160,14 +162,27 @@ public class UtilisateurController {
 
         return "redirect:/reservation/tableau";
     }
+    @GetMapping("hommeFemmesPourcentage")
+    public String femmesHommes(Model model) throws JsonProcessingException {
 
-    public String femmesHommes(Model model){
+       Map<String,Integer> list=utilisateurMetier.femmesEtHommes();
 
-        List<List<Map<Object,Object>>> list =utilisateurMetier.getListFemmesHommes();
 
         model.addAttribute("listeFemmesHommes",list);
 
-        return "utilisateur/graphHommesFemmes";
+        return "graphHommesFemmes";
+    }
+
+    @GetMapping("/pourcentageAges")
+    public String ageDesClients(Model model){
+
+        Map<String,Integer>listeAgesTranches = utilisateurMetier.agesClientsClub();
+        System.out.println("je suis la tailme de la liste "+listeAgesTranches.size());
+
+        model.addAttribute("liste",listeAgesTranches);
+        model.addAttribute("tailleListe",listeAgesTranches.size());
+
+        return "utilisateur/agePourcentage";
     }
 
 }
