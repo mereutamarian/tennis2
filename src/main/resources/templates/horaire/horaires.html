@@ -12,7 +12,7 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-    <link  rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"/>
     <link rel="stylesheet" type="text/css" href="../static/css/cssHoraire.css.css" th:href="@{/css/cssHoraire.css}"/>
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
@@ -53,10 +53,9 @@
                         <thead>
                         <tr>
                             <th><em class="fa fa-cog"></em></th>
-                            <th class="hidden-xs">ID</th>
+                            <th>Jour</th>
                             <th>Heure Debut</th>
                             <th>Heure Fin</th>
-                            <th>Jour</th>
                             <th>Terrains</th>
                             <th>Duree minimale reservation minutes</th>
                         </tr>
@@ -73,10 +72,9 @@
                                        <a th:href="@{editMesure(id=${listeHoraires.getId()})}">Attribuer Mesure/</a> <br> <br>
 
                                    </td>
-                                   <td class="hidden-xs" th:text="${listeHoraires.id}"></td>
+                                   <td th:text="${listeHoraires.nom}"></td>
                                    <td th:text="${listeHoraires.heureDebut}"></td>
                                    <td th:text="${listeHoraires.heureFin}"></td>
-                                   <td th:text="${listeHoraires.nom}"></td>
                                    <td th:text="${listeHoraires.terrains}"></td>
                                    <td th:text="${listeHoraires.mesureInterval.mesure_interval}"></td>
                                </th:block>
@@ -123,7 +121,8 @@
                         <thead>
                         <tr>
                             <th><em class="fa fa-cog"></em></th>
-                            <th class="hidden-xs">ID</th>
+
+                            <th>Date</th>
                             <th>Heure Debut</th>
                             <th>Heure Fin</th>
                             <th>Nom</th>
@@ -134,7 +133,7 @@
                         <tbody>
                         <tr th:each="listeHoraires:${liste}">
 
-                            <th:block th:if="${listeHoraires.horaireFix==null}">
+                            <th:block th:if="${listeHoraires.dateHoraireSpecial != null}">
                                 <td align="center">
 
 
@@ -143,7 +142,7 @@
                                     <a th:href="@{delete(id=${listeHoraires.getId()})}">supprimer</a> <br> <br>
                                     <a th:href="@{editMesure(id=${listeHoraires.getId()})}">Attribuer Mesure/</a>
                                 </td>
-                                <td class="hidden-xs" th:text="${listeHoraires.id}"></td>
+                                <td class="hidden-xs" th:text="${listeHoraires.dateHoraireSpecial}"></td>
                                 <td th:text="${listeHoraires.heureDebut}"></td>
                                 <td th:text="${listeHoraires.heureFin}"></td>
                                 <td th:text="${listeHoraires.nom}"></td>

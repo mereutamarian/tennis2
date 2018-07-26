@@ -8,6 +8,7 @@ import mereuta.marian.tennis01.repository.TerrainRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -76,6 +77,14 @@ public class MetierHoraire implements HoraireMetierInterface {
 
         return horaire;
     }
+
+        public int getIdHoraire(LocalDate localDate){
+
+        Horaire horaire=horaireRepository.findByDateHoraireSpecial(localDate);
+
+        return horaire.getId();
+
+        }
 
 
 }

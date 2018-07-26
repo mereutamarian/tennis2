@@ -18,10 +18,10 @@
 
 
     /*<![CDATA[*/
-    var message=new Map();
+    var ageList=new Map();
     var tailleListe= /*[[${tailleListe}]]*/
 
-    message = /*[[${liste}]]*/ 'default';
+    ageList= /*[[${liste}]]*/ 'default';
 
 
 
@@ -36,17 +36,25 @@
     //     console.log('je suis la'+[Object.keys(message)[i],Object.values(message)[i]])
     // }
 
-    function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-            ['Task', 'ages entre 16 et 90 groupés par 10'],
-            [Object.keys(message)[0],Object.values(message)[0]],
-            [Object.keys(message)[1],Object.values(message)[1]],
-                [Object.keys(message)[2],Object.values(message)[2]]
+    var dataArray = [ ['Task', 'ages between 16 and 90 group by 10'] ];
+    console.log(dataArray);
+     dataArray = dataArray.concat(ageList = [["default","default" ]] );
+    console.log(dataArray);
 
-        ]);
+    function drawChart() {
+        // var data = google.visualization.arrayToDataTable([
+        //     ['Task', 'ages between 16 and 90 group by 10'],
+        //     ['age betweeen 20-30',5 ]
+        //
+        // ]);
+
+
+
+
+        var data = google.visualization.arrayToDataTable(dataArray);
 
         // Optional; add a title and set the width and height of the chart
-        var options = {'title':'Ages en pourcent de 16 a 90 ans', 'width':550, 'height':400};
+        var options = {'title':'Ages en pourcent de 16 a 90 ans', 'width':550, 'height':400,is3D: true};
 
         // Display the chart inside the <div> element with id="piechart"
         var chart = new google.visualization.PieChart(document.getElementById('piechart'));

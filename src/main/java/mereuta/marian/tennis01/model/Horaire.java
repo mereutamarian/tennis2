@@ -1,6 +1,7 @@
 package mereuta.marian.tennis01.model;
 
 
+import mereuta.marian.tennis01.annotations.CheckDateHoraireSpecial;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
@@ -35,6 +36,7 @@ public class Horaire {
     @Column(name = "jour_horaire_fix")
     private String horaireFix;
 
+    @CheckDateHoraireSpecial(message = "il existe deja un horaire avec cette date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "date_horaire_special")
     private LocalDate dateHoraireSpecial;

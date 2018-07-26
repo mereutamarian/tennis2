@@ -40,6 +40,7 @@ public class HoraireController {
     private List<Terrain> terrains;
     private List<MesureInterval> intervals;
     private MesureInterval mesureInterval;
+    private boolean aBoolean;
 
     @GetMapping("/liste")
     public String afficheHoraire(Model model) {
@@ -48,14 +49,14 @@ public class HoraireController {
 
         model.addAttribute("liste", horaires);
 
-        return "horaires";
+        return "horaire/horaires";
     }
 
     @GetMapping("/form")
     public String formHoraire(Model model) {
 
         model.addAttribute("horaire", new Horaire());
-        return "addHoraire";
+        return "horaire/addHoraire";
     }
 
     @GetMapping("/horaireSpecial")
@@ -68,7 +69,7 @@ public class HoraireController {
         model.addAttribute("intervals",intervals);
 
         model.addAttribute("horaire", new Horaire());
-        return "addHoraireSpecial";
+        return "horaire/addHoraireSpecial";
     }
 
 
@@ -76,11 +77,11 @@ public class HoraireController {
     public String addHoraire(@Valid @ModelAttribute("horaire") Horaire horaire, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return "addHoraire";
+            return "horaire/addHoraire";
         } else {
 
             metierHoraire.addHoraire(horaire);
-            return "redirect:horaires";
+            return "redirect:/horaire/liste";
         }
 
     }
@@ -92,7 +93,7 @@ public class HoraireController {
 
 
         if (bindingResult.hasErrors()) {
-            return "addHoraireSpecial";
+            return "horaire/addHoraireSpecial";
         } else {
 
             terrains = metierTerrain.attribuerTerrain(idT);
@@ -121,7 +122,7 @@ public class HoraireController {
 
 
 
-        return "editHoraire";
+        return "horaire/editHoraire";
     }
 
     @GetMapping("/editTerrain")
@@ -133,21 +134,42 @@ public class HoraireController {
         model.addAttribute("horaire", horaire);
         model.addAttribute("terrains", terrains);
 
-        return "editTerrainHoraire";
+        return "horaire/editTerrainHoraire";
     }
 
 
     @GetMapping("/update")
     public String updateHoraire(@Valid @ModelAttribute("horaire") Horaire horaire, BindingResult bindingResult) {
 
+
+        //la solution elle doit etre ici
         System.out.println(horaire);
         if (bindingResult.hasErrors()) {
-            return "editHoraire";
+
+
+            // c'est pour tester voir si c'est une modification ou un insert sur un tarif avec une date existante
+            //la derniere condition compare les id , si id different de celui qu'on modifie on bloque l'insert
+            if(bindingResult.getFieldError().getField().contains("dateHoraireSpecial") &&
+                    metierHoraire.getHoraire(horaire.getId()) !=null &&
+                    metierHoraire.getIdHoraire(horaire.getDateHoraireSpecial())==horaire.getId()){
+
+
+
+                    metierHoraire.addHoraire(horaire);
+                return "redirect:/horaire/liste";
+
+            }else {
+                return "horaire/editHoraire";
+            }
+
+
         } else {
 
 
+
+
             metierHoraire.addHoraire(horaire);
-            return "horaires";
+            return "redirect:/horaire/liste";
         }
 
     }
@@ -174,7 +196,7 @@ public class HoraireController {
             metierHoraire.update(horaire);
         }
 
-        return "horaires";
+        return "redirect:/horaire/liste";
 
     }
 
@@ -200,7 +222,7 @@ public class HoraireController {
         model.addAttribute("horaire", horaire);
         model.addAttribute("intervals", intervals);
 
-        return "editIntervalHoraire";
+        return "horaire/editIntervalHoraire";
     }
 
     @GetMapping("/updateInterval")

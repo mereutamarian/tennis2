@@ -21,4 +21,8 @@ public interface HoraireRepository extends JpaRepository<Horaire,Integer> {
 
     Horaire findByHoraireFix(String horaireFix);
 
+
+    Horaire findByDateHoraireSpecialAndId(LocalDate dateHoraireSpecial, Integer id);
+
+
 }
