@@ -22,6 +22,10 @@ public class MetierMesure implements MetierMesureInterface {
     @Override
     public MesureInterval getMesure(Integer id) {
 
+        if (id==null){
+            id=1;
+        }
+
         return mesureIntervalRepository.getOne(id);
     }
 }

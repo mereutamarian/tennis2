@@ -6,6 +6,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
+
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -13,9 +15,13 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+
+
+
 @Component
 @Entity(name="horaire")
 public class Horaire {
+
 
     @Id @GeneratedValue
     @Column(name = "id_horaire")
@@ -28,6 +34,7 @@ public class Horaire {
     @Column(name = "heure_fin")
     private LocalTime heureFin;
 
+
     @NotNull
     @Size(min = 3, max = 30)
     @Column(name = "nom_horaire")
@@ -36,6 +43,7 @@ public class Horaire {
     @Column(name = "jour_horaire_fix")
     private String horaireFix;
 
+    @Future(message = "la date doit être supérieure à la date d'aujourd'hui")
     @CheckDateHoraireSpecial(message = "il existe deja un horaire avec cette date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "date_horaire_special")

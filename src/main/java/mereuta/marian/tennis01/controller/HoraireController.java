@@ -8,16 +8,16 @@ import mereuta.marian.tennis01.model.Terrain;
 import mereuta.marian.tennis01.service.MetierHoraire;
 import mereuta.marian.tennis01.service.MetierMesure;
 import mereuta.marian.tennis01.service.MetierTerrain;
+import org.hibernate.exception.GenericJDBCException;
+import org.hibernate.exception.SQLGrammarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,10 +63,10 @@ public class HoraireController {
     public String formHoraireSpecial(Model model) {
 
         terrains = metierTerrain.showTerrain();
-        intervals=metierMesure.showIntervales();
+        intervals = metierMesure.showIntervales();
 
         model.addAttribute("terrains", terrains);
-        model.addAttribute("intervals",intervals);
+        model.addAttribute("intervals", intervals);
 
         model.addAttribute("horaire", new Horaire());
         return "horaire/addHoraireSpecial";
@@ -86,21 +86,27 @@ public class HoraireController {
 
     }
 
+
     @GetMapping("/addHoraireSpecial")
     public String addHoraireSpecial(@Valid @ModelAttribute("horaire") Horaire horaire, BindingResult bindingResult, @RequestParam(name = "idTerrain", required = false) List<Integer> idT,
 
-                                    @RequestParam(name = "idInterval", required = false) Integer id) {
+                                    @RequestParam(name = "idInterval", required = false) Integer id) throws SQLException {
 
 
         if (bindingResult.hasErrors()) {
             return "horaire/addHoraireSpecial";
+
         } else {
 
-            terrains = metierTerrain.attribuerTerrain(idT);
-            mesureInterval=metierMesure.getMesure(id);
+
+            if (idT != null) {
+                terrains = metierTerrain.attribuerTerrain(idT);
+            }
+
+            mesureInterval = metierMesure.getMesure(id);
 
             horaire = metierHoraire.attribuerTerrainHoraire(horaire, terrains);
-            horaire=metierHoraire.attribuerIntervalMesure(horaire, mesureInterval);
+            horaire = metierHoraire.attribuerIntervalMesure(horaire, mesureInterval);
 
 
             metierHoraire.addHoraire(horaire);
@@ -114,12 +120,11 @@ public class HoraireController {
     public String getHoraire(@RequestParam(name = "id") Integer id, Model model) {
 
         horaire = metierHoraire.getHoraire(id);
-        terrains= metierTerrain.showTerrain();
+        terrains = metierTerrain.showTerrain();
 
 
         model.addAttribute("horaire", horaire);
         model.addAttribute("terrains", terrains);
-
 
 
         return "horaire/editHoraire";
@@ -149,24 +154,25 @@ public class HoraireController {
 
             // c'est pour tester voir si c'est une modification ou un insert sur un tarif avec une date existante
             //la derniere condition compare les id , si id different de celui qu'on modifie on bloque l'insert
-            if(bindingResult.getFieldError().getField().contains("dateHoraireSpecial") &&
-                    metierHoraire.getHoraire(horaire.getId()) !=null &&
-                    metierHoraire.getIdHoraire(horaire.getDateHoraireSpecial())==horaire.getId()){
+            if (bindingResult.getFieldError().getField().contains("dateHoraireSpecial") &&
+                    metierHoraire.getHoraire(horaire.getId()) != null &&
+                    metierHoraire.getIdHoraire(horaire.getDateHoraireSpecial()) == horaire.getId()) {
 
 
-
-                    metierHoraire.addHoraire(horaire);
+                metierHoraire.addHoraire(horaire);
                 return "redirect:/horaire/liste";
 
-            }else {
+            } else {
                 return "horaire/editHoraire";
             }
 
 
         } else {
-
-
-
+                    try {
+                        metierHoraire.addHoraire(horaire);
+                    }catch (SQLException e){
+                            e.getMessage();
+                    }
 
             metierHoraire.addHoraire(horaire);
             return "redirect:/horaire/liste";

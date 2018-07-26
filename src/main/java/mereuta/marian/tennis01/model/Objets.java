@@ -5,7 +5,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.validation.constraints.NotEmpty;
+
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity(name ="objets" )
@@ -19,9 +20,8 @@ public class Objets {
 
     private String nomObjet;
 
-    @NotEmpty
-    @Size(min = 3)
-    @Size(max = 25)
+    @NotNull
+    @Size(min = 3, max = 15)
     @Column(name = "description")
     private String descrition;
 

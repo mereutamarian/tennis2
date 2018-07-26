@@ -25,13 +25,21 @@ public class MetierTerrain implements InterfaceMetierTerrain {
     @Override
     public List<Terrain> attribuerTerrain(List<Integer> listeId) {
 
+
+
         List<Terrain> listechoix= new ArrayList<>();
 
         for( Integer i: listeId){
             // on recupere les terrains et on les ajoute dans la liste des terrains
             Terrain t=   terrainRepository.getOne(i);
            listechoix.add(t);
+
         }
+        if(listechoix== null){
+            listechoix=terrainRepository.findAll();
+        }
+
+        System.out.println(listechoix +" je suis la liste de choix");
 
         return listechoix;
     }
