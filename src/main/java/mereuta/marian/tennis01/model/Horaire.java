@@ -2,6 +2,7 @@ package mereuta.marian.tennis01.model;
 
 
 import mereuta.marian.tennis01.annotations.CheckDateHoraireSpecial;
+import mereuta.marian.tennis01.annotations.ValidAfterDate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +18,7 @@ import java.util.List;
 
 
 
-
+@ValidAfterDate
 @Component
 @Entity(name="horaire")
 public class Horaire {
@@ -29,6 +30,7 @@ public class Horaire {
     @NotNull
     @Column(name = "heure_debut")
     private LocalTime heureDebut;
+
 
     @NotNull
     @Column(name = "heure_fin")

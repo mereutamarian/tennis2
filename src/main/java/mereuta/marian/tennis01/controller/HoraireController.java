@@ -168,13 +168,10 @@ public class HoraireController {
 
 
         } else {
-                    try {
-                        metierHoraire.addHoraire(horaire);
-                    }catch (SQLException e){
-                            e.getMessage();
-                    }
+
 
             metierHoraire.addHoraire(horaire);
+
             return "redirect:/horaire/liste";
         }
 
@@ -201,6 +198,8 @@ public class HoraireController {
 
             metierHoraire.update(horaire);
         }
+
+        horaire = metierHoraire.getHoraire(id);
 
         return "redirect:/horaire/liste";
 
