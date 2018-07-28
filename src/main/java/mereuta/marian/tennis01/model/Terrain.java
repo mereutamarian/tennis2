@@ -1,11 +1,11 @@
 package mereuta.marian.tennis01.model;
 
-import org.hibernate.annotations.IndexColumn;
+import mereuta.marian.tennis01.annotations.EmailUnique;
+import mereuta.marian.tennis01.annotations.TerrainUnique;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.List;
 
 @Entity(name = "terrains")
 public class Terrain {
@@ -18,6 +18,7 @@ public class Terrain {
     @NotNull
     @Size(min = 3, max = 25)
     @Column(name = "nom_terrain")
+    @TerrainUnique(message = "terrain deja existant")
     private  String nomTerrain;
 
     @Column(name = "actif")
@@ -48,10 +49,7 @@ public class Terrain {
         this.actif = actif;
     }
 
-    public Terrain(@NotNull @Size(min = 3, max = 25) String nomTerrain, boolean actif) {
-        this.nomTerrain = nomTerrain;
-        this.actif = actif;
-    }
+
 
     public Terrain(){
 

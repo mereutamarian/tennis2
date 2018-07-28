@@ -11,5 +11,7 @@ import java.util.List;
 
 public interface TerrainRepository extends JpaRepository<Terrain, Integer> {
 
+    Terrain findByNomTerrain(String nomTerrain);
+
 
 }

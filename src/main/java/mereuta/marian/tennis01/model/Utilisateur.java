@@ -59,7 +59,7 @@ public class Utilisateur {
     private Role role;
 
     @OneToMany
-    @JoinColumn(name = "id_reservation")
+    @JoinColumn(name = "id")
     private List<Reservation> reservations;
 
     public Utilisateur() {

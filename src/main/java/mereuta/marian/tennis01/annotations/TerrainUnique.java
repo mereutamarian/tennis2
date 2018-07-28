@@ -10,9 +10,9 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Constraint(
-        validatedBy = {EmailUniqueValidator.class}
+        validatedBy = {TerrainUniqueValidator.class}
 )
-public @interface EmailUnique {
+public @interface TerrainUnique {
 
     String message() default "{javax.validation.constraints.Size.message}";
 

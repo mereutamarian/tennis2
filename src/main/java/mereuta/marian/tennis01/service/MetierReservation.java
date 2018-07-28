@@ -205,6 +205,7 @@ public class MetierReservation implements ReservationMetierInterface {
                     heure1.isBefore(tarif.getHeureFin()) &&
                     tarif.isTarifSpecial() && tarif.isActif() && !tarif.isTarifParDefaut()
                     ) {
+                System.out.println("premier if");
                 tarifFinal = tarif;
             } else if (
                     jour == "SATURDAY" || jour == "SUNDAY" &&
@@ -212,8 +213,9 @@ public class MetierReservation implements ReservationMetierInterface {
                             date.isBefore(tarif.getDateFin()) &&
                             heure1.isAfter(tarif.getHeureDebut()) &&
                             heure1.isBefore(tarif.getHeureFin()) &&
-                            !tarif.isTarifSpecial() && tarif.isActif() && !tarif.isTarifParDefaut() && tarif.isWeekend()
+                            tarif.isTarifSpecial() && tarif.isActif() && !tarif.isTarifParDefaut() && tarif.isWeekend()
                     ) {
+                System.out.println("deuxieme if"+ tarif.isActif());
 
                 tarifFinal = tarif;
             } else if (
@@ -223,12 +225,20 @@ public class MetierReservation implements ReservationMetierInterface {
                             date.isBefore(tarif.getDateFin()) &&
                             heure1.isAfter(tarif.getHeureDebut()) &&
                             heure1.isBefore(tarif.getHeureFin()) &&
-                            !tarif.isTarifSpecial() && tarif.isActif() && !tarif.isTarifParDefaut() && !tarif.isWeekend()
+                            !tarif.isTarifSpecial() && tarif.isActif()==true && !tarif.isTarifParDefaut() && !tarif.isWeekend()
+
 
                     ) {
+
+                if(heure1.isAfter(tarif.getHeureDebut())){
+                    System.out.println("je suis le tarif"+tarif.getId());
+                }
+
+                System.out.println("troisieme if");
                 tarifFinal = tarif;
 
             } else {
+                System.out.println("quatrieme if");
                 tarifFinal = tarifRepository.getOne(83);
             }
 

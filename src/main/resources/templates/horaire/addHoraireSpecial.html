@@ -24,7 +24,7 @@
 </div>
 
 <div class="container">
-    <form id="contact" th:action="@{addHoraireSpecial}" method="get" th:object="${horaire}"  >
+    <form id="contact" th:action="@{addHoraireSpecial}" method="get" th:object="${horaire }"   >
 
 
     <h3>Ajouter votre horaire</h3>
@@ -37,6 +37,7 @@
             <input placeholder="l'heure de fin" type="time" th:field="*{heureFin}" tabindex="2" required>
             <span th:if="${#fields.hasErrors('heureFin')}" th:errors="*{heureFin}"></span>
             <p class="alert-danger" th:if="  ${#fields.hasGlobalErrors()}" th:text="'heure de fin avant heure de debut'"></p>
+
 
 
         </fieldset>

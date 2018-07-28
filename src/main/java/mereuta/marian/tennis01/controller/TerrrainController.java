@@ -17,7 +17,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-@RequestMapping("terrain")
+@RequestMapping("/terrain")
 public class TerrrainController {
 
     @Autowired
@@ -60,7 +60,7 @@ public class TerrrainController {
         } else {
 
            metierTerrain.addTerrain(terrain);
-            return "redirect:terrain/liste";
+            return "redirect:/terrain/liste";
         }
 
     }
@@ -86,12 +86,12 @@ public class TerrrainController {
 
         System.out.println(terrain);
         if (bindingResult.hasErrors()) {
-            return "editTerrain";
+            return "terrains/editTerrain";
         } else {
 
 
             metierTerrain.addTerrain(terrain);
-            return "redirect: terrain/liste";
+            return "redirect:/terrain/liste";
         }
 
     }
