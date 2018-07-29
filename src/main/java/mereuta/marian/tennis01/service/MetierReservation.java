@@ -186,97 +186,111 @@ public class MetierReservation implements ReservationMetierInterface {
         return listeHeureues.get(indexheure2);
     }
 
-    @Override
-    public Tarif recupereTarif(LocalDate date, LocalTime heure1) {
+    public Tarif getTarifSpecial(LocalDate date, LocalTime heure1){
+        tarifs=tarifRepository.listeTarifsSpeciaux();
 
-        tarifs = tarifRepository.findAll();
+        System.out.println("**************************************");
+        System.out.println("liste des tarifs speciaux"+tarifs.size());
+        System.out.println("**************************************");
+
+        System.out.println("comparaison datesss.........");
+
+        Tarif tarif=null;
+
+        for (Tarif t: tarifs){
+            if(date.isAfter(t.getDateDebut()) || date.isEqual(t.getDateDebut() )  && date.isBefore(t.getDateFin()) || date.isEqual(t.getDateFin())){
+
+                    tarif=t;
+
+
+            }else {
+                tarif=null;
+            }
+        }
+
+
+        return tarif;
+    }
+
+    public Tarif getTarifNormalSemaine(LocalDate date, LocalTime heure1){
 
         DayOfWeek dayOfWeek = date.getDayOfWeek();
         String jour = dayOfWeek.name();
 
-        System.out.println("je suis l'heure 1 "+heure1);
+        System.out.println("le jour est "+jour);
 
-        if( date.isAfter(LocalDate.of(2018,07,28)) && date.isBefore(LocalDate.of(2018,8,01))&& heure1.isAfter(LocalTime.of(8,00)) && heure1.isBefore(LocalTime.of(16,00))){
-            System.out.println("je m'encadre");
-        }else {
-            System.out.println("jze ne m'ancadre pas");
-        }
+        System.out.println();
 
-        Tarif tarifFinal = new Tarif();
+        tarifs=tarifRepository.listeTarifsNormauxSemaine();
+
+        System.out.println(" la liste des tarifs semaine "+tarifs);
+
+        Tarif tarif=null;
+
 
         for (Tarif t: tarifs){
-            if(date.isAfter(t.getDateDebut()) || date.isEqual(t.getDateDebut())  && date.isBefore(t.getDateFin())|| date.isEqual(t.getDateFin())    && t.isActif() && t.isTarifSpecial() ){
-                if(heure1.isAfter(t.getHeureDebut()) && heure1.isBefore(t.getHeureFin()))
-                tarifFinal=t;
+            if(jour !="SATURDAY" && jour != "SUNDAY" && date.isAfter(t.getDateDebut()) || date.isEqual(t.getDateDebut())  && date.isBefore(t.getDateFin())|| date.isEqual(t.getDateFin())   &&    heure1.isAfter(t.getHeureDebut()) && heure1.isAfter(t.getHeureDebut()) && !t.isWeekend()){
+
+                    tarif=t;
+
+
             }else {
-                tarifFinal = tarifRepository.getOne(83);
+                tarif=null;
             }
         }
-            return tarifFinal;
+
+        return tarif;
+    }
+
+    public Tarif getTarifNormalWeekEnd(LocalDate date, LocalTime heure1){
+
+        DayOfWeek dayOfWeek = date.getDayOfWeek();
+        String jour = dayOfWeek.name();
+
+        tarifs=tarifRepository.listeTarifsNormauxWeekEnd();
+
+        Tarif tarif=null;
+
+
+        for (Tarif t: tarifs){
+            if(jour=="SATURDAY" || jour== "SUNDAY" && date.isAfter(t.getDateDebut()) || date.isEqual(t.getDateDebut())  && date.isBefore(t.getDateFin())|| date.isEqual(t.getDateFin())   &&    heure1.isAfter(t.getHeureDebut()) && heure1.isAfter(t.getHeureDebut()) && t.isWeekend()){
+
+                tarif=t;
+
+
+            }else {
+                tarif=null;
+            }
+        }
+
+        return tarif;
+    }
+
+    @Override
+    public Tarif recupereTarif(LocalDate date, LocalTime heure1) {
+
+        Tarif tarif=null;
+
+        if(getTarifSpecial(date,heure1)!=null){
+            tarif=getTarifSpecial(date,heure1);
+
+        }else if(getTarifNormalSemaine(date,heure1)!=null){
+            tarif=getTarifNormalSemaine(date,heure1);
+
+        }else if(getTarifNormalWeekEnd(date,heure1)!=null){
+            tarif=getTarifNormalWeekEnd(date,heure1);
+
+        }else{
+            tarif=tarifRepository.findByTarifParDefautTrue();
+        }
+
+
+
+            return tarif;
     }
 
 
-//    @Override
-//    public Tarif recupereTarif(LocalDate date, LocalTime heure1) {
-//
-//        tarifs = tarifRepository.findAll();
-//
-//        DayOfWeek dayOfWeek = date.getDayOfWeek();
-//        String jour = dayOfWeek.name();
-//
-//        Tarif tarifFinal = new Tarif();
-//
-//
-//        for (Tarif tarif : tarifs) {
-//            if (date.isAfter(tarif.getDateDebut()) &&
-//                    date.isBefore(tarif.getDateFin()) &&
-//                    heure1.isAfter(tarif.getHeureDebut()) &&
-//                    heure1.isBefore(tarif.getHeureFin()) &&
-//                    tarif.isTarifSpecial() && tarif.isActif() && !tarif.isTarifParDefaut()
-//                    ) {
-//                System.out.println("premier if");
-//                tarifFinal = tarif;
-//                System.out.println("premier tarif="+tarif);
-//            } else if (
-//                    jour == "SATURDAY" || jour == "SUNDAY" &&
-//                            date.isAfter(tarif.getDateDebut()) &&
-//                            date.isBefore(tarif.getDateFin()) &&
-//                            heure1.isAfter(tarif.getHeureDebut()) &&
-//                            heure1.isBefore(tarif.getHeureFin()) &&
-//                            tarif.isTarifSpecial() && tarif.isActif() && !tarif.isTarifParDefaut() && tarif.isWeekend()
-//                    ) {
-//                System.out.println("deuxieme if"+ tarif.isActif());
-//
-//                tarifFinal = tarif;
-//                System.out.println("deuxieme tarif="+tarif);
-//            } else if (
-//
-//                    jour != "SATURDAY" || jour != "SUNDAY" &&
-//                            date.isAfter(tarif.getDateDebut()) &&
-//                            date.isBefore(tarif.getDateFin()) &&
-//                            heure1.isAfter(tarif.getHeureDebut()) &&
-//                            heure1.isBefore(tarif.getHeureFin()) &&
-//                            !tarif.isTarifSpecial() && tarif.isActif() && !tarif.isTarifParDefaut() && !tarif.isWeekend()
-//
-//
-//                    ) {
-//
-//                System.out.println("ptroisieme tarif="+tarif);
-//
-//
-//                tarifFinal = tarif;
-//
-//            } else {
-//                System.out.println("quatrieme if");
-//                tarifFinal = tarifRepository.getOne(83);
-//            }
-//
-//        }
-//
-//        System.out.println("je suis le tarif final-----------------"+tarifFinal);
-//
-//        return tarifFinal;
-//    }
+
 
     @Override
     public Reservation getReservation(Integer idReservation) {
