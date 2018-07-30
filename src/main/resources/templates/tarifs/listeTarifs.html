@@ -42,7 +42,7 @@
 
                         <div class="col col-xs-6 text-right">
 
-                            <a th:href="@{form(id=1)}">Ajouter Tarif</a> <br>
+                            <a th:href="@{form(id=1, addOrUpdate=1) }">Ajouter Tarif</a> <br>
 
                         </div>
 
@@ -68,7 +68,7 @@
                         <tr th:each="t:${tarifs}">
                             <th:block th:if="${t.actif eq true && t.tarifSpecial eq false && t.tarifParDefaut eq false }">
                                 <td>
-                                    <a th:href="@{edit(id=${t.getId()}, typeTarif=1)}">update</a> <br> <br>
+                                    <a th:href="@{edit(id=${t.getId()}, typeTarif=1  ,addOrUpdate=2 )}">update</a> <br> <br>
                                     <a th:href="@{delete(id=${t.getId()})}">supprimer</a>
 
                                 </td>
@@ -109,7 +109,7 @@
 
                         <div class="col col-xs-6 text-right">
 
-                            <a th:href="@{form(id=2)}">Ajouter Tarif Special</a> <br>
+                            <a th:href="@{form(id=2, addOrUpdate=1)}">Ajouter Tarif Special</a> <br>
 
                         </div>
 
@@ -135,7 +135,7 @@
                         <tr th:each="t:${tarifs}">
                             <th:block th:if="${t.actif eq true && t.tarifSpecial eq true  }">
                                 <td>
-                                    <a th:href="@{edit(id=${t.getId()}, typeTarif=2)}">update</a> <br> <br>
+                                    <a th:href="@{edit(id=${t.getId()}, typeTarif=2, addOrUpdate=2)}">update</a> <br> <br>
                                     <a th:href="@{delete(id=${t.getId()})}">supprimer</a>
 
                                 </td>
@@ -198,7 +198,7 @@
                         <tr th:each="t:${tarifs}">
                             <th:block th:if="${t.actif eq true && t.tarifParDefaut eq true  }">
                                 <td>
-                                    <a th:href="@{edit(id=${t.getId()}, typeTarif=3)}">update</a> <br> <br>
+                                    <a th:href="@{edit(id=${t.getId()}, typeTarif=3, addOrUpdate=2 )}">update</a> <br> <br>
 
 
                                 </td>

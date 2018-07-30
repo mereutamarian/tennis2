@@ -81,6 +81,7 @@ public class ReservationController {
         int iteratorOption=0;
 
 
+
         List<Reservation> reservationsOptional=metierReservation.listeReservationOptional();
 
 
@@ -95,6 +96,8 @@ public class ReservationController {
 
 
 
+
+
         return "reservation/tableauReservations";
     }
 
@@ -104,7 +107,10 @@ public class ReservationController {
                                      @RequestParam(value = "date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
                                      @RequestParam(value = "listeHeures") List<LocalTime> listeHeureues,
                                      @RequestParam(value = "idUtilisateur")Integer idUtilisateur,
-                                     @RequestParam(value = "optionalOrReservation")Integer optionalOrReservation) {
+                                     @RequestParam(value = "optionalOrReservation")Integer optionalOrReservation)
+                                      {
+
+
 
 
         //recuperation de la deuxieme heure

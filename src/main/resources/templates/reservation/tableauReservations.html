@@ -39,7 +39,7 @@
 
 
 
-                <tr th:each="h,index : ${heures}"  >
+                <tr th:each="h,index : ${heures.subList(0,heures.size()-1)}"  >
                     <td>
                         <!--     <p th:text="${listeDatesResa.contains(h) && listeResa.contains(t.getId()) }? 'egal' : 'not egal'"></p> -->
 

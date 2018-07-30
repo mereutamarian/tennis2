@@ -31,8 +31,11 @@ public class TarifController {
 public String listeTarifs(Model model){
 
     tarifs=tarifMetier.listeTarifs();
+    int addOrUpdate=0;
 
     model.addAttribute("tarifs",tarifs);
+    //permet de faire la difference entre un update et un ajout pour laissr la possibilite de modifier un tarif deja encodé
+    model.addAttribute("addOrUpdate",addOrUpdate);
 
     return "tarifs/listeTarifs";
 
@@ -40,10 +43,11 @@ public String listeTarifs(Model model){
 
 
 @GetMapping("/form")
-    public String  ajouterTarif(Model model ,@RequestParam(value = "id")int id){
+    public String  ajouterTarif(Model model ,@RequestParam(value = "id")int id,@RequestParam(value = "addOrUpdate")int addOrUpdate){
 
     model.addAttribute("tarif",new Tarif());
     model.addAttribute("typeTarif", id);
+    model.addAttribute("addOrUpdate",addOrUpdate);
 
     return "tarifs/addTarif";
 }
@@ -53,8 +57,10 @@ public String listeTarifs(Model model){
 
 
     @GetMapping("/addTarif")
-    public String addTarif(@Valid  @ModelAttribute("tarif") Tarif tarif, BindingResult bindingResult, @RequestParam(value = "typeDeTarif" ) int typeTarif) {
+    public String addTarif(@Valid  @ModelAttribute("tarif") Tarif tarif, BindingResult bindingResult, @RequestParam(value = "typeDeTarif" ) int typeTarif,@RequestParam(value = "addOrUpdate")int addOrUpdate) {
 
+
+        System.out.println(" je suis le numero de --------------------"+addOrUpdate);
 
         System.out.println("le type de tarif est "+typeTarif);
 
@@ -87,7 +93,14 @@ public String listeTarifs(Model model){
             return "redirect:/tarif/liste";
 
         }else{
-            return "tarifs/problemeTarif";
+            if(addOrUpdate==2 && tarifMetier.getTarif(tarif.getId())!=null){
+
+                    tarifMetier.addTarif(tarif);
+                    return "redirect:/tarif/liste";
+
+            }else {
+                return "tarifs/problemeTarif";
+            }
         }
 
     }
@@ -106,12 +119,12 @@ public String listeTarifs(Model model){
 
 
     @GetMapping("/edit")
-    public String getTarif(@RequestParam(name = "id") Integer id, Model model, @RequestParam(name = "typeTarif")int typeTarif) {
+    public String getTarif(@RequestParam(name = "id") Integer id, Model model, @RequestParam(name = "typeTarif")int typeTarif,@RequestParam(value = "addOrUpdate")int addOrUpdate) {
 
         tarif = tarifMetier.getTarif(id);
 
 
-
+        model.addAttribute("addOrUpdate",addOrUpdate);
         model.addAttribute("tarif", tarif);
         System.out.println(tarif);
         System.out.println("je suis le tarif"+tarif);
@@ -126,10 +139,12 @@ public String listeTarifs(Model model){
 
 
     @GetMapping("/update")
-    public String updateHoraire(@Valid @ModelAttribute("tarif") Tarif tarif, BindingResult bindingResult, @RequestParam(name = "tarifType",defaultValue = "1") int idTypeTarif ){
+    public String updateTarif(@Valid @ModelAttribute("tarif") Tarif tarif, BindingResult bindingResult, @RequestParam(name = "tarifType",defaultValue = "1") int idTypeTarif ,@RequestParam(value = "addOrUpdate")int addOrUpdate){
 
-        System.out.println(tarif);
+        System.out.println("je suis le tari------------------------"+addOrUpdate);
         if (bindingResult.hasErrors()) {
+
+
             return "tarifs/editTarif";
         }
         else if(idTypeTarif==3)
@@ -140,7 +155,7 @@ public String listeTarifs(Model model){
 
             return "redirect:/tarif/liste";
         }else{
-            return addTarif(tarif,bindingResult,idTypeTarif);
+            return addTarif(tarif,bindingResult,idTypeTarif,addOrUpdate);
         }
 
     }
