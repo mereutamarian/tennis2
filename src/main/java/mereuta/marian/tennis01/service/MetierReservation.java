@@ -186,28 +186,22 @@ public class MetierReservation implements ReservationMetierInterface {
         return listeHeureues.get(indexheure2);
     }
 
-    public Tarif getTarifSpecial(LocalDate date, LocalTime heure1){
-        tarifs=tarifRepository.listeTarifsSpeciaux();
-
-        System.out.println("**************************************");
-        System.out.println("liste des tarifs speciaux"+tarifs.size());
-        System.out.println("**************************************");
-
-        System.out.println("comparaison datesss.........");
+    public Tarif getTarifSpecial(LocalDate date , LocalTime heure1){
 
         Tarif tarif=null;
 
-        for (Tarif t: tarifs){
-            if(date.isAfter(t.getDateDebut()) || date.isEqual(t.getDateDebut() )  && date.isBefore(t.getDateFin()) || date.isEqual(t.getDateFin())){
+        tarifs=tarifRepository.listeTarifsSpeciaux();
 
-                    tarif=t;
+        for(Tarif t: tarifs){
 
-
-            }else {
-                tarif=null;
+            if(date.isAfter(t.getDateDebut()) &&date.isBefore( t.getDateFin()) && heure1.isAfter(t.getHeureDebut()) && heure1.isBefore(t.getHeureFin()) || heure1.isAfter(t.getHeureDebut()) && heure1.equals(t.getHeureFin()) || heure1.equals(t.getHeureDebut())&& heure1.isBefore(t.getHeureFin())
+                    || date.isAfter(t.getDateDebut()) && date.isEqual(t.getDateFin()) && heure1.isAfter(t.getHeureDebut()) && heure1.isBefore(t.getHeureFin()) || heure1.isAfter(t.getHeureDebut()) && heure1.equals(t.getHeureFin()) || heure1.equals(t.getHeureDebut())&& heure1.isBefore(t.getHeureFin())
+                    || date.isEqual(t.getDateDebut()) && date.isBefore(t.getDateFin())&& heure1.isAfter(t.getHeureDebut()) && heure1.isBefore(t.getHeureFin()) || heure1.isAfter(t.getHeureDebut()) && heure1.equals(t.getHeureFin()) || heure1.equals(t.getHeureDebut())&& heure1.isBefore(t.getHeureFin())
+                    ){
+                tarif=t;
             }
-        }
 
+        }
 
         return tarif;
     }
@@ -217,9 +211,7 @@ public class MetierReservation implements ReservationMetierInterface {
         DayOfWeek dayOfWeek = date.getDayOfWeek();
         String jour = dayOfWeek.name();
 
-        System.out.println("le jour est "+jour);
 
-        System.out.println();
 
         tarifs=tarifRepository.listeTarifsNormauxSemaine();
 
@@ -271,22 +263,52 @@ public class MetierReservation implements ReservationMetierInterface {
 
         Tarif tarif=null;
 
+       List<Tarif> tarifsSpeciaux=tarifRepository.listeTarifsSpeciaux();
+       List<Tarif> tarifSemaine=tarifRepository.listeTarifsNormauxSemaine();
+       List tarifsWeekend=tarifRepository.listeTarifsNormauxWeekEnd();
+       Tarif  tarifDefaut=tarifRepository.findByTarifParDefautTrue();
+
+//            int i=0;
+//Tarif  t=tarifsSpeciaux.get(0);
+//
+//        System.out.println("je suis le tarif special"+t);
+//        System.out.println(" je suis la date" +date);
+//
+//        System.out.println("comparaison -*****-");
+//        if(date.isAfter(t.getDateDebut()) &&date.isBefore( t.getDateFin()) && heure1.isAfter(t.getHeureDebut()) && heure1.isBefore(t.getHeureFin()) || heure1.isAfter(t.getHeureDebut()) && heure1.equals(t.getHeureFin()) || heure1.equals(t.getHeureDebut())&& heure1.isBefore(t.getHeureFin())
+//                || date.isAfter(t.getDateDebut()) && date.isEqual(t.getDateFin()) && heure1.isAfter(t.getHeureDebut()) && heure1.isBefore(t.getHeureFin()) || heure1.isAfter(t.getHeureDebut()) && heure1.equals(t.getHeureFin()) || heure1.equals(t.getHeureDebut())&& heure1.isBefore(t.getHeureFin())
+//                || date.isEqual(t.getDateDebut()) && date.isBefore(t.getDateFin())&& heure1.isAfter(t.getHeureDebut()) && heure1.isBefore(t.getHeureFin()) || heure1.isAfter(t.getHeureDebut()) && heure1.equals(t.getHeureFin()) || heure1.equals(t.getHeureDebut())&& heure1.isBefore(t.getHeureFin())
+//
+//
+//
+//
+//              //  && heure1.isAfter(t.getHeureDebut()) && heure1.isBefore(t.getHeureFin()) || heure1.isAfter(t.getHeureDebut()) && heure1.equals(t.getHeureFin()) || heure1.equals(t.getHeureDebut())&& heure1.isBefore(t.getHeureFin())
+//
+//
+//                ){
+//            System.out.println(" je suis avant ");
+//        }else{
+//            System.out.println("je suis apres");
+//        }
+//
+//
+//      if (date.isAfter(t.getDateDebut()) || date.isEqual(t.getDateDebut())  && date.isBefore(t.getDateFin())|| date.isEqual(t.getDateFin())){
+//          System.out.println("je suis dedans");
+//      }else {
+//          System.out.println("je suis pas dedans");
+//      }
+
+
         if(getTarifSpecial(date,heure1)!=null){
-            tarif=getTarifSpecial(date,heure1);
-
-        }else if(getTarifNormalSemaine(date,heure1)!=null){
-            tarif=getTarifNormalSemaine(date,heure1);
-
-        }else if(getTarifNormalWeekEnd(date,heure1)!=null){
-            tarif=getTarifNormalWeekEnd(date,heure1);
-
-        }else{
-            tarif=tarifRepository.findByTarifParDefautTrue();
-        }
+                tarif=getTarifSpecial(date,heure1);
+            }else {
+                tarif=tarifDefaut;
+            }
 
 
 
-            return tarif;
+       return tarif;
+
     }
 
 
