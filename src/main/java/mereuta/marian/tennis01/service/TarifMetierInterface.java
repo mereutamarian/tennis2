@@ -20,5 +20,11 @@ public interface TarifMetierInterface {
     public List<Tarif> listeTarifsNormaux();
     public List<Tarif> listeTarifsSpeciaux();
     public  List<Tarif> effacerTarifListe(Tarif tarif,List<Tarif> tarifs);
+    public List<Tarif> tarifsNormauxWeekend();
+    public int getAnneCourante();
+    public List<Tarif> tarifsNormauxSemaine();
+    public int getAnneeprochaine(int annee);
+    public Tarif tarifParDefaut();
+    public boolean checkIfIntersectionOuDatesEgales(Tarif tarif, Tarif t);
 
 }

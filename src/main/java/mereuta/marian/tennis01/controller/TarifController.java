@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -93,7 +94,13 @@ public String listeTarifs(Model model){
             return "redirect:/tarif/liste";
 
         }else{
-            if(addOrUpdate==2 && tarifMetier.getTarif(tarif.getId())!=null){
+            //le numero deux c'est update et 1 c'est add
+            //on check si l'id du tarif existe , s'il existe veut dire que l'id du tarif est deja encodé dont 'est un update
+            if(addOrUpdate==2 && tarifMetier.getTarif(tarif.getId())!=null &&
+                    tarifMetier.intersectionDatesOuDatesEgales(tarif,tarifs)>1 && tarifMetier.intersectionDatesOuDatesEgales(tarif,tarifs)<2 ||
+                    tarifMetier.intersectionDatesOuDatesEgalesEtWeekEndDifferent(tarif,tarifs)==0 ||
+                    tarifMetier.dateEgaleWeekEndEgalEtHeureDifferente(tarif,tarifs)>1 && tarifMetier.dateEgaleWeekEndEgalEtHeureDifferente(tarif,tarifs)<2){
+
 
                     tarifMetier.addTarif(tarif);
                     return "redirect:/tarif/liste";
@@ -141,23 +148,42 @@ public String listeTarifs(Model model){
     @GetMapping("/update")
     public String updateTarif(@Valid @ModelAttribute("tarif") Tarif tarif, BindingResult bindingResult, @RequestParam(name = "tarifType",defaultValue = "1") int idTypeTarif ,@RequestParam(value = "addOrUpdate")int addOrUpdate){
 
-        System.out.println("je suis le tari------------------------"+addOrUpdate);
+
         if (bindingResult.hasErrors()) {
 
 
             return "tarifs/editTarif";
         }
-        else if(idTypeTarif==3)
-            {
 
+        else if(idTypeTarif==3 ){
 
-            tarifMetier.addTarif(tarif);
 
             return "redirect:/tarif/liste";
         }else{
             return addTarif(tarif,bindingResult,idTypeTarif,addOrUpdate);
         }
 
+    }
+
+    @GetMapping("/grille")
+    public String listTarifsClients(Model model){
+
+        List<Tarif>tarifsNormauxSemaine=tarifMetier.tarifsNormauxSemaine();
+        List<Tarif>tarifsNormauxWeekend=tarifMetier.tarifsNormauxWeekend();
+        List<Tarif>tarifsSpeciaux=tarifMetier.listeTarifsSpeciaux();
+        Tarif tarifParDefaut=tarifMetier.tarifParDefaut();
+        int annee=tarifMetier.getAnneCourante();
+        int anneeProchaine=tarifMetier.getAnneeprochaine(annee);
+
+
+        model.addAttribute("annee", annee);
+        model.addAttribute("tarifsNormaux", tarifsNormauxSemaine);
+        model.addAttribute("anneeProchaine", anneeProchaine);
+        model.addAttribute("tarifsNormauxWeekend", tarifsNormauxWeekend);
+        model.addAttribute("tarifsSpeciaux", tarifsSpeciaux);
+        model.addAttribute("tarifParDefaut",tarifParDefaut);
+
+        return "tarifs/grilleTarifClients";
     }
 
 }

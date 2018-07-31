@@ -4,6 +4,8 @@ import mereuta.marian.tennis01.model.Tarif;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import java.time.LocalTime;
 import java.util.List;
 
 public interface TarifRepository extends JpaRepository<Tarif,Integer> {
@@ -24,6 +26,15 @@ public interface TarifRepository extends JpaRepository<Tarif,Integer> {
     List<Tarif> listeTarifsSpeciaux();
 
     Tarif findByTarifParDefautTrue();
+
+//    @Query(value = "select * from tarifs where actif =1 and id=?", nativeQuery =true )
+//    Tarif trouverTarif(Integer id);
+
+    Tarif findTarifByIdAndActifTrue(Integer id);
+
+
+
+
 
 
 

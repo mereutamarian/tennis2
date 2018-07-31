@@ -1,0 +1,42 @@
+<html xmlns:th= "http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <link  rel="stylesheet" type="text/css" href="../../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../static/css/cssHoraire.css.css" th:href="@{/css/cssHoraire.css}"/>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
+
+</head>
+<body>
+
+
+           <h3 th:text="${'la liste des tarifs normaux de la semaine pour l''année  ' + annee +' et '+ anneeProchaine +' sont :'}"></h3>
+
+           <p class="alert-success" th:each=" tarif:${tarifsNormaux}" th:text="${'de la date  '+tarif.dateDebut+' a la date ' +tarif.dateFin +' entre les herures '+tarif.heureDebut+' et '+tarif.heureFin+' le prix est de : '+tarif.prix +'€'}"></p>
+
+           <h3 th:text="${'la liste des tarifs normaux de l''weekend pour l''année  ' + annee +' et '+ anneeProchaine +' sont :'}"></h3>
+
+           <p class="alert-danger" th:each=" tarif:${tarifsNormauxWeekend}" th:text="${'de la date  '+tarif.dateDebut+' a la date ' +tarif.dateFin +' entre les herures '+tarif.heureDebut+' et '+tarif.heureFin+' le prix est de : '+tarif.prix +'€'}"></p>
+
+           <h3 th:text="${'la liste des tarifs speciaux pour l''année  ' + annee +' et '+ anneeProchaine +' sont :'}"></h3>
+
+           <p class="alert-warning" th:each=" tarif:${tarifsSpeciaux}" th:text="${'de la date  '+tarif.dateDebut+' a la date ' +tarif.dateFin +' entre les herures '+tarif.heureDebut+' et '+tarif.heureFin+' le prix est de : '+tarif.prix +'€'}"></p>
+
+           <h3 th:text="${'si vous trouvez un jour ou il n'' a pas de tarif defini dans le liste des tarifs precedentes le tarif applique sera celui la : '}"></h3>
+
+           <p class="alert-dark"  th:text="${'de la date  '+tarifParDefaut.dateDebut+' a la date ' +tarifParDefaut.dateFin +' entre les herures '+tarifParDefaut.heureDebut+' et '+tarifParDefaut.heureFin+' le prix est de : '+tarifParDefaut.prix +'€'}"></p>
+
+
+
+</body>
+</html>

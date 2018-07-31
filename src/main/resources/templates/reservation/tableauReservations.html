@@ -53,6 +53,8 @@
 
                                 <p>reserve</p>
                                 <a th:if="${resa.utilisateur.id eq session.session.id}" th:text="'Annuler'" th:href="@{cancelResa(idResa=${resa.getId()})}"></a>
+                                <!--si gestionare ou admin-->
+                                <a  th:text="'Modifier Terrain'" th:href="@{updateTerrain(idResa=${resa.getId()})}"></a>
 
                                <p th:if="${c}"></p>
 

@@ -219,6 +219,19 @@ public class ReservationController {
         return "redirect:/reservation/tableau";
     }
 
+    @GetMapping("/updateTerrain")
+    public String modifierTerrainReservation(@RequestParam(value ="idResa") Integer idResa, Model model){
+
+     Reservation reservation= metierReservation.getReservation(idResa);
+     List<Terrain> terrains= metierTerrain.showTerrain();
+
+     model.addAttribute("reservation", reservation);
+
+
+
+        return "reservation/terrainsListe";
+    }
+
 
 
 

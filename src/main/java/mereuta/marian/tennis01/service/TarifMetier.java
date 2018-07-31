@@ -5,6 +5,7 @@ import mereuta.marian.tennis01.repository.TarifRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class TarifMetier implements TarifMetierInterface {
 
     @Override
     public Tarif getTarif(Integer id) {
-        return tarifRepository.getOne(id);
+        return tarifRepository.findTarifByIdAndActifTrue(id);
     }
 
     @Override
@@ -52,7 +53,7 @@ public class TarifMetier implements TarifMetierInterface {
         tarifRepository.save(tarif);
     }
 
-
+    @Override
     public int intersectionDatesOuDatesEgales(Tarif tarif, List<Tarif> tarifs) {
 
 
@@ -198,9 +199,18 @@ public class TarifMetier implements TarifMetierInterface {
         return tarifs;
     }
 
+    @Override
+    public int getAnneCourante() {
 
+        return LocalDate.now().getYear();
+    }
 
+    @Override
+    public int getAnneeprochaine(int annee) {
+        return annee+1;
+    }
 
+    @Override
     public boolean checkIfIntersectionOuDatesEgales(Tarif tarif, Tarif t) {
         if (tarif.getDateDebut().isAfter(t.getDateDebut()) && tarif.getDateDebut().isBefore(t.getDateFin()) ||
                 t.getDateDebut().isAfter(tarif.getDateDebut()) && t.getDateDebut().isBefore(tarif.getDateFin()) ||
@@ -211,6 +221,19 @@ public class TarifMetier implements TarifMetierInterface {
             return false;
         }
     }
+    @Override
+    public List<Tarif> tarifsNormauxSemaine() {
 
+        return tarifRepository.listeTarifsNormauxSemaine();
+    }
+    @Override
+    public List<Tarif> tarifsNormauxWeekend() {
 
+        return tarifRepository.listeTarifsNormauxWeekEnd();
+    }
+    @Override
+    public Tarif tarifParDefaut() {
+
+        return tarifRepository.findByTarifParDefautTrue();
+    }
 }
