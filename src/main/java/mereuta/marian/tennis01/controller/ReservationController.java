@@ -1,6 +1,7 @@
 package mereuta.marian.tennis01.controller;
 
 import mereuta.marian.tennis01.model.*;
+import mereuta.marian.tennis01.repository.ReservationRepository;
 import mereuta.marian.tennis01.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -50,6 +51,7 @@ public class ReservationController {
         //l'horaire qui va être affiché
         horaire = metierReservation.checkHoraire(dateResa);
 
+      //  System.out.println( "je suis le type "+horaire.getTerrains().getClass().getName() + "je suis  la valeur "+horaire.getTerrains());
 
 
         //liste des heures qui vont etre disponibles pour la reservation
@@ -219,21 +221,50 @@ public class ReservationController {
         return "redirect:/reservation/tableau";
     }
 
-    @GetMapping("/updateTerrain")
-    public String modifierTerrainReservation(@RequestParam(value ="idResa") Integer idResa, Model model){
+    @GetMapping("/editTerrainForm")
+    public String modifierTerrainReservation(@RequestParam(value ="idResa") Integer idResa,@RequestParam(value = "terrains") String terrainsListe,Model model){
 
-     Reservation reservation= metierReservation.getReservation(idResa);
+
      List<Terrain> terrains= metierTerrain.showTerrain();
+     Reservation reservation=metierReservation.getReservation(idResa);
 
-     model.addAttribute("reservation", reservation);
+        System.out.println("voila la classe "+ terrainsListe.getClass().getName());
+
+
+
+     //on elimine le terrain qui est deja present
+     terrains=metierTerrain.effacerTerrainCourrant(terrains, reservation.getTerrain().getId());
+
+
+     model.addAttribute("idReservation", idResa);
+     model.addAttribute("terrains", terrains);
+
 
 
 
         return "reservation/terrainsListe";
     }
+@Autowired
+    ReservationRepository reservationRepository;
+
+    @PostMapping("/updateTerrain")
+    public String modifierTerrain(@RequestParam(value = "idResa")Integer idResa, @RequestParam(value = "idTerrain")Integer idTerrain){
+
+        Reservation reservation= metierReservation.getReservation(idResa);
+        Terrain terrain= metierTerrain.getTerrain(idTerrain);
+
+        if(reservationRepository.findByDateReservationAndHeureDebutAndHeureFinAndTerrainAndActifTrue(reservation.getDateReservation(), reservation.getHeureDebut(), reservation.getHeureFin(), reservation.getTerrain())!=null){
+            return "reservation/terrainIndisponible";
+        }else {
+
+            metierReservation.modifierTerrain(reservation, terrain);
+            return "redirect:/reservation/tableau";
+        }
 
 
 
+
+    }
 
 }
 

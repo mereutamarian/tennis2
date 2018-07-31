@@ -15,7 +15,5 @@ public interface InterfaceMetierTerrain {
     public void setActivTerrain(Terrain t);
 
 
-
-
-
+    public List<Terrain> effacerTerrainCourrant(List<Terrain> terrains, Integer idResa);
 }

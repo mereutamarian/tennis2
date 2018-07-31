@@ -432,5 +432,11 @@ public class MetierReservation implements ReservationMetierInterface {
         return reservationRepository.findByOptionalTrue();
     }
 
+    @Override
+    public void modifierTerrain(Reservation reservation, Terrain terrain) {
+        reservation.setTerrain(terrain);
+        reservationRepository.save(reservation);
+    }
+
 
 }

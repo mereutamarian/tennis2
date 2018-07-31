@@ -20,15 +20,10 @@
 
 <body>
 
-        <form th:action="@{updateTerrain}" method="post"  >
+    <h2>Le terain que vous avez choisi est indisponlible a cette heure la !!!!!!!!!!</h2>
 
-            <input type="hidden" name="idResa" th:value="${idReservation}" >
 
-            <input type="radio" name="idTerrain" th:value="${terrain.id}" th:each=" terrain:${terrains}" th:text="${terrain.nomTerrain}" >
-
-            <input type="submit" value="valider">
-        </form>
-
+        <a th:href="@{tableau}">Retout au tableau de réservation</a>
 
 </body>
 </html>

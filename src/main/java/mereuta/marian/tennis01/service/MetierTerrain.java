@@ -68,7 +68,24 @@ public class MetierTerrain implements InterfaceMetierTerrain {
 
     }
 
+    @Override
+    public List<Terrain> effacerTerrainCourrant(List<Terrain> terrains, Integer idResa) {
 
+        int index=0;
+
+        for (Terrain t : terrains){
+            if(t.getId().equals(idResa)){
+                System.out.println("voici le terrain"+t);
+                index=terrains.indexOf(t);
+            }
+        }
+
+        terrains.remove(terrains.get(index));
+
+        System.out.println("voiala la liste des terrains"+terrains);
+
+        return terrains;
+    }
 
 
 }
