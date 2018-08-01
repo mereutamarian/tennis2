@@ -87,5 +87,38 @@ public class MetierTerrain implements InterfaceMetierTerrain {
         return terrains;
     }
 
+    //permet de recuperer les id du string terrain liste
+    @Override
+    public List<Integer> getIdsFromString(String terrainsListe) {
+
+        List<Integer> ids=new ArrayList<>();
+        String[]tableau= terrainsListe.split("i");
+        Integer idTerrain;
+
+        for (String id:tableau){
+            if(id.startsWith("d=")){
+                idTerrain=Integer.parseInt(id.substring(2, id.indexOf(",")));
+                ids.add(idTerrain);
+            }
+        }
+
+
+        return ids ;
+    }
+
+    @Override
+    public List<Terrain> getTerrainsFromIds(List<Integer> idsTerrains) {
+
+        List<Terrain> terrains= new ArrayList<>();
+        Terrain terrain;
+
+        for (Integer i: idsTerrains){
+            terrain=getTerrain(i);
+            terrains.add(terrain);
+        }
+
+        return terrains;
+    }
+
 
 }

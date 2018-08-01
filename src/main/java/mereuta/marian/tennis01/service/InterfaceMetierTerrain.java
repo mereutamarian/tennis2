@@ -13,7 +13,7 @@ public interface InterfaceMetierTerrain {
     public void deleteTerrain(Terrain terrain);
     public void addTerrain(Terrain terrain);
     public void setActivTerrain(Terrain t);
-
-
     public List<Terrain> effacerTerrainCourrant(List<Terrain> terrains, Integer idResa);
+    public List<Integer> getIdsFromString(String terrainsListe);
+    public List<Terrain> getTerrainsFromIds(List<Integer> idsTerrains);
 }

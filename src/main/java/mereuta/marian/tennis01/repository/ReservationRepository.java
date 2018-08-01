@@ -23,14 +23,14 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     List<Reservation>findByDateReservationIsGreaterThanAndActifTrue(LocalDate today);
     List<Reservation>findByOptionalTrue();
 
-//    @Query("select * from reses")
-//    Reservation (LocalDate date , LocalTime heureDebut, LocalTime heureFin, Terrain terrain);
+
 
     Reservation findByDateReservationAndHeureDebutAndHeureFinAndTerrainAndActifTrue(LocalDate date, LocalTime heureDebut, LocalTime heureFin,Terrain  terrain);
 
+    List<Reservation>findByUtilisateurAndDateReservationIsBeforeOrderByDateReservation( Utilisateur utilisateur,LocalDate date);
 
 
-
+    List<Reservation> findByUtilisateurAndDateReservationIsAfterOrderByDateReservation(Utilisateur utilisateur, LocalDate now);
 }
 
 

@@ -1,5 +1,6 @@
 package mereuta.marian.tennis01.service;
 
+import mereuta.marian.tennis01.model.Reservation;
 import mereuta.marian.tennis01.model.Utilisateur;
 
 import java.util.List;
@@ -18,5 +19,7 @@ public interface UtilisateurInterfaceMetier {
     public boolean checkEmailLogin(String email);
     public boolean comparePassword(String password, Utilisateur utilisateur);
     public Map<String ,Integer> femmesEtHommes();
+    public List<Reservation> mesReservationPassees(Utilisateur utilisateur);
+    public List<Reservation> mesReservationFutures( Utilisateur utilisateur);
 
 }

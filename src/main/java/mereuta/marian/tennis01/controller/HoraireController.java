@@ -90,7 +90,7 @@ public class HoraireController {
     @GetMapping("/addHoraireSpecial")
     public String addHoraireSpecial(@Valid @ModelAttribute("horaire") Horaire horaire, BindingResult bindingResult, @RequestParam(name = "idTerrain", required = false) List<Integer> idT,
 
-                                    @RequestParam(name = "idInterval", required = false) Integer id) throws SQLException {
+                                    @RequestParam(name = "idInterval", required = false) Integer id)  {
 
 
         if (bindingResult.hasErrors()) {

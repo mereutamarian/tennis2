@@ -1,0 +1,40 @@
+<table border="0" cellpadding="3" cellspacing="0">
+    <tr>
+        <td>
+            Password:
+        </td>
+        <td>
+            <input type="password" id="txtPassword" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Confirm Password:
+        </td>
+        <td>
+            <input type="password" id="txtConfirmPassword" />
+            <p class="alert alert danger" id="demo"></p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+        </td>
+        <td>
+            <input type="button" id="btnSubmit" value="Submit" />
+        </td>
+    </tr>
+</table>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#btnSubmit").click(function () {
+            var password = $("#txtPassword").val();
+            var confirmPassword = $("#ttxtConfirmPassword").val();
+            if (password != confirmPassword) {
+                alert("bala bla")
+                return false;
+            }
+            return true;
+        });
+    });
+</script>

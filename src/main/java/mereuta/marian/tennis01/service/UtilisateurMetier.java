@@ -1,9 +1,12 @@
 package mereuta.marian.tennis01.service;
 
+import mereuta.marian.tennis01.model.Reservation;
 import mereuta.marian.tennis01.model.Role;
 import mereuta.marian.tennis01.model.Utilisateur;
+import mereuta.marian.tennis01.repository.ReservationRepository;
 import mereuta.marian.tennis01.repository.RoleRepository;
 import mereuta.marian.tennis01.repository.UtilisateurRepository;
+import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,13 +27,15 @@ public class UtilisateurMetier implements UtilisateurInterfaceMetier {
     UtilisateurRepository utilisateurRepository;
     @Autowired
     RoleRepository roleRepository;
+    @Autowired
+    ReservationRepository reservationRepository;
 
 
     private Utilisateur utilisateur;
 
     @Override
     public List<Utilisateur> listUtilisateurs() {
-        return null;
+        return utilisateurRepository.findAll();
     }
 
     @Override
@@ -49,6 +55,7 @@ public class UtilisateurMetier implements UtilisateurInterfaceMetier {
         System.out.println("je suis le role" + role);
 
         utilisateur.setPassword(encoder.encode(utilisateur.getPassword()));
+
         utilisateur.setRole(role);
         utilisateur.setCredit(credit);
         utilisateur.setActif(actif);
@@ -91,9 +98,9 @@ public class UtilisateurMetier implements UtilisateurInterfaceMetier {
     public boolean checkEmailLogin(String email) {
 
         if (findByEmail(email) == null) {
-            return true;
-        } else {
             return false;
+        } else {
+            return true;
         }
 
 
@@ -192,5 +199,15 @@ public class UtilisateurMetier implements UtilisateurInterfaceMetier {
 
         return listeAgesTranches;
 
+    }
+
+    @Override
+    public List<Reservation> mesReservationPassees(Utilisateur utilisateur) {
+        return reservationRepository.findByUtilisateurAndDateReservationIsBeforeOrderByDateReservation( utilisateur, LocalDate.now());
+    }
+
+    @Override
+    public List<Reservation> mesReservationFutures(Utilisateur utilisateur) {
+        return reservationRepository.findByUtilisateurAndDateReservationIsAfterOrderByDateReservation( utilisateur, LocalDate.now());
     }
 }

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th= "http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" type="text/css" href="../../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../static/css/cssHoraire.css.css" th:href="@{/css/cssHoraire.css}"/>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
+
+</head>
+<body>
+
+<h1>
+   Informations sur mon compte
+</h1>
+
+
+
+<div class="container">
+    <div class="row">
+
+
+
+        <div class="col-md-10 col-md-offset-1">
+
+            <div class="panel panel-default panel-table">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col col-xs-6">
+                            <h3 class="panel-title">Liste Horaires Fixes</h3>
+                        </div>
+
+                        <div class="col col-xs-6 text-right">
+
+                            <!-- <a th:href="@{form}">Ajouter Horaire</a> <br>-->
+                            <!--  <a th:href="@{horaireSpecial}">Ajouter Horaire Special</a> -->
+                        </div>
+
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped table-bordered table-list">
+                        <thead>
+                        <tr>
+                            <th><em class="fa fa-cog"></em></th>
+                            <th>Nom</th>
+                            <th>Prenom</th>
+                            <th>Adresse</th>
+                            <th>Code postal</th>
+                            <th>Ville</th>
+                            <th>Telephone</th>
+                            <th>Email</th>
+                            <th>Date Naissance</th>
+                            <th>Sexe</th>
+                            <th>Credit</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr >
+
+
+                            <td align="center">
+
+
+                                <!--<a th:href="@{edit(id=${listeHoraires.getId()})}">edit horaire/</a><br> <br>-->
+                                <!--<a th:href="@{editTerrain(id=${listeHoraires.getId()})}">Attribuer Terrain/</a> <br> <br>-->
+                                <!--<a th:href="@{editMesure(id=${listeHoraires.getId()})}">Attribuer Mesure/</a> <br> <br>-->
+
+                            </td>
+                            <td th:text="${session.session.nom}"></td>
+                            <td th:text="${session.session.prenom}"></td>
+                            <td th:text="${session.session.adrese}"></td>
+                            <td th:text="${session.session.codePostal}"></td>
+                            <td th:text="${session.session.ville}"></td>
+                            <td th:text="${session.session.telephone}"></td>
+                            <td th:text="${session.session.email}"></td>
+                            <td th:text="${session.session.dateNaissance}"></td>
+                            <td th:text="${session.session.sexe}"></td>
+                            <td th:text="${session.session.credit}"></td>
+
+
+
+
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="panel-footer">
+
+                </div>
+            </div>
+
+        </div></div></div>
+
+        <a th:href=" @{mesReservationsPasseesOuFututures(id=${session.session.id} , idTypeResa=1) } "> Voir la liste des reservation deja passees</a>
+        <a th:href=" @{mesReservationsPasseesOuFututures(id=${session.session.id}, idTypeResa=2) } "> Voir la liste des reservation a venir</a>
+
+</body>
+</html>

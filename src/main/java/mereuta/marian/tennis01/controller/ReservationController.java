@@ -225,11 +225,15 @@ public class ReservationController {
     public String modifierTerrainReservation(@RequestParam(value ="idResa") Integer idResa,@RequestParam(value = "terrains") String terrainsListe,Model model){
 
 
-     List<Terrain> terrains= metierTerrain.showTerrain();
+
      Reservation reservation=metierReservation.getReservation(idResa);
 
-        System.out.println("voila la classe "+ terrainsListe.getClass().getName());
+     //on recupere les id du terrain a partir du string liste terrains
+     List<Integer> idsTerrains=metierTerrain.getIdsFromString(terrainsListe);
 
+        List<Terrain> terrains=metierTerrain.getTerrainsFromIds(idsTerrains);
+
+        System.out.println("voila les id du terrain" +terrains);
 
 
      //on elimine le terrain qui est deja present
@@ -253,15 +257,14 @@ public class ReservationController {
         Reservation reservation= metierReservation.getReservation(idResa);
         Terrain terrain= metierTerrain.getTerrain(idTerrain);
 
-        if(reservationRepository.findByDateReservationAndHeureDebutAndHeureFinAndTerrainAndActifTrue(reservation.getDateReservation(), reservation.getHeureDebut(), reservation.getHeureFin(), reservation.getTerrain())!=null){
+
+        if(reservationRepository.findByDateReservationAndHeureDebutAndHeureFinAndTerrainAndActifTrue(reservation.getDateReservation(), reservation.getHeureDebut(), reservation.getHeureFin(), terrain)!=null){
             return "reservation/terrainIndisponible";
         }else {
 
             metierReservation.modifierTerrain(reservation, terrain);
             return "redirect:/reservation/tableau";
         }
-
-
 
 
     }

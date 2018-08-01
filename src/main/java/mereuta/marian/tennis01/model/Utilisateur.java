@@ -2,6 +2,7 @@ package mereuta.marian.tennis01.model;
 
 import mereuta.marian.tennis01.annotations.CheckAge;
 import mereuta.marian.tennis01.annotations.EmailUnique;
+import mereuta.marian.tennis01.annotations.PassMatch;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.List;
 
+//@PassMatch(field = "password", verifyField = "confirmPassword")
 @Entity(name = "utilisateurs")
 public class Utilisateur {
     @Id @GeneratedValue
@@ -42,6 +44,8 @@ public class Utilisateur {
     @Size(min = 4, max = 255)
     @Column(name = "password")
     private String password;
+    @Transient
+    private String confirmPassword;
     @Column(name="credit")
     private float credit;
     @Column(name = "actif")
@@ -206,5 +210,13 @@ public class Utilisateur {
 
     public void setSexe(String sexe) {
         this.sexe = sexe;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 }

@@ -44,4 +44,5 @@ public interface ReservationMetierInterface {
     public List<Reservation>listeReservationOptional();
 
     public void modifierTerrain(Reservation reservation, Terrain terrain);
+
 }

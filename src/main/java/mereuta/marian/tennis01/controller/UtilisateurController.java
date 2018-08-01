@@ -1,6 +1,7 @@
 package mereuta.marian.tennis01.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import mereuta.marian.tennis01.model.Reservation;
 import mereuta.marian.tennis01.model.Utilisateur;
 import mereuta.marian.tennis01.service.MailMetier;
 import mereuta.marian.tennis01.service.UtilisateurMetier;
@@ -14,6 +15,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -26,6 +29,8 @@ public class UtilisateurController {
     @Autowired
     MailMetier mailMetier;
 
+
+    private List<Utilisateur> utilisateurs;
 
 
     @GetMapping("/inscription")
@@ -65,9 +70,6 @@ public class UtilisateurController {
     public String home() {
 
 
-
-
-
         return "utilisateur/home";
     }
 
@@ -75,27 +77,28 @@ public class UtilisateurController {
     public String login(Model model, @RequestParam(name = "email") String email, @RequestParam(name = "password") String password, HttpServletRequest request) {
 
 
-
-
         int compt = 0;
         Utilisateur utilisateur = utilisateurMetier.findByEmail(email);
         HttpSession session = request.getSession();
 
 
-        if (utilisateurMetier.checkEmailLogin(email) == false) {
+        if (utilisateurMetier.checkEmailLogin(email) == true) {
+
+            if (utilisateur.isActif() == true) {
+                if (utilisateurMetier.comparePassword(password, utilisateur) == true) {
+
+                    session.setAttribute("session", utilisateur);
 
 
-            if (utilisateurMetier.comparePassword(password, utilisateur) == true) {
+                    return "utilisateur/home";
+                } else {
+                    compt = 1;
+                    model.addAttribute("compt", compt);
 
-                session.setAttribute("session", utilisateur);
-
-
-                return "utilisateur/home";
+                    return "utilisateur/loginFailed";
+                }
             } else {
-                compt = 1;
-                model.addAttribute("compt", compt);
-
-                return "utilisateur/loginFailed";
+                return "utilisateur/compteBloque";
             }
 
 
@@ -119,22 +122,20 @@ public class UtilisateurController {
     }
 
     @GetMapping("/sendMailForm")
-    public String sendMailForm(){
+    public String sendMailForm() {
 
 
         return "utilisateur/mailForm";
     }
 
     @PostMapping("/sendMail")
-    public String sendMail(@RequestParam(name ="email") String email, @RequestParam(name = "sujet")String sujet, @RequestParam(name = "message")String message, RedirectAttributes model){
+    public String sendMail(@RequestParam(name = "email") String email, @RequestParam(name = "sujet") String sujet, @RequestParam(name = "message") String message, RedirectAttributes model) {
 
 
+        //  mailService.sendSimpleMail(email,sujet,message);
 
 
-      //  mailService.sendSimpleMail(email,sujet,message);
-
-
-        if (mailMetier.sendSimpleMail(email,sujet,message)) {
+        if (mailMetier.sendSimpleMail(email, sujet, message)) {
             model.addFlashAttribute("classCss", "alert alert-success");
             model.addFlashAttribute("message", "Your message has been sent");
         } else {
@@ -154,35 +155,74 @@ public class UtilisateurController {
 
 
     @PostMapping("/modificationAdresseMail")
-    public String heuresAnulationReservation(@RequestParam(name = "email") String email)  {
+    public String heuresAnulationReservation(@RequestParam(name = "email") String email) {
 
         mailMetier.modifierAdresseMail(email);
 
 
-
         return "redirect:/reservation/tableau";
     }
+
     @GetMapping("hommeFemmesPourcentage")
     public String femmesHommes(Model model) throws JsonProcessingException {
 
-       Map<String,Integer> list=utilisateurMetier.femmesEtHommes();
+        Map<String, Integer> list = utilisateurMetier.femmesEtHommes();
 
 
-        model.addAttribute("listeFemmesHommes",list);
+        model.addAttribute("listeFemmesHommes", list);
 
         return "graphHommesFemmes";
     }
 
     @GetMapping("/pourcentageAges")
-    public String ageDesClients(Model model){
+    public String ageDesClients(Model model) {
 
-        Map<String,Integer>listeAgesTranches = utilisateurMetier.agesClientsClub();
-        System.out.println("je suis la tailme de la liste "+listeAgesTranches.size());
+        Map<String, Integer> listeAgesTranches = utilisateurMetier.agesClientsClub();
+        System.out.println("je suis la tailme de la liste " + listeAgesTranches.size());
 
-        model.addAttribute("liste",listeAgesTranches);
-        model.addAttribute("tailleListe",listeAgesTranches.size());
+        model.addAttribute("liste", listeAgesTranches);
+        model.addAttribute("tailleListe", listeAgesTranches.size());
 
         return "utilisateur/agePourcentage";
+    }
+
+    @GetMapping("/liste")
+    public String listeUtilisateurs(Model model) {
+
+        utilisateurs = utilisateurMetier.listUtilisateurs();
+
+
+        model.addAttribute("utilisateurs", utilisateurs);
+
+        return "utilisateur/listeUtilisateurs";
+    }
+
+    @GetMapping("monProfil")
+    public String monProfile() {
+
+        return "utilisateur/accountInformations";
+    }
+
+    @GetMapping("/mesReservationsPasseesOuFututures")
+    public String mesreservationsPasses( Model model,@RequestParam(value = "id") Integer id, @RequestParam("idTypeResa")int idtypeResa) {
+
+        List<Reservation> reservations= new ArrayList<>();
+
+        Utilisateur utilisateur=utilisateurMetier.getUtilisateur(id);
+
+        if(idtypeResa==1){
+            reservations = utilisateurMetier.mesReservationPassees(utilisateur);
+        }else {
+             reservations = utilisateurMetier.mesReservationFutures(utilisateur);
+        }
+
+
+        model.addAttribute("idtypeResa", idtypeResa);
+        model.addAttribute("reservations", reservations);
+
+
+
+        return "utilisateur/reservationPassesOuFutures";
     }
 
 }
