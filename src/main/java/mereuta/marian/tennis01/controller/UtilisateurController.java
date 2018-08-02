@@ -225,4 +225,35 @@ public class UtilisateurController {
         return "utilisateur/reservationPassesOuFutures";
     }
 
+    @GetMapping("/rechercheMotcle")
+    public String rechercherParMotcle(@RequestParam(value = "motCle" , required = false) String motCle, Model model){
+
+    utilisateurs= utilisateurMetier.rechercheUtilisateurParMotCle( "%"+motCle+"%");
+
+        model.addAttribute("utilisateurs", utilisateurs);
+
+
+        return  "utilisateur/listeUtilisateursMotcle";
+    }
+
+    @PostMapping("/creditercompte")
+    public String credediterCompte(@RequestParam(value = "montant")float montant, @RequestParam(value = "idUtilisateur") Integer idUtilisateur){
+
+        Utilisateur utilisateur=utilisateurMetier.getUtilisateur(idUtilisateur);
+
+        utilisateurMetier.crediterCompte(montant, utilisateur);
+
+        return "redirect:/utilisateur/liste";
+
+    }
+
+    @PostMapping("/ActiverDesactiverClient")
+    public String activerDesactiverClient(@RequestParam(value = "actif")boolean actif, @RequestParam(value = "idUtilisateur")Integer idUtilisateur){
+
+        Utilisateur utilisateur=utilisateurMetier.getUtilisateur(idUtilisateur);
+        utilisateurMetier.activerOuDescativerCompte(actif, utilisateur);
+
+        return "redirect:/utilisateur/liste";
+    }
+
 }

@@ -210,4 +210,29 @@ public class UtilisateurMetier implements UtilisateurInterfaceMetier {
     public List<Reservation> mesReservationFutures(Utilisateur utilisateur) {
         return reservationRepository.findByUtilisateurAndDateReservationIsAfterOrderByDateReservation( utilisateur, LocalDate.now());
     }
+
+    @Override
+    public List<Utilisateur> rechercheUtilisateurParMotCle(String motCle) {
+
+        System.out.println("je suis le mot cle"+motCle);
+        return utilisateurRepository.trouverUtilisateurParMotCleViaSonNom(motCle);
+    }
+
+    @Override
+    public void crediterCompte(float montant, Utilisateur utilisateur) {
+
+        if (montant > 0) {
+            utilisateur.setCredit(utilisateur.getCredit()+montant);
+            utilisateurRepository.save(utilisateur);
+        }
+
+    }
+
+    @Override
+    public void activerOuDescativerCompte(boolean actif, Utilisateur utilisateur) {
+
+        utilisateur.setActif(actif);
+        utilisateurRepository.save(utilisateur);
+
+    }
 }

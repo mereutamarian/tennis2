@@ -24,4 +24,7 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur,Integer
             "from    utilisateurs", nativeQuery = true)
     List<BigInteger> agesToutesPersonnes();
 
+    @Query(value = "select * from utilisateurs where nom like ?1", nativeQuery = true)
+    List<Utilisateur> trouverUtilisateurParMotCleViaSonNom(String motCle );
+
 }

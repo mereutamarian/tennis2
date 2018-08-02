@@ -10,7 +10,6 @@ public interface UtilisateurInterfaceMetier {
 
     public List<Utilisateur> listUtilisateurs();
     public void creerUtilisateur(Utilisateur utilisateur);
-
     public boolean checkIfMailIsPresent(String email);
     public Utilisateur findByEmail(String email);
     public Utilisateur getUtilisateur(Integer id);
@@ -21,5 +20,9 @@ public interface UtilisateurInterfaceMetier {
     public Map<String ,Integer> femmesEtHommes();
     public List<Reservation> mesReservationPassees(Utilisateur utilisateur);
     public List<Reservation> mesReservationFutures( Utilisateur utilisateur);
+    public List<Utilisateur> rechercheUtilisateurParMotCle(String motCle);
 
+    public void crediterCompte(float montant, Utilisateur utilisateur);
+
+    public void activerOuDescativerCompte(boolean actif, Utilisateur utilisateur);
 }
