@@ -73,9 +73,7 @@
                             <td align="center">
 
 
-                                <!--<a th:href="@{edit(id=${listeHoraires.getId()})}">edit horaire/</a><br> <br>-->
-                                <!--<a th:href="@{editTerrain(id=${listeHoraires.getId()})}">Attribuer Terrain/</a> <br> <br>-->
-                                <!--<a th:href="@{editMesure(id=${listeHoraires.getId()})}">Attribuer Mesure/</a> <br> <br>-->
+                              <a th:href="@{modifierInformationsCompte(idUtilisateur= ${session.session.id})}"></a>
 
                             </td>
                             <td th:text="${session.session.nom}"></td>

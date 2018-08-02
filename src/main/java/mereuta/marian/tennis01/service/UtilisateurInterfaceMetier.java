@@ -1,6 +1,7 @@
 package mereuta.marian.tennis01.service;
 
 import mereuta.marian.tennis01.model.Reservation;
+import mereuta.marian.tennis01.model.Role;
 import mereuta.marian.tennis01.model.Utilisateur;
 
 import java.util.List;
@@ -25,4 +26,6 @@ public interface UtilisateurInterfaceMetier {
     public void crediterCompte(float montant, Utilisateur utilisateur);
 
     public void activerOuDescativerCompte(boolean actif, Utilisateur utilisateur);
+
+    public void changerRole(Utilisateur utilisateur, Role role);
 }

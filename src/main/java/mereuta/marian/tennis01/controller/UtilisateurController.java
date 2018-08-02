@@ -2,8 +2,10 @@ package mereuta.marian.tennis01.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import mereuta.marian.tennis01.model.Reservation;
+import mereuta.marian.tennis01.model.Role;
 import mereuta.marian.tennis01.model.Utilisateur;
 import mereuta.marian.tennis01.service.MailMetier;
+import mereuta.marian.tennis01.service.RoleMetier;
 import mereuta.marian.tennis01.service.UtilisateurMetier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,6 +30,8 @@ public class UtilisateurController {
     UtilisateurMetier utilisateurMetier;
     @Autowired
     MailMetier mailMetier;
+    @Autowired
+    RoleMetier roleMetier;
 
 
     private List<Utilisateur> utilisateurs;
@@ -254,6 +258,26 @@ public class UtilisateurController {
         utilisateurMetier.activerOuDescativerCompte(actif, utilisateur);
 
         return "redirect:/utilisateur/liste";
+    }
+
+    @PostMapping("/changerRole")
+    public String changerRole(@RequestParam(value = "role")Integer idRole, @RequestParam(value = "idUtilisateur")Integer idUtilisateur){
+
+        Role role=roleMetier.getRole(idRole);
+        Utilisateur utilisateur=utilisateurMetier.getUtilisateur(idUtilisateur);
+
+        utilisateurMetier.changerRole(utilisateur, role);
+
+        return "redirect:/utilisateur/liste";
+    }
+
+    @GetMapping("/modifierProfil")
+    public String modifierInformationsCompte(@RequestParam(value = "idUtiliateur")Integer idUtilisateur, Model model){
+
+        Utilisateur utilisateur= utilisateurMetier.getUtilisateur(idUtilisateur);
+        model.addAttribute("utilisateur",utilisateur);
+
+        return "utilisateur/editProfil";
     }
 
 }

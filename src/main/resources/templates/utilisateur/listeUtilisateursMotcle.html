@@ -1,21 +1,27 @@
 <!DOCTYPE html>
-<html xmlns:th= "http://www.thymeleaf.org" >
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
     <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
     <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" type="text/css" href="../../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../static/css/bootstrap.min.css"
+          th:href="@{/css/bootstrap.min.css}"/>
     <link rel="stylesheet" type="text/css" href="../../static/css/cssHoraire.css.css" th:href="@{/css/cssHoraire.css}"/>
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet'
+          type='text/css'>
 
 </head>
 <body>
@@ -35,7 +41,7 @@
             <form th:action="@{rechercheMotcle}" method="get">
 
                 <div class="form-group">
-                    <label>Chercher un utilisateur  tir de son nom par mot clé</label>
+                    <label>Chercher un utilisateur à partir de son nom par mot clé</label>
                     <input type="text" name="motCle">
                     <button class="alert-info" type="submit">Chercher</button>
 
@@ -45,9 +51,7 @@
         </div>
 
 
-        <div class="col-md-10 col-md-offset-1">
-
-
+        <div>
 
 
             <div class="panel panel-default panel-table">
@@ -69,6 +73,7 @@
                     <table class="table table-striped table-bordered table-list">
                         <thead>
                         <tr>
+                            <th>changer role</th>
                             <th>Activer ou Desactiver Client</th>
                             <th>Credite Compte</th>
                             <th>Nom</th>
@@ -88,21 +93,39 @@
                         <tbody>
 
 
-
                         <tr th:each="user:${utilisateurs}">
+
+                            <td align="center">
+
+
+                                <form class="form-inline" th:action="@{changerRole}" method="post">
+
+                                    <select name="role">
+                                        <option value="1">Admin</option>
+                                        <option value="2">Gestionaire</option>
+                                        <option value="3">Client</option>
+
+
+                                    </select>
+                                    <input type="hidden" name="idUtilisateur" th:value="${user.id}">
+                                    <button class="btn-info" type="submit" th:text="'Valider'"></button>
+                                </form>
+
+                            </td>
 
                             <td>
                                 <form th:action="@{ActiverDesactiverClient}" method="post">
 
                                     <div th:if="${user.actif eq true}">
-                                        <input type="hidden" name="actif"  th:value="false"  >
+                                        <input type="hidden" name="actif" th:value="false">
                                     </div>
 
                                     <div th:if="${user.actif eq false}">
-                                        <input type="hidden" name="actif"  th:value="true"  >
+                                        <input type="hidden" name="actif" th:value="true">
                                     </div>
                                     <input type="hidden" name="idUtilisateur" th:value="${user.id}">
-                                    <button type="submit" class="btn btn-primary mb-2"  th:text="${user.actif eq true} ? 'Desactiver User' :'Activer User'"></button>
+                                    <button type="submit" class="btn btn-danger mb-2"
+                                            th:text="${user.actif eq true} ? 'Desactiver User' :'Activer User'"></button>
 
                                 </form>
 
@@ -117,16 +140,12 @@
                                     <div class="row">
                                         <div class="col-1">
                                             <input type="hidden" name="idUtilisateur" th:value="${user.id}">
-                                            <input type="number"  name="montant"  min="0" class="form-control" placeholder="montant">
-                                            <button type="submit" >Confirme montant</button>
+                                            <input type="number" name="montant" min="0" class="form-control"
+                                                   placeholder="montant">
+                                            <button class="btn-success" type="submit">Confirme montant</button>
                                         </div>
 
                                     </div>
-
-
-
-
-
 
                                 </form>
 
@@ -147,7 +166,6 @@
                             <th th:text="${user.role.nomRole}"></th>
 
 
-
                         </tr>
                         </tbody>
                     </table>
@@ -160,9 +178,9 @@
 
             <a th:href="@{liste}">Voir le liste des utilisateurs</a>
 
-        </div></div></div>
-
-
+        </div>
+    </div>
+</div>
 
 
 </body>

@@ -235,4 +235,10 @@ public class UtilisateurMetier implements UtilisateurInterfaceMetier {
         utilisateurRepository.save(utilisateur);
 
     }
+
+    @Override
+    public void changerRole(Utilisateur utilisateur, Role role) {
+        utilisateur.setRole(role);
+        utilisateurRepository.save(utilisateur);
+    }
 }
