@@ -406,7 +406,12 @@ public class MetierReservation implements ReservationMetierInterface {
 
     @Override
     public void addReservation(Reservation reservation) {
+        utilisateur=utilisateurRepository.getOne(reservation.getUtilisateur().getId());
+
+        utilisateur.getReservations().add(reservation);
+
         reservationRepository.save(reservation);
+
     }
 
     LocalDate today;

@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 //@PassMatch(field = "password", verifyField = "confirmPassword")
@@ -62,13 +63,24 @@ public class Utilisateur {
     @JoinColumn(name="id_role")
     private Role role;
 
-    @OneToMany
-    @JoinColumn(name = "id")
-    private List<Reservation> reservations;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_utilisateur")
+    private List<Reservation> reservations= new ArrayList<>();
 
     public Utilisateur() {
     }
 
+    public Utilisateur(@Pattern(regexp = "[\\p{L} '-]+", message = "ce champ ne doit pas contenir des chiffres") @NotNull String nom, @Pattern(regexp = "[\\p{L} '-]+", message = "ce champ ne doit pas contenir des chiffres") @NotNull String prenom, String adrese, @Size(min = 4, max = 4) @Pattern(regexp = "[0-9]{4}", message = "le code postal doit contenir 4 chiffres !!!") String codePostal, String ville, @Pattern(regexp = "([(+]*[0-9]+[()+. -]*)", message = "le format du numéro du téléphone que vous avez inseré est invalide") String telephone, @Pattern(regexp = "^[\\w\\-.+_%]+@[\\w\\.\\-]+\\.[A-Za-z0-9]{2,}$", message = "le format de l'email est invalide") String email, LocalDate dateNaissance, @Size(min = 1, max = 1) String sexe) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.adrese = adrese;
+        this.codePostal = codePostal;
+        this.ville = ville;
+        this.telephone = telephone;
+        this.email = email;
+        this.dateNaissance = dateNaissance;
+        this.sexe = sexe;
+    }
 
     public List<Reservation> getReservations() {
         return reservations;
@@ -91,6 +103,7 @@ public class Utilisateur {
                 ", telephone='" + telephone + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", confirmPassword='" + confirmPassword + '\'' +
                 ", credit=" + credit +
                 ", actif=" + actif +
                 ", dateNaissance=" + dateNaissance +
@@ -219,4 +232,12 @@ public class Utilisateur {
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
     }
+
+//    public void addReservation(Reservation reservation){
+//        if (reservations==null){
+//            reservations=new ArrayList<>();
+//        }
+//
+//        reservations.add(reservation);
+//    }
 }

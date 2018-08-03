@@ -18,19 +18,16 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
 
     List<Reservation> findByUtilisateurAndDateReservationGreaterThanEqualAndActif(Utilisateur utilisateur, Date currentDate, boolean actif);
 
-    List<Reservation>findByUtilisateurAndDateReservationIsLessThanAndActif(Utilisateur utilisateur, Date currentDate, boolean actif);
+    List<Reservation> findByUtilisateurAndDateReservationIsLessThanAndActif(Utilisateur utilisateur, Date currentDate, boolean actif);
 
-    List<Reservation>findByDateReservationIsGreaterThanAndActifTrue(LocalDate today);
-    List<Reservation>findByOptionalTrue();
+    List<Reservation> findByDateReservationIsGreaterThanAndActifTrue(LocalDate today);
 
-
-
-    Reservation findByDateReservationAndHeureDebutAndHeureFinAndTerrainAndActifTrue(LocalDate date, LocalTime heureDebut, LocalTime heureFin,Terrain  terrain);
-
-    List<Reservation>findByUtilisateurAndDateReservationIsBeforeOrderByDateReservation( Utilisateur utilisateur,LocalDate date);
+    List<Reservation> findByOptionalTrue();
 
 
-    List<Reservation> findByUtilisateurAndDateReservationIsAfterOrderByDateReservation(Utilisateur utilisateur, LocalDate now);
+    Reservation findByDateReservationAndHeureDebutAndHeureFinAndTerrainAndActifTrue(LocalDate date, LocalTime heureDebut, LocalTime heureFin, Terrain terrain);
+
+
 }
 
 

@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +48,7 @@ public class UtilisateurController {
 
 
     @PostMapping("/addUtilisateur")
-    public String addUtilisateur(@Valid @ModelAttribute("utilisateur") Utilisateur utilisateur, BindingResult bindingResult, Model model) {
+    public String addUtilisateur(@Valid @ModelAttribute("utilisateur") Utilisateur utilisateur, BindingResult bindingResult) {
 
 
         if (bindingResult.hasErrors()) {
@@ -201,49 +202,55 @@ public class UtilisateurController {
         return "utilisateur/listeUtilisateurs";
     }
 
-    @GetMapping("monProfil")
+    @GetMapping("/monProfil")
     public String monProfile() {
 
         return "utilisateur/accountInformations";
     }
 
     @GetMapping("/mesReservationsPasseesOuFututures")
-    public String mesreservationsPasses( Model model,@RequestParam(value = "id") Integer id, @RequestParam("idTypeResa")int idtypeResa) {
+    public String mesreservationsPasses(Model model, @RequestParam(value = "id") Integer id, @RequestParam("idTypeResa") int idtypeResa) {
 
-        List<Reservation> reservations= new ArrayList<>();
+        List<Reservation> reservations;
+        Utilisateur utilisateur = utilisateurMetier.getUtilisateur(id);
+        reservations = utilisateur.getReservations();
+        List<Reservation> reservationsPassesOuFutures = new ArrayList<>();
 
-        Utilisateur utilisateur=utilisateurMetier.getUtilisateur(id);
+        System.out.println("voici les reservations" + reservations);
 
-        if(idtypeResa==1){
-            reservations = utilisateurMetier.mesReservationPassees(utilisateur);
-        }else {
-             reservations = utilisateurMetier.mesReservationFutures(utilisateur);
+        if (idtypeResa == 1) {
+
+            reservationsPassesOuFutures = utilisateurMetier.mesReservationFutures(reservations);
+
+            System.out.println("futures" + reservationsPassesOuFutures);
+        } else {
+            reservationsPassesOuFutures = utilisateurMetier.mesReservationPassees(reservations);
+
         }
 
 
         model.addAttribute("idtypeResa", idtypeResa);
-        model.addAttribute("reservations", reservations);
-
+        model.addAttribute("reservations", reservationsPassesOuFutures);
 
 
         return "utilisateur/reservationPassesOuFutures";
     }
 
     @GetMapping("/rechercheMotcle")
-    public String rechercherParMotcle(@RequestParam(value = "motCle" , required = false) String motCle, Model model){
+    public String rechercherParMotcle(@RequestParam(value = "motCle", required = false) String motCle, Model model) {
 
-    utilisateurs= utilisateurMetier.rechercheUtilisateurParMotCle( "%"+motCle+"%");
+        utilisateurs = utilisateurMetier.rechercheUtilisateurParMotCle("%" + motCle + "%");
 
         model.addAttribute("utilisateurs", utilisateurs);
 
 
-        return  "utilisateur/listeUtilisateursMotcle";
+        return "utilisateur/listeUtilisateursMotcle";
     }
 
     @PostMapping("/creditercompte")
-    public String credediterCompte(@RequestParam(value = "montant")float montant, @RequestParam(value = "idUtilisateur") Integer idUtilisateur){
+    public String credediterCompte(@RequestParam(value = "montant") float montant, @RequestParam(value = "idUtilisateur") Integer idUtilisateur) {
 
-        Utilisateur utilisateur=utilisateurMetier.getUtilisateur(idUtilisateur);
+        Utilisateur utilisateur = utilisateurMetier.getUtilisateur(idUtilisateur);
 
         utilisateurMetier.crediterCompte(montant, utilisateur);
 
@@ -252,32 +259,44 @@ public class UtilisateurController {
     }
 
     @PostMapping("/ActiverDesactiverClient")
-    public String activerDesactiverClient(@RequestParam(value = "actif")boolean actif, @RequestParam(value = "idUtilisateur")Integer idUtilisateur){
+    public String activerDesactiverClient(@RequestParam(value = "actif") boolean actif, @RequestParam(value = "idUtilisateur") Integer idUtilisateur) {
 
-        Utilisateur utilisateur=utilisateurMetier.getUtilisateur(idUtilisateur);
+        Utilisateur utilisateur = utilisateurMetier.getUtilisateur(idUtilisateur);
         utilisateurMetier.activerOuDescativerCompte(actif, utilisateur);
 
         return "redirect:/utilisateur/liste";
     }
 
     @PostMapping("/changerRole")
-    public String changerRole(@RequestParam(value = "role")Integer idRole, @RequestParam(value = "idUtilisateur")Integer idUtilisateur){
+    public String changerRole(@RequestParam(value = "role") Integer idRole, @RequestParam(value = "idUtilisateur") Integer idUtilisateur) {
 
-        Role role=roleMetier.getRole(idRole);
-        Utilisateur utilisateur=utilisateurMetier.getUtilisateur(idUtilisateur);
+        Role role = roleMetier.getRole(idRole);
+        Utilisateur utilisateur = utilisateurMetier.getUtilisateur(idUtilisateur);
 
         utilisateurMetier.changerRole(utilisateur, role);
 
         return "redirect:/utilisateur/liste";
     }
 
-    @GetMapping("/modifierProfil")
-    public String modifierInformationsCompte(@RequestParam(value = "idUtiliateur")Integer idUtilisateur, Model model){
+    @GetMapping("/modifierInformationsCompte")
+    public String modifierInformationsCompte(@RequestParam(value = "idUtilisateur") Integer idUtilisateur, Model model) {
 
-        Utilisateur utilisateur= utilisateurMetier.getUtilisateur(idUtilisateur);
-        model.addAttribute("utilisateur",utilisateur);
+        Utilisateur utilisateur = utilisateurMetier.getUtilisateur(idUtilisateur);
+        model.addAttribute("utilisateur", utilisateur);
 
         return "utilisateur/editProfil";
+    }
+
+    @PostMapping("/modifierCompte")
+    public String modifierCompte(@Valid @ModelAttribute(value = "utilisateur") Utilisateur utilisateur, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return "utilisateur/formRegister";
+        }
+
+        System.out.println("je suis l'utilisatur" + utilisateur);
+
+        return "redirect:/utilisateur/monProfil";
     }
 
 }

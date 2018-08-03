@@ -138,7 +138,6 @@ public class Reservation {
                 ", heureFin=" + heureFin +
                 ", actif=" + actif +
                 ", optional=" + optional +
-                ", utilisateur=" + utilisateur +
                 ", terrain=" + terrain +
                 ", tarif=" + tarif +
                 '}';

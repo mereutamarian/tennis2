@@ -19,8 +19,8 @@ public interface UtilisateurInterfaceMetier {
     public boolean checkEmailLogin(String email);
     public boolean comparePassword(String password, Utilisateur utilisateur);
     public Map<String ,Integer> femmesEtHommes();
-    public List<Reservation> mesReservationPassees(Utilisateur utilisateur);
-    public List<Reservation> mesReservationFutures( Utilisateur utilisateur);
+    public List<Reservation> mesReservationPassees(List<Reservation> reservations);
+    public List<Reservation> mesReservationFutures( List<Reservation> reservations);
     public List<Utilisateur> rechercheUtilisateurParMotCle(String motCle);
 
     public void crediterCompte(float montant, Utilisateur utilisateur);

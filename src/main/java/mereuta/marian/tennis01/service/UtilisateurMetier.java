@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -127,6 +128,37 @@ public class UtilisateurMetier implements UtilisateurInterfaceMetier {
         return liste;
     }
 
+    @Override
+    public List<Reservation> mesReservationPassees(List<Reservation> reservations) {
+
+
+
+List<Reservation> reservationsFutures= new ArrayList<>();
+
+        for(Reservation reservation: reservations){
+            if(reservation.getDateReservation().isAfter(LocalDate.now()) || reservation.getDateReservation().isEqual(LocalDate.now()) && reservation.getHeureDebut().getHour()>(LocalTime.now().getHour())){
+                reservationsFutures.add(reservation);
+
+
+            }
+        }
+        return reservationsFutures;
+    }
+
+    @Override
+    public List<Reservation> mesReservationFutures(List<Reservation> reservations) {
+        List<Reservation> reservationsPasses= new ArrayList<>();
+
+        for(Reservation reservation: reservations){
+            if(reservation.getDateReservation().isBefore(LocalDate.now()) || reservation.getDateReservation().isEqual(LocalDate.now())&& reservation.getHeureDebut().getHour()<(LocalTime.now().getHour())){
+                reservationsPasses.add(reservation);
+
+
+            }
+        }
+        return reservationsPasses;
+    }
+
     public Map< String,Integer> agesClientsClub() {
         List<BigInteger> listeAges = utilisateurRepository.agesToutesPersonnes();
 
@@ -201,15 +233,7 @@ public class UtilisateurMetier implements UtilisateurInterfaceMetier {
 
     }
 
-    @Override
-    public List<Reservation> mesReservationPassees(Utilisateur utilisateur) {
-        return reservationRepository.findByUtilisateurAndDateReservationIsBeforeOrderByDateReservation( utilisateur, LocalDate.now());
-    }
 
-    @Override
-    public List<Reservation> mesReservationFutures(Utilisateur utilisateur) {
-        return reservationRepository.findByUtilisateurAndDateReservationIsAfterOrderByDateReservation( utilisateur, LocalDate.now());
-    }
 
     @Override
     public List<Utilisateur> rechercheUtilisateurParMotCle(String motCle) {
