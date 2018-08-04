@@ -265,4 +265,14 @@ List<Reservation> reservationsFutures= new ArrayList<>();
         utilisateur.setRole(role);
         utilisateurRepository.save(utilisateur);
     }
+
+    @Override
+    public Integer getIdUtilisateurByEmail(String email) {
+        return utilisateurRepository.findIdUtilisateurAvecEmail(email);
+    }
+
+    @Override
+    public void updateUtilisateur(Utilisateur utilisateur) {
+        utilisateurRepository.save(utilisateur);
+    }
 }

@@ -11,9 +11,9 @@ import javax.validation.constraints.Size;
 
 @Entity(name ="objets" )
 
-public class Objets {
+public class Objet {
     @Id @GeneratedValue
-    @Column(name = "id")
+    @Column(name = "id_objet")
     private Integer idObjests;
 
     @Column(name = "nom_objet")
@@ -21,24 +21,18 @@ public class Objets {
     private String nomObjet;
 
     @NotNull
-    @Size(min = 3, max = 15)
+    @Size(min = 15, max = 1000)
     @Column(name = "description")
-    private String descrition;
+    private String description;
 
     @Column(name = "photo")
     private String photoPath;
 
     @Column(name = "actif")
-    private boolean active;
+    private boolean actif;
 
-    public Objets() {
-    }
 
-    public Objets(String nomObjet, String descrition, String photoPath, boolean active) {
-        this.nomObjet = nomObjet;
-        this.descrition = descrition;
-        this.photoPath = photoPath;
-        this.active = active;
+    public Objet() {
     }
 
     public Integer getIdObjests() {
@@ -57,12 +51,12 @@ public class Objets {
         this.nomObjet = nomObjet;
     }
 
-    public String getDescrition() {
-        return descrition;
+    public String getdescription() {
+        return description;
     }
 
-    public void setDescrition(String descrition) {
-        this.descrition = descrition;
+    public void setdescription(String description) {
+        this.description = description;
     }
 
     public String getPhotoPath() {
@@ -73,22 +67,21 @@ public class Objets {
         this.photoPath = photoPath;
     }
 
-    public boolean isActive() {
-        return active;
+    public boolean isActif() {
+        return actif;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setActif(boolean actif) {
+        this.actif = actif;
     }
 
     @Override
     public String toString() {
-        return "Objets{" +
+        return "Objet{" +
                 "idObjests=" + idObjests +
                 ", nomObjet='" + nomObjet + '\'' +
-                ", descrition='" + descrition + '\'' +
+                ", description='" + description + '\'' +
                 ", photoPath='" + photoPath + '\'' +
-                ", active=" + active +
                 '}';
     }
 }

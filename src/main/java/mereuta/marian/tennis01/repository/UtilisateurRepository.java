@@ -27,4 +27,7 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur,Integer
     @Query(value = "select * from utilisateurs where nom like ?1", nativeQuery = true)
     List<Utilisateur> trouverUtilisateurParMotCleViaSonNom(String motCle );
 
+    @Query(value = "select id_utilisateur from utilisateurs where email=?1", nativeQuery = true)
+    Integer findIdUtilisateurAvecEmail(String Email);
+
 }

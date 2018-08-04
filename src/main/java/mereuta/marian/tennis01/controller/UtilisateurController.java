@@ -279,24 +279,45 @@ public class UtilisateurController {
     }
 
     @GetMapping("/modifierInformationsCompte")
-    public String modifierInformationsCompte(@RequestParam(value = "idUtilisateur") Integer idUtilisateur, Model model) {
+    public String modifierInformationsCompte( HttpServletRequest request,@RequestParam(value = "idUtilisateur") Integer idUtilisateur, Model model) {
 
         Utilisateur utilisateur = utilisateurMetier.getUtilisateur(idUtilisateur);
         model.addAttribute("utilisateur", utilisateur);
+
+
+
 
         return "utilisateur/editProfil";
     }
 
     @PostMapping("/modifierCompte")
-    public String modifierCompte(@Valid @ModelAttribute(value = "utilisateur") Utilisateur utilisateur, BindingResult bindingResult) {
+    public String modifierCompte(HttpServletRequest request,@Valid @ModelAttribute(value = "utilisateur") Utilisateur utilisateur, BindingResult bindingResult) {
 
-        if (bindingResult.hasErrors()) {
-            return "utilisateur/formRegister";
+        HttpSession session= request.getSession(false);
+
+
+
+
+
+        if(bindingResult.hasErrors()){
+            if (bindingResult.getFieldError().getField().contains("email") && utilisateurMetier.getUtilisateur(utilisateur.getId() ) !=null && utilisateurMetier.getIdUtilisateurByEmail(utilisateur.getEmail()).equals(utilisateur.getId())) {
+
+                utilisateurMetier.updateUtilisateur(utilisateur);
+                session.setAttribute("session", utilisateur);
+
+
+                return "utilisateur/accountInformations";
+            }else {
+                return "utilisateur/editProfil";
+            }
+        }else{
+            System.out.println("je suis l'utilisatuer"+utilisateur);
+            utilisateurMetier.updateUtilisateur(utilisateur);
+            session.setAttribute("session", utilisateur);
+            return "utilisateur/accountInformations";
         }
 
-        System.out.println("je suis l'utilisatur" + utilisateur);
 
-        return "redirect:/utilisateur/monProfil";
     }
 
 }

@@ -28,4 +28,7 @@ public interface UtilisateurInterfaceMetier {
     public void activerOuDescativerCompte(boolean actif, Utilisateur utilisateur);
 
     public void changerRole(Utilisateur utilisateur, Role role);
+
+    public Integer getIdUtilisateurByEmail(String email);
+    public void updateUtilisateur(Utilisateur utilisateur);
 }
