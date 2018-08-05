@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +27,12 @@ import java.util.List;
 @RequestMapping("/objet")
 public class ObjetsController {
 
-    @Autowired
-    ObjetMetier objetMetier;
+    @Value("${dir.images}")
+    private String dossierImages;
+
+  @Autowired
+   ObjetMetier objetMetier;
+
 
     @GetMapping("/liste")
     public  String listeObjets(Model model){
@@ -46,6 +51,27 @@ public class ObjetsController {
         model.addAttribute("objet", new Objet());
 
         return "objet/objetFormulaire";
+    }
+
+    @PostMapping("/addObjet")
+    public String ajouterObjet(@Valid @ModelAttribute(value = "objet")Objet objet, BindingResult bindingResult,@RequestParam(value = "photo") MultipartFile file) throws IOException {
+
+        if(bindingResult.hasErrors()){
+            return "objet/objetFormulaire";
+        }
+
+        objetMetier.ajouterObjet(objet);
+
+        objet=objetMetier.ajouterPhotoObjet(objet,file);
+
+        return "redirect:/objet/liste";
+    }
+
+    @GetMapping(value = "getPhoto", produces = MediaType.IMAGE_JPEG_VALUE)
+    @ResponseBody
+    public byte[] charherPhoto(Integer id){
+
+
     }
 
 }

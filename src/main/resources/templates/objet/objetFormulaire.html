@@ -20,34 +20,44 @@
 
 
 <div>
-    <h1>Ajouter Horaire</h1>
+    <h1>Ajouter Objet</h1>
 </div>
 
-<div class="container">
-    <form id="contact" th:action="@{ajouterObjet}" method="get" th:object="${objet}"  >
-        <h3>Ajouter votre horaire</h3>
+<div class="col-lg-4 col-xs-12 col-md-offset-3   ">
+    <div class="panel panel-default ">
+        <div class="panel-heading" >Saisie d'un objet</div>
+        <div class="panel-body" >
 
-        <fieldset>
-            <input placeholder="nom de l'objet" type="time" th:field="*{nomObjet}" tabindex="1" required autofocus>
-            <span th:if="${#fields.hasErrors('nomObjet')}" th:errors="*{nomObjet}"></span>
-        </fieldset>
-        <fieldset>
-            <label>Description</label>
-           <textarea th:field="*{description}" ></textarea>
-            <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
-        </fieldset>
-        <fieldset>
-            <input placeholder="photo " type="file" th:field="*{photoPath}">
-            <span th:if="${#fields.hasErrors('photoPath')}" th:errors="*{photoPath}"></span>
-        </fieldset>
+            <!--pour l'upload une photo ou fichier il faut mettre "enctype="multipart/form-data" dans le formulaire-->
+
+            <form th:action="@{addObjet}" method="post" th:object="${objet}"    enctype="multipart/form-data">
+                <div class="form-group">
+                    <label class="control-label">nom Objet</label>
+                    <input type="text" th:field="*{nomObjet}" class="form-control"/>
+                    <span class="alert-danger" th:if="${#fields.hasErrors('nomObjet')}" th:errors="*{nomObjet}"></span>
+
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">description objet</label>
+                    <input type="text" th:field="${objet.description}" class="form-control"/>
+                    <span class="alert-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
 
 
+                </div>
 
-        <fieldset>
-            <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">ajouter</button>
-        </fieldset>
+                <div class="form-group">
+                    <label class="control-label">photo</label>
+                    <input type="file" name="photo" class="form-control"/>
 
-    </form>
+
+                    <!--span sert pour les validations-->
+                    <button type="submit" class="btn-lg btn-primary">Enregistrer</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
 </div>
 </body>
 </html>
