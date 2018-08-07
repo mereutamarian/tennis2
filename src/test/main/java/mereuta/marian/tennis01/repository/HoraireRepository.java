@@ -15,7 +15,7 @@ public interface HoraireRepository extends JpaRepository<Horaire,Integer> {
 
 
 
-    Horaire findByDateHoraireSpecial( LocalDate date);
+    Horaire findByDateHoraireSpecial(LocalDate date);
 
     List<Horaire> findAllByDateHoraireSpecialNotNull();
 
