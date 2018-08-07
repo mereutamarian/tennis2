@@ -2,10 +2,7 @@ package mereuta.marian.tennis01.model;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -38,6 +35,9 @@ public class Tarif {
     private boolean tarifSpecial;
     @Column(name = "default_tarif")
     private boolean tarifParDefaut;
+    @ManyToOne
+    @JoinColumn(name = "id_Utilisateur")
+    private Utilisateur utilisateur;
 
     public Integer getId() {
         return id;
@@ -127,9 +127,16 @@ public class Tarif {
         this.tarifParDefaut = tarifParDefaut;
     }
 
-    public Tarif() {
+    public Utilisateur getUtilisateur() {
+        return utilisateur;
     }
 
+    public void setUtilisateur(Utilisateur utilisateur) {
+        this.utilisateur = utilisateur;
+    }
+
+    public Tarif() {
+    }
 
 
     @Override
@@ -146,6 +153,7 @@ public class Tarif {
                 ", weekend=" + weekend +
                 ", tarifSpecial=" + tarifSpecial +
                 ", tarifParDefaut=" + tarifParDefaut +
+                ", utilisateur=" + utilisateur +
                 '}';
     }
 }

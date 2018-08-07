@@ -55,6 +55,10 @@ public class Horaire {
     @JoinColumn(name = "interval_mesure")
     private MesureInterval mesureInterval;
 
+    @ManyToOne
+    @JoinColumn(name = "id_Utilisateur")
+    private Utilisateur utilisateur;
+
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "terrainshoraire", joinColumns = @JoinColumn(name = "id_horaire"), inverseJoinColumns = @JoinColumn(name = "id_terrain"))
@@ -129,6 +133,14 @@ public class Horaire {
         this.terrains = terrains;
     }
 
+    public Utilisateur getUtilisateur() {
+        return utilisateur;
+    }
+
+    public void setUtilisateur(Utilisateur utilisateur) {
+        this.utilisateur = utilisateur;
+    }
+
     @Override
     public String toString() {
         return "Horaire{" +
@@ -139,6 +151,7 @@ public class Horaire {
                 ", horaireFix='" + horaireFix + '\'' +
                 ", dateHoraireSpecial=" + dateHoraireSpecial +
                 ", mesureInterval=" + mesureInterval +
+                ", utilisateur=" + utilisateur +
                 ", terrains=" + terrains +
                 '}';
     }

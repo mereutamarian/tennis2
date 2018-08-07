@@ -57,13 +57,13 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="o:${objets}">
+                        <tr th:each="o:${objets}" th:if="${o.actif==true}">
 
 
                                 <td align="center">
 
 
-                                    <a th:href="@{edit}">edit objet/</a><br> <br>
+                                    <a th:href="@{edit(id=${o.idObjests})}">Modifier objet/</a><br> <br>
                                     <a onclick="return confirm('Etes vous sur?')" th:href="@{supprimer(id=${o.getIdObjests()})}">Supprimer</a>
 
                                 </td>

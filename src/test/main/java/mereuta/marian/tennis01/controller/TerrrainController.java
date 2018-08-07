@@ -33,9 +33,11 @@ public class TerrrainController {
     @GetMapping("/liste")
     public String showTerrains(Model model){
 
-
+        //is like terrainsRepository.findAll()
         terrains=metierTerrain.showTerrain();
+        System.out.println("voici la liste des terrains"+terrains);
 
+      //  System.out.println( "voici la personne qui a ajouté le terrain"+terrain.getUtilisateur() );
         model.addAttribute("terrains", terrains);
 
 

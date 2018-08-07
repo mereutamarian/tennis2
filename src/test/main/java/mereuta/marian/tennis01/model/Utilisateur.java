@@ -109,7 +109,7 @@ public class Utilisateur {
                 ", dateNaissance=" + dateNaissance +
                 ", sexe='" + sexe + '\'' +
                 ", role=" + role +
-                ", reservations=" + reservations +
+
                 '}';
     }
 
@@ -233,11 +233,5 @@ public class Utilisateur {
         this.confirmPassword = confirmPassword;
     }
 
-//    public void addReservation(Reservation reservation){
-//        if (reservations==null){
-//            reservations=new ArrayList<>();
-//        }
-//
-//        reservations.add(reservation);
-//    }
+
 }

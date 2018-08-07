@@ -30,7 +30,11 @@
 
             <!--pour l'upload une photo ou fichier il faut mettre "enctype="multipart/form-data" dans le formulaire-->
 
-            <form th:action="@{addObjet}" method="post" th:object="${objet}"    enctype="multipart/form-data">
+            <form th:action="@{modifierObjet}" method="post" th:object="${objet}"    enctype="multipart/form-data">
+
+
+                <input type="hidden" th:field=" ${objet.idObjests} " th:value="${objet.idObjests}">
+
                 <div class="form-group">
                     <label class="control-label">nom Objet</label>
                     <input type="text" th:field="*{nomObjet}" class="form-control"/>
@@ -40,18 +44,24 @@
 
                 <div class="form-group">
                     <label class="control-label">description objet</label>
-                    <input type="text" th:field="${objet.description}" class="form-control"/>
+                    <input type="text" th:field=" *{description}" class="form-control"/>
                     <span class="alert-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
 
 
                 </div>
 
+
+
                 <div class="form-group">
                     <label class="control-label">photo</label>
                     <input type="file" name="photo" class="form-control"/>
+                    <img class="img-circle" th:src="@{getPhoto(id=${objet.getIdObjests()})}" th:width="150" th:height="150"  />
 
 
                     <!--span sert pour les validations-->
+                </div>
+
+                <div>
                     <button type="submit" class="btn-lg btn-primary">Enregistrer</button>
                 </div>
 

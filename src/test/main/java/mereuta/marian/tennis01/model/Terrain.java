@@ -24,6 +24,10 @@ public class Terrain {
     @Column(name = "actif")
     private  boolean actif;
 
+    @ManyToOne
+    @JoinColumn(name = "id_utilisateur")
+    private Utilisateur utilisateur;
+
 
     public Integer getId() {
         return id;
@@ -49,7 +53,13 @@ public class Terrain {
         this.actif = actif;
     }
 
+    public Utilisateur getUtilisateur() {
+        return utilisateur;
+    }
 
+    public void setUtilisateur(Utilisateur utilisateur) {
+        this.utilisateur = utilisateur;
+    }
 
     public Terrain(){
 
@@ -61,6 +71,9 @@ public class Terrain {
                 "id=" + id +
                 ", nomTerrain='" + nomTerrain + '\'' +
                 ", actif=" + actif +
+                ", utilisateur=" + utilisateur +
                 '}';
     }
+
+
 }

@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public interface ObjetMetierInterface {
@@ -15,5 +17,13 @@ public interface ObjetMetierInterface {
 
    public void ajouterObjet( Objet objet);
 
-   public Objet ajouterPhotoObjet( Objet objet, MultipartFile file);
+   public void ajouterPhotoObjet( Objet objet, MultipartFile file) throws IOException;
+
+   public File chargerPhoto(Integer id);
+
+   public void supprimerObjet(Integer id);
+
+   public Objet getObjetById(Integer idObjet);
+
+   public List<Objet> rechercheObjetParMotCle(String s);
 }

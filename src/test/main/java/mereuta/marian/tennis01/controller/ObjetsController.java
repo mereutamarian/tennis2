@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -33,13 +34,16 @@ public class ObjetsController {
   @Autowired
    ObjetMetier objetMetier;
 
+  private Objet objet;
+  private List<Objet> objets;
+
 
     @GetMapping("/liste")
     public  String listeObjets(Model model){
 
-        List<Objet> listeObjets=objetMetier.getListeObjets();
+        objets=objetMetier.getListeObjets();
 
-        model.addAttribute("objets", listeObjets);
+        model.addAttribute("objets", objets);
 
 
         return "objet/objetsListe";
@@ -62,16 +66,65 @@ public class ObjetsController {
 
         objetMetier.ajouterObjet(objet);
 
-        objet=objetMetier.ajouterPhotoObjet(objet,file);
+       objetMetier.ajouterPhotoObjet(objet,file);
 
         return "redirect:/objet/liste";
     }
 
     @GetMapping(value = "getPhoto", produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseBody
-    public byte[] charherPhoto(Integer id){
+    public byte[] charherPhoto(Integer id) throws Exception {
 
 
+        File f=objetMetier.chargerPhoto(id);
+
+        return IOUtils.toByteArray(new FileInputStream(f));
+
+    }
+
+    @GetMapping("supprimer")
+    public String supprimerObjet(@RequestParam(value = "id")Integer idObjet){
+
+        objetMetier.supprimerObjet(idObjet);
+
+        return "redirect:/objet/liste";
+    }
+
+    @GetMapping("edit")
+    public String modifierObjet(@RequestParam(value = "id")Integer idObjet, Model model){
+
+        objet=objetMetier.getObjetById(idObjet);
+
+        model.addAttribute("objet", objet);
+
+        return "objet/modifierObjet";
+    }
+
+    @PostMapping("/modifierObjet")
+    public String ModifierObjet(@Valid @ModelAttribute(value = "objet")Objet objet, BindingResult bindingResult,@RequestParam(value = "photo") MultipartFile file) throws IOException {
+
+
+        System.out.println("je suis l'id de l'obj"+objet.getIdObjests());
+        if(bindingResult.hasErrors()){
+            return "objet/modifierObjet";
+        }
+
+        objetMetier.ajouterObjet(objet);
+
+        objetMetier.ajouterPhotoObjet(objet,file);
+
+        return "redirect:/objet/liste";
+    }
+
+    @GetMapping("/rechercheMotcle")
+    public String rechercherParMotcle(@RequestParam(value = "motCle", required = false) String motCle, Model model) {
+
+       objets = objetMetier.rechercheObjetParMotCle("%" + motCle + "%");
+
+        model.addAttribute("objets", objets);
+
+
+        return "objet/objetsMotCle";
     }
 
 }

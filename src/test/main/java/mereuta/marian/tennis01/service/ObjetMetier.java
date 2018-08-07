@@ -28,23 +28,52 @@ public class ObjetMetier implements ObjetMetierInterface {
 
     @Override
     public void ajouterObjet(Objet objet) {
+        objet.setActif(true);
         objetRepository.save(objet);
     }
 
     @Override
-    public Objet ajouterPhotoObjet(Objet objet, MultipartFile file) {
+    public void ajouterPhotoObjet(Objet objet, MultipartFile file) throws IOException {
 
-        if (!(file.isEmpty())){
+
+
+        if(!(file.isEmpty())){
             objet.setPhotoPath(file.getOriginalFilename());
-            try {
-                //le nom de la photo va comporter l'id de l'étudiant
+            objetRepository.save(objet);
+
+            if (!(file.isEmpty())){
+                objet.setPhotoPath(file.getOriginalFilename());
                 file.transferTo(new File(dossierImages+objet.getIdObjests()));
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
 
 
-        return objet;
+
+    }
+
+    @Override
+    public File chargerPhoto(Integer id) {
+
+        File file=new File(dossierImages+id);
+        return file ;
+    }
+
+    @Override
+    public void supprimerObjet(Integer id) {
+
+        Objet objet= objetRepository.getOne(id);
+        objet.setActif(false);
+        objetRepository.save(objet);
+
+    }
+
+    @Override
+    public Objet getObjetById(Integer idObjet) {
+        return objetRepository.getOne(idObjet);
+    }
+
+    @Override
+    public List<Objet> rechercheObjetParMotCle(String s) {
+        return objetRepository.rechercherObjetMotCle(s);
     }
 }
